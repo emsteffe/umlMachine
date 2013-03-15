@@ -38,7 +38,7 @@ public class Main {
         
         
         DefaultApplicationModel model = new UMLMachineApplicationModel();
-        model.setName("UML Machine");
+        model.setName("JHotDraw Pert");
         model.setVersion(Main.class.getPackage().getImplementationVersion());
         model.setCopyright("Copyright 2006-2010 (c) by the authors of JHotDraw and all its contributors.\n" +
                 "This software is licensed under LGPL and Creative Commons 3.0 Attribution.");

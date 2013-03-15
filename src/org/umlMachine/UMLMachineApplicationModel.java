@@ -101,8 +101,7 @@ public class UMLMachineApplicationModel extends DefaultApplicationModel {
         }
     }
 
-    @SuppressWarnings("rawtypes")
-	private void addCreationButtonsTo(JToolBar tb, final DrawingEditor editor) {
+    private void addCreationButtonsTo(JToolBar tb, final DrawingEditor editor) {
         // AttributeKeys for the entitie sets
         HashMap<AttributeKey, Object> attributes;
 
@@ -132,7 +131,7 @@ public class UMLMachineApplicationModel extends DefaultApplicationModel {
      * values.
      */
     @Override
-   public java.util.List<JToolBar> createToolBars(Application a, @Nullable View pr) {
+    public java.util.List<JToolBar> createToolBars(Application a, @Nullable View pr) {
         ResourceBundleUtil drawLabels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
         UMLMachineView p = (UMLMachineView) pr;
 
@@ -149,8 +148,6 @@ public class UMLMachineApplicationModel extends DefaultApplicationModel {
         addCreationButtonsTo(tb, editor);
         tb.setName(drawLabels.getString("window.drawToolBar.title"));
         list.add(tb);
-        
-        /*
         tb = new JToolBar();
         ButtonFactory.addAttributesButtonsTo(tb, editor);
         tb.setName(drawLabels.getString("window.attributesToolBar.title"));
@@ -159,8 +156,6 @@ public class UMLMachineApplicationModel extends DefaultApplicationModel {
         ButtonFactory.addAlignmentButtonsTo(tb, editor);
         tb.setName(drawLabels.getString("window.alignmentToolBar.title"));
         list.add(tb);
-        */
-        
         return list;
     }
 
@@ -185,7 +180,6 @@ public class UMLMachineApplicationModel extends DefaultApplicationModel {
                 }
                 m.add(m2);
             }
-            
         };
     }
 
