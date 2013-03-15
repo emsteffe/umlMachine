@@ -20,5 +20,4 @@ Deliverable 4 [Due 3/25]
 	2. Documentation that explains the design of project, which includes the updated use cases, updated UML use-case/class/sequence diagrams, and a brief explanation of the correspondence between the implementation and the class diagrams of your project design.
 
  
-Updated.
 
