@@ -65,7 +65,7 @@ public class ButtonFactory extends org.jhotdraw.draw.action.ButtonFactory {
 	
 	public ButtonFactory(){
 		
-		//a change
+		//poop
 	}
 
     
