@@ -5,7 +5,7 @@ UML Machine Project
 Deliverable 4 [Due 3/25]
 
 1 UML Class diagram tools
-	1. the ability to draw UML state diagrams,
+	1. the ability to draw UML state diagrams, 
 	2. the ability to check the draw diagrams for errors,
 	3. the ability to save the drawn diagram in a file,
 	4. the ability to serialize the drawn diagram in a XML-based text representation, and
