@@ -24,5 +24,10 @@ Erik Steffens
 	->FileHandler
 		
 	->Simulator
+	
+	->FigureFactory
+		FigureFactory getInstance()
+		
+		
  
 
