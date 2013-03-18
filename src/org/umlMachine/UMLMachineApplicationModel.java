@@ -107,21 +107,27 @@ public class UMLMachineApplicationModel extends DefaultApplicationModel {
 
         ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.umlMachine.Labels");
         ResourceBundleUtil drawLabels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
-
-        ButtonFactory.addSelectionToolTo(tb, editor);
-        tb.addSeparator();
-
         attributes = new HashMap<AttributeKey, Object>();
         attributes.put(AttributeKeys.FILL_COLOR, Color.white);
         attributes.put(AttributeKeys.STROKE_COLOR, Color.black);
         attributes.put(AttributeKeys.TEXT_COLOR, Color.black);
-        ButtonFactory.addToolTo(tb, editor, new CreationTool(new TaskFigure(), attributes), "edit.createTask", labels);
-
-        attributes = new HashMap<AttributeKey, Object>();
-        attributes.put(AttributeKeys.STROKE_COLOR, new Color(0x000099));
-        ButtonFactory.addToolTo(tb, editor, new ConnectionTool(new DependencyFigure(), attributes), "edit.createDependency", labels);
+        
+        // Tools Start
+        
+        ButtonFactory.addSelectionToolTo(tb, editor);
         tb.addSeparator();
-        ButtonFactory.addToolTo(tb, editor, new TextAreaCreationTool(new TextAreaFigure()), "edit.createTextArea", drawLabels);
+        ButtonFactory.addToolTo(tb, editor, new CreationTool(new StateFigure(), attributes), "edit.createTask", labels);
+        ButtonFactory.addToolTo(tb, editor, new ConnectionTool(new TransitionFigure(), attributes), "edit.createDependency", labels);
+        ButtonFactory.addToolTo(tb, editor, new CreationTool(new StateFigure(true), attributes), "edit.createStart", labels);
+        
+        
+        // old shit
+        // this used to be between create state and create transition buttons
+        //attributes = new HashMap<AttributeKey, Object>();
+        //attributes.put(AttributeKeys.STROKE_COLOR, new Color(0x000099));
+        // Text box tool
+        //tb.addSeparator();
+        //ButtonFactory.addToolTo(tb, editor, new TextAreaCreationTool(new TextAreaFigure()), "edit.createTextArea", drawLabels);
 
     }
 
@@ -148,6 +154,8 @@ public class UMLMachineApplicationModel extends DefaultApplicationModel {
         addCreationButtonsTo(tb, editor);
         tb.setName(drawLabels.getString("window.drawToolBar.title"));
         list.add(tb);
+        
+        /* Old Pert Toolbars
         tb = new JToolBar();
         ButtonFactory.addAttributesButtonsTo(tb, editor);
         tb.setName(drawLabels.getString("window.attributesToolBar.title"));
@@ -156,6 +164,8 @@ public class UMLMachineApplicationModel extends DefaultApplicationModel {
         ButtonFactory.addAlignmentButtonsTo(tb, editor);
         tb.setName(drawLabels.getString("window.alignmentToolBar.title"));
         list.add(tb);
+        */
+        
         return list;
     }
 

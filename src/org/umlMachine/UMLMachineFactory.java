@@ -27,8 +27,8 @@ import org.jhotdraw.xml.*;
 public class UMLMachineFactory extends DefaultDOMFactory {
     private final static Object[][] classTagArray = {
         { DefaultDrawing.class, "PertDiagram" },
-        { TaskFigure.class, "task" },
-        { DependencyFigure.class, "dep" },
+        { StateFigure.class, "task" },
+        { TransitionFigure.class, "dep" },
         { ListFigure.class, "list" },
         { TextFigure.class, "text" },
         { GroupFigure.class, "g" },
