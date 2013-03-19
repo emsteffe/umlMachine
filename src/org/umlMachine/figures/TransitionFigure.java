@@ -26,7 +26,7 @@ public class TransitionFigure extends LineConnectionFigure {
 
     /** Creates a new instance. */
     public TransitionFigure() {
-        set(STROKE_COLOR, new Color(0x000099));
+        set(STROKE_COLOR, new Color(0,0,0));
         set(STROKE_WIDTH, 1d);
         set(END_DECORATION, new ArrowTip());
 
@@ -49,6 +49,11 @@ public class TransitionFigure extends LineConnectionFigure {
             StateFigure sf = (StateFigure) start.getOwner();
             StateFigure ef = (StateFigure) end.getOwner();
 
+            // Prevent transitions into START state
+            if(ef.getType() == -1){
+            	return false;            	
+            }
+            
             // Disallow multiple connections to same dependent
             if (ef.getPredecessors().contains(sf)) {
                 return false;
@@ -63,7 +68,14 @@ public class TransitionFigure extends LineConnectionFigure {
 
     @Override
     public boolean canConnect(Connector start) {
-        return (start.getOwner() instanceof StateFigure);
+    	//Prevent transitions out of END state
+        if( (start.getOwner() instanceof StateFigure)){
+        	//nested loops to avoid casting errors
+        	if (( (StateFigure)start.getOwner() ).getType() != 1){
+        		return true;
+        	}
+        }
+        return false;
     }
 
     /**

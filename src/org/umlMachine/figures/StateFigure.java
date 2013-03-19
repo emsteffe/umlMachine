@@ -42,8 +42,8 @@ import org.jhotdraw.xml.*;
 public class StateFigure extends GraphicalCompositeFigure {
 
 	private HashSet<TransitionFigure> dependencies;
-	private static ImageFigure imageFigure;
 	private boolean isEnd = false;
+	private boolean isStart = false;
 
 	/**
 	 * This adapter is used, to connect a TextFigure with the name of
@@ -156,25 +156,20 @@ public class StateFigure extends GraphicalCompositeFigure {
 	}
 
 
-	public StateFigure(boolean isStart){ // true=start , false=end
+	public StateFigure(boolean type){ // true->start , false->end
 
 		super(new EllipseFigure());
-
-		// Keeps jHotDraw getter methods happy (for now)
-		ListFigure blankCompartment = new ListFigure();
-		TextFigure blankFigure = new TextFigure();			
-		blankFigure.setText("");
-		blankCompartment.add(blankFigure);
-		add(blankCompartment);
-
-		imageFigure = new ImageFigure();
+		
+		ImageFigure imageFigure = new ImageFigure();
 		imageFigure.set(STROKE_COLOR, new Color(255,255,255));
 		imageFigure.setAttributeEnabled(STROKE_COLOR, false);
 
+
 		File file;
-		if(isStart){
+		if(type){
 
 			file = new File("src/org/umlMachine/images/start.png");
+			isStart = true;
 
 		}else{
 
@@ -191,6 +186,12 @@ public class StateFigure extends GraphicalCompositeFigure {
 
 		super.setPresentationFigure(imageFigure);
 
+	}
+	
+	public int getType(){
+		if (isStart) return -1;
+		if (isEnd) return 1;
+		return 0;		
 	}
 
 	@Override
@@ -211,7 +212,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 				handles.add(ch = new ConnectorHandle(new LocatorConnector(this, RelativeLocator.east()), new TransitionFigure()));
 				ch.setToolTipText("Drag the connector to another state.");
 			}
-			
+
 			break;
 		}
 		return handles;
@@ -224,11 +225,14 @@ public class StateFigure extends GraphicalCompositeFigure {
 	public String getName() {
 		return getNameFigure().getText();
 	}
-	
+
 	private TextFigure getNameFigure() {
-		return (TextFigure) ((ListFigure) getChild(0)).getChild(0);
+		if (!isStart && !isEnd){
+			return (TextFigure)((ListFigure) getChild(0)).getChild(0);
+		}
+		else return new TextFigure("");
 	}
-	
+
 	@Override
 	public StateFigure clone() {
 		StateFigure that = (StateFigure) super.clone();
@@ -284,13 +288,11 @@ public class StateFigure extends GraphicalCompositeFigure {
 
 	public void addDependency(TransitionFigure f) {
 		dependencies.add(f);
-		//updateStartTime();
 
 	}
 
 	public void removeDependency(TransitionFigure f) {
 		dependencies.remove(f);
-		//updateStartTime();
 
 	}
 
