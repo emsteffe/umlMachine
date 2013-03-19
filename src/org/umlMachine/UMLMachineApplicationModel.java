@@ -30,6 +30,7 @@ import org.jhotdraw.gui.JFileURIChooser;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
 import org.jhotdraw.util.*;
+import org.umlMachine.controller.Simulator;
 import org.umlMachine.figures.*;
 
 /**
@@ -116,10 +117,27 @@ public class UMLMachineApplicationModel extends DefaultApplicationModel {
         
         ButtonFactory.addSelectionToolTo(tb, editor);
         tb.addSeparator();
+        
+        //creation
         ButtonFactory.addToolTo(tb, editor, new CreationTool(new StateFigure(), attributes), "edit.createTask", labels);
         ButtonFactory.addToolTo(tb, editor, new ConnectionTool(new TransitionFigure(), attributes), "edit.createDependency", labels);
         ButtonFactory.addToolTo(tb, editor, new CreationTool(new StateFigure(true), attributes), "edit.createStart", labels);
+        ButtonFactory.addToolTo(tb, editor, new CreationTool(new StateFigure(false), attributes), "edit.createEnd", labels);
         
+        tb.addSeparator();
+        
+        //functions
+        ButtonFactory.addToolTo(tb, editor, new CreationTool(new StateFigure(), attributes), "edit.serialize", labels);
+        ButtonFactory.addToolTo(tb, editor, new CreationTool(new StateFigure(), attributes), "edit.fromfile", labels);
+        ButtonFactory.addToolTo(tb, editor, new CreationTool(new StateFigure(), attributes), "edit.save", labels);
+        
+        tb.addSeparator();
+        
+        //later
+        ButtonFactory.addToolTo(tb, editor, new CreationTool(new StateFigure(), attributes), "edit.animate", labels);
+
+
+
         
         // old shit
         // this used to be between create state and create transition buttons

@@ -19,7 +19,10 @@ import org.jhotdraw.draw.layouter.HorizontalLayouter;
 import org.jhotdraw.draw.layouter.VerticalLayouter;
 import org.jhotdraw.draw.connector.LocatorConnector;
 import org.jhotdraw.draw.handle.ConnectorHandle;
+
+import java.io.File;
 import java.io.IOException;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.*;
 import static org.jhotdraw.draw.AttributeKeys.*;
@@ -39,6 +42,8 @@ import org.jhotdraw.xml.*;
 public class StateFigure extends GraphicalCompositeFigure {
 
 	private HashSet<TransitionFigure> dependencies;
+	private static ImageFigure imageFigure;
+	private boolean isEnd = false;
 
 	/**
 	 * This adapter is used, to connect a TextFigure with the name of
@@ -123,7 +128,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 		attributeCompartment.add(attributeFigure = new TextFigure());
 		attributeFigure.setText("Attribute");
 
-/*
+		/*
 		TextFigure durationFigure;
 		durationFigure = new TextFigure();
 		durationFigure.set(FONT_BOLD, true);
@@ -136,7 +141,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 		startTimeFigure.setText("0");
 		startTimeFigure.setAttributeEnabled(FONT_BOLD, false);
 
-*/
+		 */
 
 
 		setAttributeEnabled(STROKE_DASHES, false);
@@ -145,48 +150,46 @@ public class StateFigure extends GraphicalCompositeFigure {
 				ResourceBundleUtil.getBundle("org.umlMachine.Labels");
 
 		setName(labels.getString("state.defaultName"));
-		// setDuration(0);
 
 		dependencies = new HashSet<TransitionFigure>();
 		nameFigure.addFigureListener(new NameAdapter(this));
-		//durationFigure.addFigureListener(new DurationAdapter(this));
 	}
 
-	
-	public StateFigure(boolean StartType){ // true=start , false=end
-	
-		super(new EllipseFigure());
-		
-		if(StartType){ // Create new start state figure
-			
-			
-			// Keeps jHotDraw getter methods happy (for now)
-			ListFigure blankCompartment = new ListFigure();
-			TextFigure blankFigure = new TextFigure();			
-			blankFigure.setText("");
-			blankCompartment.add(blankFigure);
-			
-			
-			EllipseFigure circleFigure = new EllipseFigure(0.0,-0.03333,0.05,0.2);
-			blankCompartment.add(circleFigure);
-			
-			
-			
-			add(blankCompartment);
-			
-			
-			
-			
-			
-			
-		}else{ // Create new end state figure
-			
-			
-		}
-			
-			
-		
 
+	public StateFigure(boolean isStart){ // true=start , false=end
+
+		super(new EllipseFigure());
+
+		// Keeps jHotDraw getter methods happy (for now)
+		ListFigure blankCompartment = new ListFigure();
+		TextFigure blankFigure = new TextFigure();			
+		blankFigure.setText("");
+		blankCompartment.add(blankFigure);
+		add(blankCompartment);
+
+		imageFigure = new ImageFigure();
+		imageFigure.set(STROKE_COLOR, new Color(255,255,255));
+		imageFigure.setAttributeEnabled(STROKE_COLOR, false);
+
+		File file;
+		if(isStart){
+
+			file = new File("src/org/umlMachine/images/start.png");
+
+		}else{
+
+			file = new File("src/org/umlMachine/images/end.png");
+			isEnd = true;
+
+		}
+
+		try {
+			imageFigure.loadImage(file);
+		} catch (IOException e) {
+		}
+
+
+		super.setPresentationFigure(imageFigure);
 
 	}
 
@@ -203,8 +206,12 @@ public class StateFigure extends GraphicalCompositeFigure {
 			handles.add(new MoveHandle(this, RelativeLocator.southWest()));
 			handles.add(new MoveHandle(this, RelativeLocator.southEast()));
 			ConnectorHandle ch;
-			handles.add(ch = new ConnectorHandle(new LocatorConnector(this, RelativeLocator.east()), new TransitionFigure()));
-			ch.setToolTipText("Drag the connector to a dependent task.");
+
+			if(!isEnd){
+				handles.add(ch = new ConnectorHandle(new LocatorConnector(this, RelativeLocator.east()), new TransitionFigure()));
+				ch.setToolTipText("Drag the connector to another state.");
+			}
+			
 			break;
 		}
 		return handles;
@@ -217,71 +224,11 @@ public class StateFigure extends GraphicalCompositeFigure {
 	public String getName() {
 		return getNameFigure().getText();
 	}
-	/*
-    public void setDuration(int newValue) {
-        int oldValue = getDuration();
-        getDurationFigure().setText(Integer.toString(newValue));
-        if (oldValue != newValue) {
-            for (StateFigure succ : getSuccessors()) {
-                succ.updateStartTime();
-            }
-
-        }
-    }
-
-    public int getDuration() {
-        try {
-            return Integer.valueOf(getDurationFigure().getText());
-        } catch (NumberFormatException e) {
-            return 0;
-        }
-
-    }
-
-    public void updateStartTime() {
-        willChange();
-        int oldValue = getStartTime();
-        int newValue = 0;
-        for (StateFigure pre : getPredecessors()) {
-            newValue = Math.max(newValue,
-                    pre.getStartTime() + pre.getDuration());
-        }
-
-        getStartTimeFigure().setText(Integer.toString(newValue));
-        if (newValue != oldValue) {
-            for (StateFigure succ : getSuccessors()) {
-                // The if-statement here guards against
-                // cyclic task dependencies. 
-                if (!this.isDependentOf(succ)) {
-                    succ.updateStartTime();
-                }
-
-            }
-        }
-        changed();
-    }
-
-    public int getStartTime() {
-        try {
-            return Integer.valueOf(getStartTimeFigure().getText());
-        } catch (NumberFormatException e) {
-            return 0;
-        }
-
-    }
-	 */
+	
 	private TextFigure getNameFigure() {
 		return (TextFigure) ((ListFigure) getChild(0)).getChild(0);
 	}
-	/*
-    private TextFigure getDurationFigure() {
-        return (TextFigure) ((ListFigure) getChild(2)).getChild(0);
-    }
-
-    private TextFigure getStartTimeFigure() {
-        return (TextFigure) ((ListFigure) getChild(2)).getChild(1);
-    }
-	 */
+	
 	@Override
 	public StateFigure clone() {
 		StateFigure that = (StateFigure) super.clone();
