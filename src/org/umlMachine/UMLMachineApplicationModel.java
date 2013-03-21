@@ -31,8 +31,8 @@ import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
 import org.jhotdraw.util.*;
 import org.umlMachine.controller.FigureFactory;
-import org.umlMachine.controller.ImageCreationTool;
 import org.umlMachine.controller.Simulator;
+import org.umlMachine.controller.tools.ImageCreationTool;
 import org.umlMachine.figures.*;
 
 /**
@@ -133,6 +133,7 @@ public class UMLMachineApplicationModel extends DefaultApplicationModel {
         ButtonFactory.addToolTo(tb, editor, new CreationTool(new StateFigure(), attributes), "serialize", labels);
         tb.addSeparator();
         ButtonFactory.addToolTo(tb, editor, new CreationTool(new StateFigure(), attributes), "fromfile", labels);
+        ButtonFactory.addToolTo(tb, editor, new CreationTool(new StateFigure(), attributes), "simulateDiagram", labels);
         
         
         // Implement this in later deliverable
@@ -172,25 +173,7 @@ public class UMLMachineApplicationModel extends DefaultApplicationModel {
     /** Creates the MenuBuilder. */
     @Override
     protected MenuBuilder createMenuBuilder() {
-        return new DefaultMenuBuilder() {
-
-            @Override
-            public void addOtherViewItems(JMenu m, Application app, @Nullable View v) {
-                ActionMap am = app.getActionMap(v);
-                JCheckBoxMenuItem cbmi;
-                cbmi = new JCheckBoxMenuItem(am.get("view.toggleGrid"));
-                ActionUtil.configureJCheckBoxMenuItem(cbmi, am.get("view.toggleGrid"));
-                m.add(cbmi);
-                JMenu m2 = new JMenu("Zoom");
-                for (double sf : scaleFactors) {
-                    String id = (int) (sf * 100) + "%";
-            cbmi = new JCheckBoxMenuItem(am.get(id));
-            ActionUtil.configureJCheckBoxMenuItem(cbmi, am.get(id));
-            m2.add(cbmi);
-                }
-                m.add(m2);
-            }
-        };
+        return new UMLMachineMenuBuilder();
     }
 
     @Override
