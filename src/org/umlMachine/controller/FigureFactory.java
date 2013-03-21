@@ -16,7 +16,7 @@ public class FigureFactory {
 		return instance;
 	}
 	
-	public StateFigure getState(String name){
+	public StateFigure getState(){
 		StateFigure toReturn = new StateFigure();
 		return toReturn;
 	}
@@ -27,7 +27,7 @@ public class FigureFactory {
 	}
 	
 	
-	public TransitionFigure getTransition(String action){
+	public TransitionFigure getTransition(){
 		TransitionFigure toReturn = new TransitionFigure();
 		return toReturn;
 	}
