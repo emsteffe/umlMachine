@@ -41,6 +41,7 @@ import org.jhotdraw.gui.URIChooser;
  * @author Werner Randelshofer
  * @version $Id: PertView.java 727 2011-01-09 13:23:59Z rawcoder $
  */
+@SuppressWarnings("serial")
 public class UMLMachineView extends AbstractView {
 
     public final static String GRID_VISIBLE_PROPERTY = "gridVisible";

@@ -11,6 +11,8 @@ out of file
 
 package org.umlMachine.controller;
 
+import java.util.Set;
+
 import org.umlMachine.figures.StateFigure;
 
 public class Simulator {
@@ -19,7 +21,7 @@ public class Simulator {
 		return false;
 	}
 	
-	public boolean simulate(Set<StateFigure>){
+	public boolean simulate(Set<StateFigure> s){
 		return false;
 	}
 	

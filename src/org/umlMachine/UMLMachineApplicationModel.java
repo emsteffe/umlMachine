@@ -30,6 +30,7 @@ import org.jhotdraw.gui.JFileURIChooser;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
 import org.jhotdraw.util.*;
+import org.umlMachine.controller.FigureFactory;
 import org.umlMachine.controller.ImageCreationTool;
 import org.umlMachine.controller.Simulator;
 import org.umlMachine.figures.*;
@@ -120,10 +121,10 @@ public class UMLMachineApplicationModel extends DefaultApplicationModel {
         tb.addSeparator();
         
         //creation
-        ButtonFactory.addToolTo(tb, editor, new CreationTool(new StateFigure(), attributes), "createState", labels);
-        ButtonFactory.addToolTo(tb, editor, new ConnectionTool(new TransitionFigure(), attributes), "createTransition", labels);
-        ButtonFactory.addToolTo(tb, editor, new ImageCreationTool(new StateFigure(true), attributes), "createStart", labels);
-        ButtonFactory.addToolTo(tb, editor, new ImageCreationTool(new StateFigure(false), attributes), "createEnd", labels);
+        ButtonFactory.addToolTo(tb, editor, new CreationTool(FigureFactory.getInstance().getState(), attributes), "createState", labels);
+        ButtonFactory.addToolTo(tb, editor, new ConnectionTool(FigureFactory.getInstance().getTransition(), attributes), "createTransition", labels);
+        ButtonFactory.addToolTo(tb, editor, new ImageCreationTool(FigureFactory.getInstance().getState(true), attributes), "createStart", labels);
+        ButtonFactory.addToolTo(tb, editor, new ImageCreationTool(FigureFactory.getInstance().getState(false), attributes), "createEnd", labels);
         
         tb.addSeparator();
         
@@ -136,6 +137,7 @@ public class UMLMachineApplicationModel extends DefaultApplicationModel {
         
         // Implement this later
         ButtonFactory.addToolTo(tb, editor, new CreationTool(new StateFigure(), attributes), "animate", labels);
+
 
 
 

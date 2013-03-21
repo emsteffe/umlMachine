@@ -87,70 +87,36 @@ public class StateFigure extends GraphicalCompositeFigure {
 	/** Creates a new instance. */
 	public StateFigure() {
 
-		super(new EllipseFigure());
-
+		super(new RectangleFigure());
 		setLayouter(new VerticalLayouter());
 
-		RectangleFigure nameCompartmentPF = new RectangleFigure();
-		nameCompartmentPF.set(STROKE_COLOR, null);
-		nameCompartmentPF.setAttributeEnabled(STROKE_COLOR, false);
-		nameCompartmentPF.set(FILL_COLOR, null);
-		nameCompartmentPF.setAttributeEnabled(FILL_COLOR, false);
-
-		ListFigure nameCompartment = new ListFigure(nameCompartmentPF);
+		//Compartments
+		ListFigure nameCompartment = new ListFigure();
 		ListFigure attributeCompartment = new ListFigure();
 		ListFigure actionCompartment = new ListFigure();
-		SeparatorLineFigure separator1 = new SeparatorLineFigure();
-
-		add(nameCompartment);
-		add(separator1);
-		add(attributeCompartment);
-		add(separator1);
-		add(actionCompartment);
-
-
-		Insets2D.Double insets = new Insets2D.Double(4, 8, 4, 8);
-		nameCompartment.set(LAYOUT_INSETS, insets);
-		attributeCompartment.set(LAYOUT_INSETS, insets);
-		actionCompartment.set(LAYOUT_INSETS, insets);
-
-
+		
+		//Figures
 		TextFigure nameFigure;
 		nameCompartment.add(nameFigure = new TextFigure());
 		nameFigure.set(FONT_BOLD, true);
 		nameFigure.setAttributeEnabled(FONT_BOLD, false);
+		
+		actionCompartment.add(new TextFigure("Actions"));
+		
+		attributeCompartment.add(new TextFigure("Attributes"));
+		
+		SeparatorLineFigure separator = new SeparatorLineFigure();
+	
+		//Order
+		add(nameCompartment);
+		add(separator);
+		add(actionCompartment);
+		add(separator);
+		add(attributeCompartment);
 
-		TextFigure actionFigure;
-		actionCompartment.add(actionFigure = new TextFigure());
-		actionFigure.setText("Action");
-
-		TextFigure attributeFigure;
-		attributeCompartment.add(attributeFigure = new TextFigure());
-		attributeFigure.setText("Attribute");
-
-		/*
-		TextFigure durationFigure;
-		durationFigure = new TextFigure();
-		durationFigure.set(FONT_BOLD, true);
-		durationFigure.setText("0");
-		durationFigure.setAttributeEnabled(FONT_BOLD, false);
-
-		TextFigure startTimeFigure;
-		startTimeFigure = new TextFigure();
-		startTimeFigure.setEditable(false);
-		startTimeFigure.setText("0");
-		startTimeFigure.setAttributeEnabled(FONT_BOLD, false);
-
-		 */
-
-
-		setAttributeEnabled(STROKE_DASHES, false);
-
-		ResourceBundleUtil labels =
-				ResourceBundleUtil.getBundle("org.umlMachine.Labels");
-
+		//Assignments
+		ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.umlMachine.Labels");
 		setName(labels.getString("state.defaultName"));
-
 		dependencies = new HashSet<TransitionFigure>();
 		nameFigure.addFigureListener(new NameAdapter(this));
 	}
@@ -208,7 +174,8 @@ public class StateFigure extends GraphicalCompositeFigure {
 			handles.add(new MoveHandle(this, RelativeLocator.southEast()));
 			ConnectorHandle ch;
 
-			if(!isEnd){
+			if(!isEnd){ 
+				//TODO: make transitions created from this handle the same as the transition tool
 				handles.add(ch = new ConnectorHandle(new LocatorConnector(this, RelativeLocator.east()), new TransitionFigure()));
 				ch.setToolTipText("Drag the connector to another state.");
 			}
@@ -294,6 +261,16 @@ public class StateFigure extends GraphicalCompositeFigure {
 	public void removeDependency(TransitionFigure f) {
 		dependencies.remove(f);
 
+	}
+	
+	public void addAction(String action){
+		//TODO
+		
+	}
+	
+	public void addAttribute(String attribute){
+		//TODO
+		
 	}
 
 	/**

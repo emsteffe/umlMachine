@@ -1,11 +1,11 @@
 package org.umlMachine.controller;
 
 import java.util.Set;
-
 import org.umlMachine.figures.StateFigure;
-import org.umlMachine.figures.TaskFigure;
 import org.umlMachine.figures.TransitionFigure;
-import org.umlMachine.xml.XMLElement;
+
+//import org.umlMachine.xml.XMLElement;
+import net.n3.nanoxml.XMLElement;
 
 public class FigureFactory {
 
@@ -32,7 +32,7 @@ public class FigureFactory {
 		return toReturn;
 	}
 	
-	public Set<TaskFigure> buildFigures(Set<XMLElement>  elements){
+	public Set<StateFigure> buildFigures(Set<XMLElement>  elements){
 		
 		return null;
 	}
