@@ -135,20 +135,10 @@ public class UMLMachineApplicationModel extends DefaultApplicationModel {
         ButtonFactory.addToolTo(tb, editor, new CreationTool(new StateFigure(), attributes), "fromfile", labels);
         
         
-        // Implement this later
+        // Implement this in later deliverable
         ButtonFactory.addToolTo(tb, editor, new CreationTool(new StateFigure(), attributes), "animate", labels);
 
 
-
-
-        
-        // old shit
-        // this used to be between create state and create transition buttons
-        //attributes = new HashMap<AttributeKey, Object>();
-        //attributes.put(AttributeKeys.STROKE_COLOR, new Color(0x000099));
-        // Text box tool
-        //tb.addSeparator();
-        //ButtonFactory.addToolTo(tb, editor, new TextAreaCreationTool(new TextAreaFigure()), "edit.createTextArea", drawLabels);
 
     }
 
@@ -175,18 +165,7 @@ public class UMLMachineApplicationModel extends DefaultApplicationModel {
         addCreationButtonsTo(tb, editor);
         tb.setName(drawLabels.getString("window.drawToolBar.title"));
         list.add(tb);
-        
-        /* Old Pert Toolbars
-        tb = new JToolBar();
-        ButtonFactory.addAttributesButtonsTo(tb, editor);
-        tb.setName(drawLabels.getString("window.attributesToolBar.title"));
-        list.add(tb);
-        tb = new JToolBar();
-        ButtonFactory.addAlignmentButtonsTo(tb, editor);
-        tb.setName(drawLabels.getString("window.alignmentToolBar.title"));
-        list.add(tb);
-        */
-        
+                
         return list;
     }
 

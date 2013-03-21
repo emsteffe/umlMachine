@@ -12,7 +12,11 @@ package org.umlMachine.figures;
 
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.decoration.ArrowTip;
+import org.jhotdraw.draw.layouter.HorizontalLayouter;
+
 import java.awt.*;
+import java.util.ArrayList;
+
 import static org.jhotdraw.draw.AttributeKeys.*;
 import org.jhotdraw.draw.*;
 
@@ -22,108 +26,134 @@ import org.jhotdraw.draw.*;
  * @author Werner Randelshofer.
  * @version $Id: DependencyFigure.java 718 2010-11-21 17:49:53Z rawcoder $
  */
+@SuppressWarnings("serial")
 public class TransitionFigure extends LineConnectionFigure {
 
-    /** Creates a new instance. */
-    public TransitionFigure() {
-        set(STROKE_COLOR, new Color(0,0,0));
-        set(STROKE_WIDTH, 1d);
-        set(END_DECORATION, new ArrowTip());
+	protected GraphicalCompositeFigure textArea = new GraphicalCompositeFigure();
+	
+	protected ArrayList<Figure> children = new ArrayList<Figure>();
 
-        setAttributeEnabled(END_DECORATION, false);
-        setAttributeEnabled(START_DECORATION, false);
-        setAttributeEnabled(STROKE_DASHES, false);
-        setAttributeEnabled(FONT_ITALIC, false);
-        setAttributeEnabled(FONT_UNDERLINE, false);
-    }
+	/** Creates a new instance. */
+	public TransitionFigure() {
 
-    /**
-     * Checks if two figures can be connected. Implement this method
-     * to constrain the allowed connections between figures.
-     */
-    @Override
-    public boolean canConnect(Connector start, Connector end) {
-        if ((start.getOwner() instanceof StateFigure)
-                && (end.getOwner() instanceof StateFigure)) {
+		ListFigure list = new ListFigure();
+		
+		//TODO Make this real data from TransitionData
+		list.add(new TextFigure("Event"));
+		list.add(new TextFigure(" / "));
+		list.add(new TextFigure("Action"));
+		list.add(new TextFigure(" / "));
+		list.add(new TextFigure("Condition"));
+		
+		textArea.add(list);
+		textArea.setLayouter(new HorizontalLayouter());
+		
+		//TODO find a way to to add textArea to the screen? 
+		
 
-            StateFigure sf = (StateFigure) start.getOwner();
-            StateFigure ef = (StateFigure) end.getOwner();
+		//TODO check if start is end, change from straight line to curved.
+		
+		
+		//Visual Attributes
+		set(STROKE_COLOR, new Color(0,0,0));
+		set(STROKE_WIDTH, 2d);
+		set(END_DECORATION, new ArrowTip());
+		setAttributeEnabled(END_DECORATION, false);
+		setAttributeEnabled(START_DECORATION, false);
+		setAttributeEnabled(STROKE_DASHES, false);
+		setAttributeEnabled(FONT_ITALIC, false);
+		setAttributeEnabled(FONT_UNDERLINE, false);
+	}
+	
 
-            // Prevent transitions into START state
-            if(ef.getType() == -1){
-            	return false;            	
-            }
-            
-            // Disallow multiple connections to same dependent
-            if (ef.getPredecessors().contains(sf)) {
-                return false;
-            }
 
-            // Disallow cyclic connections
-            return !sf.isDependentOf(ef);
-        }
+	/**
+	 * Checks if two figures can be connected. Implement this method
+	 * to constrain the allowed connections between figures.
+	 */
+	@Override
+	public boolean canConnect(Connector start, Connector end) {
+		if ((start.getOwner() instanceof StateFigure)
+				&& (end.getOwner() instanceof StateFigure)) {
 
-        return false;
-    }
+			StateFigure sf = (StateFigure) start.getOwner();
+			StateFigure ef = (StateFigure) end.getOwner();
 
-    @Override
-    public boolean canConnect(Connector start) {
-    	//Prevent transitions out of END state
-        if( (start.getOwner() instanceof StateFigure)){
-        	//nested loops to avoid casting errors
-        	if (( (StateFigure)start.getOwner() ).getType() != 1){
-        		return true;
-        	}
-        }
-        return false;
-    }
+			// Prevent transitions into START state
+			if(ef.getType() == -1){
+				return false;            	
+			}
 
-    /**
-     * Handles the disconnection of a connection.
-     * Override this method to handle this event.
-     */
-    @Override
-    protected void handleDisconnect(Connector start, Connector end) {
-        StateFigure sf = (StateFigure) start.getOwner();
-        StateFigure ef = (StateFigure) end.getOwner();
+			// Disallow multiple connections to same dependent
+			if (ef.getPredecessors().contains(sf)) {
+				return false;
+			}
 
-        sf.removeDependency(this);
-        ef.removeDependency(this);
-    }
+			// Disallow cyclic connections
+			return !sf.isDependentOf(ef);
+		}
 
-    /**
-     * Handles the connection of a connection.
-     * Override this method to handle this event.
-     */
-    @Override
-    protected void handleConnect(Connector start, Connector end) {
-        StateFigure sf = (StateFigure) start.getOwner();
-        StateFigure ef = (StateFigure) end.getOwner();
+		return false;
+	}
 
-        sf.addDependency(this);
-        ef.addDependency(this);
-    }
+	@Override
+	public boolean canConnect(Connector start) {
+		//Prevent transitions out of END state
+		if( (start.getOwner() instanceof StateFigure)){
+			//nested loops to avoid casting errors
+			if (( (StateFigure)start.getOwner() ).getType() != 1){
+				return true;
+			}
+		}
+		return false;
+	}
 
-    @Override
-    public TransitionFigure clone() {
-        TransitionFigure that = (TransitionFigure) super.clone();
+	/**
+	 * Handles the disconnection of a connection.
+	 * Override this method to handle this event.
+	 */
+	@Override
+	protected void handleDisconnect(Connector start, Connector end) {
+		StateFigure sf = (StateFigure) start.getOwner();
+		StateFigure ef = (StateFigure) end.getOwner();
 
-        return that;
-    }
+		sf.removeDependency(this);
+		ef.removeDependency(this);
+	}
 
-    @Override
-    public int getLayer() {
-        return 1;
-    }
+	/**
+	 * Handles the connection of a connection.
+	 * Override this method to handle this event.
+	 */
+	@Override
+	protected void handleConnect(Connector start, Connector end) {
+		StateFigure sf = (StateFigure) start.getOwner();
+		StateFigure ef = (StateFigure) end.getOwner();
 
-    @Override
-    public void removeNotify(Drawing d) {
-        if (getStartFigure() != null) {
-            ((StateFigure) getStartFigure()).removeDependency(this);
-        }
-        if (getEndFigure() != null) {
-            ((StateFigure) getEndFigure()).removeDependency(this);
-        }
-        super.removeNotify(d);
-    }
+		sf.addDependency(this);
+		ef.addDependency(this);
+	}
+
+	@Override
+	public TransitionFigure clone() {
+		TransitionFigure that = (TransitionFigure) super.clone();
+
+		return that;
+	}
+
+	@Override
+	public int getLayer() {
+		return 1;
+	}
+
+	@Override
+	public void removeNotify(Drawing d) {
+		if (getStartFigure() != null) {
+			((StateFigure) getStartFigure()).removeDependency(this);
+		}
+		if (getEndFigure() != null) {
+			((StateFigure) getEndFigure()).removeDependency(this);
+		}
+		super.removeNotify(d);
+	}
 }

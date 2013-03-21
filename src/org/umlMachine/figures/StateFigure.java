@@ -15,7 +15,6 @@ import org.jhotdraw.draw.handle.MoveHandle;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.event.FigureAdapter;
 import org.jhotdraw.draw.event.FigureEvent;
-import org.jhotdraw.draw.layouter.HorizontalLayouter;
 import org.jhotdraw.draw.layouter.VerticalLayouter;
 import org.jhotdraw.draw.connector.LocatorConnector;
 import org.jhotdraw.draw.handle.ConnectorHandle;
@@ -23,13 +22,11 @@ import org.jhotdraw.draw.handle.ConnectorHandle;
 import java.io.File;
 import java.io.IOException;
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.geom.*;
 import static org.jhotdraw.draw.AttributeKeys.*;
 import java.util.*;
 import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.handle.BoundsOutlineHandle;
-import org.jhotdraw.geom.*;
 import org.jhotdraw.util.*;
 import org.jhotdraw.xml.*;
 
@@ -39,6 +36,7 @@ import org.jhotdraw.xml.*;
  * @author Werner Randelshofer.
  * @version $Id: TaskFigure.java 727 2011-01-09 13:23:59Z rawcoder $
  */
+@SuppressWarnings("serial")
 public class StateFigure extends GraphicalCompositeFigure {
 
 	private HashSet<TransitionFigure> dependencies;
@@ -65,6 +63,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private static class DurationAdapter extends FigureAdapter {
 
 		private StateFigure target;
@@ -84,7 +83,6 @@ public class StateFigure extends GraphicalCompositeFigure {
 		}
 	}
 
-	/** Creates a new instance. */
 	public StateFigure() {
 
 		super(new RectangleFigure());
@@ -94,19 +92,23 @@ public class StateFigure extends GraphicalCompositeFigure {
 		ListFigure nameCompartment = new ListFigure();
 		ListFigure attributeCompartment = new ListFigure();
 		ListFigure actionCompartment = new ListFigure();
-		
+
 		//Figures
 		TextFigure nameFigure;
 		nameCompartment.add(nameFigure = new TextFigure());
 		nameFigure.set(FONT_BOLD, true);
 		nameFigure.setAttributeEnabled(FONT_BOLD, false);
 		
+		
+		//These need to be lists of actions/attributes from StateData that can be added to and removed from via right click menu
+		//TODO
 		actionCompartment.add(new TextFigure("Actions"));
 		
+		//TODO
 		attributeCompartment.add(new TextFigure("Attributes"));
-		
+
 		SeparatorLineFigure separator = new SeparatorLineFigure();
-	
+
 		//Order
 		add(nameCompartment);
 		add(separator);
@@ -121,11 +123,10 @@ public class StateFigure extends GraphicalCompositeFigure {
 		nameFigure.addFigureListener(new NameAdapter(this));
 	}
 
-
 	public StateFigure(boolean type){ // true->start , false->end
 
 		super(new EllipseFigure());
-		
+
 		ImageFigure imageFigure = new ImageFigure();
 		imageFigure.set(STROKE_COLOR, new Color(255,255,255));
 		imageFigure.setAttributeEnabled(STROKE_COLOR, false);
@@ -153,7 +154,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 		super.setPresentationFigure(imageFigure);
 
 	}
-	
+
 	public int getType(){
 		if (isStart) return -1;
 		if (isEnd) return 1;
@@ -175,7 +176,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 			ConnectorHandle ch;
 
 			if(!isEnd){ 
-				//TODO: make transitions created from this handle the same as the transition tool
+				//TODO: make transitions created from this handle the same as the transition tool (low priority) 
 				handles.add(ch = new ConnectorHandle(new LocatorConnector(this, RelativeLocator.east()), new TransitionFigure()));
 				ch.setToolTipText("Drag the connector to another state.");
 			}
@@ -198,6 +199,16 @@ public class StateFigure extends GraphicalCompositeFigure {
 			return (TextFigure)((ListFigure) getChild(0)).getChild(0);
 		}
 		else return new TextFigure("");
+	}
+
+	public void addAction(String action){
+		//TODO
+
+	}
+
+	public void addAttribute(String attribute){
+		//TODO
+
 	}
 
 	@Override
@@ -262,16 +273,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 		dependencies.remove(f);
 
 	}
-	
-	public void addAction(String action){
-		//TODO
-		
-	}
-	
-	public void addAttribute(String attribute){
-		//TODO
-		
-	}
+
 
 	/**
 	 * Returns dependent PertTasks which are directly connected via a
@@ -323,11 +325,9 @@ public class StateFigure extends GraphicalCompositeFigure {
 		}
 		return false;
 	}
-	/*
-    @Override
-    public String toString() {
-        return "TaskFigure#" + hashCode() + " " + getName() + " " + getDuration() + " " + getStartTime();
-    }
-	 */
+
+	// @Override
+	//public String toString() {return "TaskFigure#" + hashCode() + " " + getName() + " " + getDuration() + " " + getStartTime();}
+
 }
 
