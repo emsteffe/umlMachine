@@ -16,14 +16,12 @@ import org.jhotdraw.app.action.view.ToggleViewPropertyAction;
 import org.jhotdraw.app.action.file.ExportFileAction;
 import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.draw.tool.CreationTool;
-import org.jhotdraw.draw.tool.TextAreaCreationTool;
 import org.jhotdraw.draw.tool.ConnectionTool;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import org.jhotdraw.app.*;
-import org.jhotdraw.app.action.*;
 import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.action.*;
 import org.jhotdraw.gui.JFileURIChooser;
@@ -31,8 +29,7 @@ import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
 import org.jhotdraw.util.*;
 import org.umlMachine.controller.FigureFactory;
-import org.umlMachine.controller.Simulator;
-import org.umlMachine.controller.tools.ImageCreationTool;
+import org.umlMachine.controller.tools.*;
 import org.umlMachine.figures.*;
 
 /**
@@ -43,7 +40,6 @@ import org.umlMachine.figures.*;
  */
 public class UMLMachineApplicationModel extends DefaultApplicationModel {
 
-    private final static double[] scaleFactors = {5, 4, 3, 2, 1.5, 1.25, 1, 0.75, 0.5, 0.25, 0.10};
 
     private static class ToolButtonListener implements ItemListener {
 
@@ -74,20 +70,7 @@ public class UMLMachineApplicationModel extends DefaultApplicationModel {
 
     @Override
     public ActionMap createActionMap(Application a, @Nullable View v) {
-        ActionMap m = super.createActionMap(a, v);
-        ResourceBundleUtil drawLabels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
-        AbstractAction aa;
-
-        m.put(ExportFileAction.ID, new ExportFileAction(a, v));
-        m.put("view.toggleGrid", aa = new ToggleViewPropertyAction(a, v, UMLMachineView.GRID_VISIBLE_PROPERTY));
-        drawLabels.configureAction(aa, "view.toggleGrid");
-        for (double sf : scaleFactors) {
-            m.put((int) (sf * 100) + "%",
-                    aa = new ViewPropertyAction(a, v, DrawingView.SCALE_FACTOR_PROPERTY, Double.TYPE, new Double(sf)));
-            aa.putValue(Action.NAME, (int) (sf * 100) + " %");
-
-        }
-        return m;
+        return super.createActionMap(a, v);
     }
 
     public DefaultDrawingEditor getSharedEditor() {
@@ -103,13 +86,13 @@ public class UMLMachineApplicationModel extends DefaultApplicationModel {
             ((UMLMachineView) p).setEditor(getSharedEditor());
         }
     }
+    
 
-    private void addCreationButtonsTo(JToolBar tb, final DrawingEditor editor) {
+    private void addButtonsTo(JToolBar tb, final DrawingEditor editor) {
         // AttributeKeys for the entitie sets
         HashMap<AttributeKey, Object> attributes;
 
         ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.umlMachine.Labels");
-        ResourceBundleUtil drawLabels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
         attributes = new HashMap<AttributeKey, Object>();
         attributes.put(AttributeKeys.FILL_COLOR, Color.white);
         attributes.put(AttributeKeys.STROKE_COLOR, Color.black);
@@ -129,16 +112,15 @@ public class UMLMachineApplicationModel extends DefaultApplicationModel {
         tb.addSeparator();
         
         //functions
-        ButtonFactory.addToolTo(tb, editor, new CreationTool(new StateFigure(), attributes), "save", labels);
-        ButtonFactory.addToolTo(tb, editor, new CreationTool(new StateFigure(), attributes), "serialize", labels);
+        ButtonFactory.addToolTo(tb, editor, new SaveTool(0), "save", labels);
+        ButtonFactory.addToolTo(tb, editor, new SaveTool(1), "serialize", labels);
         tb.addSeparator();
-        ButtonFactory.addToolTo(tb, editor, new CreationTool(new StateFigure(), attributes), "fromfile", labels);
-        ButtonFactory.addToolTo(tb, editor, new CreationTool(new StateFigure(), attributes), "simulateDiagram", labels);
+        ButtonFactory.addToolTo(tb, editor, new SimulateTool(false), "fromfile", labels);
+        ButtonFactory.addToolTo(tb, editor, new SimulateTool(true), "simulateDiagram", labels);
         
         
         // Implement this in later deliverable
-        ButtonFactory.addToolTo(tb, editor, new CreationTool(new StateFigure(), attributes), "animate", labels);
-
+        ButtonFactory.addToolTo(tb, editor, new AnimateTool(), "animate", labels);
 
 
     }
@@ -163,7 +145,7 @@ public class UMLMachineApplicationModel extends DefaultApplicationModel {
         LinkedList<JToolBar> list = new LinkedList<JToolBar>();
         JToolBar tb;
         tb = new JToolBar();
-        addCreationButtonsTo(tb, editor);
+        addButtonsTo(tb, editor);
         tb.setName(drawLabels.getString("window.drawToolBar.title"));
         list.add(tb);
                 

@@ -36,8 +36,8 @@ public class Main {
             app = new SDIApplication();
         }
         
-        
-        DefaultApplicationModel model = new UMLMachineApplicationModel();
+        DefaultApplicationModel model;
+        model = new UMLMachineApplicationModel();
         model.setName("UML Machine");
         model.setVersion(Main.class.getPackage().getImplementationVersion());
         model.setCopyright("Copyright 2006-2010 (c) by the authors of JHotDraw and all its contributors.\n" +
@@ -46,5 +46,6 @@ public class Main {
         app.setModel(model);
         app.launch(args);
     }
+    
     
 }

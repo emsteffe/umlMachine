@@ -78,25 +78,6 @@ public class UMLMachineView extends AbstractView {
             }
         });
 
-        ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
-
-        JPanel placardPanel = new JPanel(new BorderLayout());
-        javax.swing.AbstractButton pButton;
-        pButton = ButtonFactory.createZoomButton(view);
-        pButton.putClientProperty("Quaqua.Button.style", "placard");
-        pButton.putClientProperty("Quaqua.Component.visualMargin", new Insets(0, 0, 0, 0));
-        pButton.setFont(UIManager.getFont("SmallSystemFont"));
-        placardPanel.add(pButton, BorderLayout.WEST);
-        pButton = ButtonFactory.createToggleGridButton(view);
-        pButton.putClientProperty("Quaqua.Button.style", "placard");
-        pButton.putClientProperty("Quaqua.Component.visualMargin", new Insets(0, 0, 0, 0));
-        pButton.setFont(UIManager.getFont("SmallSystemFont"));
-        labels.configureToolBarButton(pButton, "view.toggleGrid.placard");
-        placardPanel.add(pButton, BorderLayout.EAST);
-        scrollPane.add(placardPanel, JScrollPane.LOWER_LEFT_CORNER);
-
-        //setGridVisible(preferences.getBoolean("view.gridVisible", false));
-        //setScaleFactor(preferences.getDouble("view.scaleFactor", 1d));
     }
 
     /**
@@ -137,29 +118,6 @@ public class UMLMachineView extends AbstractView {
         if (newValue != null) {
             newValue.add(view);
         }
-    }
-
-    public void setGridVisible(boolean newValue) {
-        boolean oldValue = isGridVisible();
-        view.setConstrainerVisible(newValue);
-        firePropertyChange(GRID_VISIBLE_PROPERTY, oldValue, newValue);
-        preferences.putBoolean("view.gridVisible", newValue);
-    }
-
-    public boolean isGridVisible() {
-        return view.isConstrainerVisible();
-    }
-
-    public double getScaleFactor() {
-        return view.getScaleFactor();
-    }
-
-    public void setScaleFactor(double newValue) {
-        double oldValue = getScaleFactor();
-        view.setScaleFactor(newValue);
-
-        firePropertyChange("scaleFactor", oldValue, newValue);
-        preferences.putDouble("view.scaleFactor", newValue);
     }
 
     /**
