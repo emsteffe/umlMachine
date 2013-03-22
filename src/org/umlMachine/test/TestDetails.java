@@ -1,4 +1,4 @@
-/* @(#)testDetails.java
+/** @(#)testDetails.java
  * 
  * helper methods to help with the UMLModelTest.Java
  * 
@@ -6,6 +6,7 @@
  */
 package org.umlMachine.test;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.umlMachine.controller.XMLController;
 import org.umlMachine.figures.StateFigure;
@@ -16,9 +17,9 @@ public class TestDetails{
 
 	StateFigure defaultFigure = new StateFigure();
 	
-	/* constructs the desired number of the figures
+	/** constructs the desired number of figures
 	 * and returns the size 
-	 * @param a is the list that we are working with
+	 * @param a is the list that is working on
 	 * @param number is the desired number of state figures to be created
 	 */
 	public int construct(ArrayList<StateFigure> a, int number){
@@ -30,31 +31,29 @@ public class TestDetails{
 		return a.size();
 	}
 	
-	/* creates and checks if we successfully created a start state figure */	
+	/* creates and checks if successfully created a start state figure */	
 	
-	public boolean createStartState(ArrayList<StateFigure> a){
+	public boolean createStartState(){
 		StateFigure s = new StateFigure(true);
-		a.add(s);
-		return a.get(0).getType() == -1;
+		return s.getType() == -1;
 	}
 	
-	/* creates an checks if we successfully created an end state figure */
+	/* creates and checks if successfully created an end state figure */
 	
-	public boolean createEndState(ArrayList<StateFigure> a){
+	public boolean createEndState(){
 		StateFigure s = new StateFigure(false);
-		a.add(s);
-		return a.get(0).getType() == 1;
+		return s.getType() == 1;
 	}
 	
-	/* creates a Transition Figure *?
+	/* creates a Transition Figure 
 	 */
 	
 	public boolean createTransitionFigure() {
-		// TODO 
+		StateFigure start = new StateFigure(true);
+		StateFigure end = new StateFigure(false);
+		
 		return false;
 	}
-
-	
 	
 	/* creates two state figures, one is a start state, the other is a regular state
 	 * and will try to create a transition into the start state form the regular state
@@ -69,11 +68,13 @@ public class TestDetails{
 		return false;
 	}
 	
-	public boolean allowedTranstionToHaveNoEndState(ArrayList<StateFigure> l){
+	
+	public boolean allowedTranstionToHaveNoEndStateFigure(ArrayList<StateFigure> l){
 		StateFigure a = new StateFigure();
 		
 		return false;
 	}
+	
 	
 	public boolean allowedEndStateToHaveTransitionsOut(
 			ArrayList<StateFigure> listFigures2) {
@@ -122,6 +123,61 @@ public class TestDetails{
 		
 	}
 
+	public String expected2(){
+		String s = "<State name=state1 type=start>\n"+
+				"\t<Actions>\n"+
+				"\t\t<Action>action1</Action>\n"+
+			"\t</Actions>\n"+
+			"\t<TransitionsIn>\n" +
+				"\t\t<Transition action=trans1 start=state1 end=state1 trigger=refself event=event1 condition=[con1]/>\n" +
+			"\t</TransitionsIn>\n" +
+			"\t<TransitionsOut>\n" +
+				"\t\t<Transition action=trans1 start=state1 end=state1 trigger=refself event=event1 condition=[con1]/>\n" +
+				"\t\t<Transition action=trans2 start=state1 end=state2 trigger=continue event=event2 condition=null/>\n" +
+			"\t</TransitionsOut>\n" +
+		"</State>\n" +
+		"<State name=state2 type=end>\n"+
+			"\t<Actions>\n"+
+				"\t\t<Action>action2</Action>\n"+
+				"\t\t<Action>action3</Action>\n" +
+			"\t</Actions>\n"+
+			"\t<TransitionsIn>\n" +
+				"\t\t<Transition action=trans2 start=state1 end=state2 trigger=continue event=event2 condition=null/>\n" +
+			"\t</TransitionsIn>\n" +
+			"\t<TransitionsOut>\n" +
+			"\t</TransitionsOut>\n" +
+		"</State>\n";
+		return s;
+	}
+	
+	public String serializeData(XMLController x){
+		StateFigure one = new StateFigure();
+		StateFigure two = new StateFigure();
+		
+		TransitionData tran1 = new TransitionData("trans1", one, one, "refself", "event1", "[con1]");
+		TransitionData tran2 = new TransitionData("trans2", one, two, "continue", "event2",null);
+		
+		one.addAction("action1");
+		two.addAction("action2");
+		two.addAction("action3");
+		
+		one.setName("state1");
+		one.setName("state2");
+		
+		one.setStart(true);
+		two.setEnd(true);
+		
+		one.addTransitionOut(tran1);
+		two.addTransitionOut(tran2);
+		
+		List<StateData> testList = new ArrayList<StateData>();
+		
+		testList.add(one);
+		testList.add(two);
+		
+		return x.serialize(testList);
+		
+	}
 }
 
 	
