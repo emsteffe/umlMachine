@@ -7,114 +7,97 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Assert;
 
-import org.umlMachine.model.StateData;
-import org.umlMachine.model.TransitionData;
+import org.umlMachine.figures.*;
 import org.umlMachine.controller.XMLController;
 
-public class UMLModelTest {
+public class UMLModelTest extends TestDetails {
 
-	
-	private StateData defaultState;
-	private TransitionData defaultTransition;
-	StateData state2;
+	private ArrayList<StateFigure> listFigures;
 	private XMLController xml;
 	
 	@Before
 	public void constructModel(){
-		defaultState = new StateData();
-		defaultTransition = new TransitionData();
-		state2 = new StateData();
+		listFigures = new ArrayList<StateFigure>();
 		xml = new XMLController();
 	}
 	
+	@Test
+	/* test to see if the number of desired state figures are really created 
+	 */
 	
-	@Test 
-	public void testBaseStateActions(){
-		assertEquals(0,defaultState.getActions().size());
+	public void testForNumbersOfFiguresCreatedInList(){
+		assertEquals(0, (construct(listFigures, 0)));
+		constructModel();
+		assertEquals(1, (construct(listFigures, 1)));
+		constructModel();
+		assertEquals(2, (construct(listFigures, 2)));
+		constructModel();
+		assertEquals(3, (construct(listFigures,3))); 
+	}
+
+	@Test
+	/* test to see if we successfully created a start state figure
+	 */
+	
+	public void createdStartStateSuccessfully(){
+		constructModel();
+		assertTrue("Start state not created successfully",createStartState(listFigures));
 	}
 	
 	@Test
-	public void testBaseStateTransitionsIn(){
-		assertEquals(0,defaultState.getTransitionsIn().size());
+	/* test to see if we successfully created an end state figure
+	 */
+	
+	public void createdEndStateSuccessfully(){
+		constructModel();
+		assertTrue("End state not created successfully", createEndState(listFigures));
 	}
 	
 	@Test
-	public void testBaseStateTransitionsOut(){
-		assertEquals(0,defaultState.getTransitionsIn().size());
+	/* test to see if we created a Transition figure successfully
+	 */
+	public void createdTransitionFigureSuccessfuly(){
+		constructModel();
+		assertTrue("TransitionFigure not created successfully", createTransitionFigure());
 	}
 	
 	@Test
-	public void testBaseTransition(){
-		assertEquals(null, defaultTransition.getAction());
+	/* test to see if we allowed a transition going into start state figure
+	 */
+	
+	public void testForNoTransitionIntoStartState(){
+		constructModel();
+		assertFalse("Allowed transition into start figure", allowedTransitionIntoStartState());
 	}
 	
 	@Test
-	public void testBaseTransitionStart(){
-		assertEquals(null, defaultTransition.getStart());
+	/* test to see if we allowed a transition to have no transition out figure
+	 */
+	
+	public void testForMissingTransitionEndState(){
+		constructModel();
+		assertFalse("Transition is missing an end state figure", allowedTranstionToHaveNoEndState(listFigures));
 	}
 	
 	@Test
-	public void testBaseTransitionEnd(){
-		assertEquals(null, defaultTransition.getEnd());
-	}
-	
-	@Test
-	public void testBaseTransitionEvent(){
-		assertEquals(null, defaultTransition.getEvent());
-	}
-	
-	@Test
-	public void testBaseTransitionTrigger(){
-		assertEquals(null, defaultTransition.getTrigger());
-	}
-	
-	@Test
-	public void testStateAddAction(){
-		String expected = "TestAction1";
-		defaultState.addAction("TestAction1");
+	/* test to see to see if we allowed an end state figure to have a transition out
+	 */
+
+	public void testNoTransitionOutFromEndState(){
+		assertFalse("End state has a transition out", allowedEndStateToHaveTransitionsOut(listFigures));
 		
-		assertEquals(expected , defaultState.getActions().get(0));
-		
-		assertEquals(1,defaultState.getActions().size());
 	}
 	
-	@Test	
-	public void testStateAddTransition(){
-		defaultTransition.setStart(defaultState);
-		defaultTransition.setEnd(state2);
-		defaultState.addTransitionOut(defaultTransition);
-		
-		assertEquals(1,defaultState.getTransitionsOut().size());
-		assertEquals(1,state2.getTransitionsIn().size());
-		assertEquals(state2.getTransitionsIn().get(0),defaultState.getTransitionsOut().get(0));
-	}
-	
+
 	@Test
 	public void testStateTransitionToSelf(){
-		TransitionData tran1 = new TransitionData();
-		tran1.setStart(state2);
-		tran1.setEnd(state2);
-		state2.addTransitionOut(tran1);
 		
-		assertEquals(1,state2.getTransitionsIn().size());
-		assertEquals(1,state2.getTransitionsOut().size());
-		assertEquals(state2.getTransitionsIn().get(0),state2.getTransitionsOut().get(0));
 	}
 	
 	@Test
 	public void testStateDefaultXML(){
-		String expected = "<State name=null type=norm>\n"+
-							"\t<Actions>\n"+
-							"\t</Actions>\n"+
-							"\t<TransitionsIn>\n"+
-							"\t</TransitionsIn>\n"+
-							"\t<TransitionsOut>\n"+
-							"\t</TransitionsOut>\n"+
-							"</State>";
-		
-		assertEquals(expected,defaultState.toXML());
+		assertEquals(expected1(), createDefaultState());
 	}
 	
 	@Test
