@@ -37,9 +37,9 @@ public class UMLModelTest extends TestDetails {
 		assertEquals(3, (construct(FF,3))); 
 	}
     
-	@Test
+	/*@Test
 	/* test to see if we successfully created a start state figure
-	 
+
 	
 	public void createdStartStateSuccessfully(){
 		assertTrue("Start state not created successfully",createStartState());

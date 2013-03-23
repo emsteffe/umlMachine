@@ -37,7 +37,7 @@ public class TestDetails{
 	
 	/* creates and checks if successfully created a start state figure */	
 	
-/*	public boolean createStartState(){
+	public boolean createStartState(){
 		StateFigure s = new StateFigure(true);
 		return s.getType() == -1;
 	}
