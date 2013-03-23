@@ -35,18 +35,22 @@ public class TestDetails{
 		return f.figureMap.size();
 	}
 	
-	/* creates and checks if successfully created a start state figure */	
+	/* creates and checks if successfully created a start state figure in FigureFactory */	
 	
-	public boolean createStartState(){
+	public boolean createStartState(FigureFactory f){
+		String name = "start";
 		StateFigure s = new StateFigure(true);
-		return s.getType() == -1;
+		f.figureMap.put(name,s);
+		return f.figureMap.get("start").getType() == -1;
 	}
 	
-	/* creates and checks if successfully created an end state figure 
+	/* creates and checks if successfully created an end state figure in FigureFactory */ 
 	
-//	public boolean createEndState(){
-		StateFigure s = new StateFigure(false);
-		return s.getType() == 1;
+	public boolean createEndState(FigureFactory f){
+		String name = "end";
+		StateFigure e = new StateFigure(false);
+		f.figureMap.put(name, e);
+		return f.figureMap.get("end").getType() == 1;
 	}
 	
 	/* creates a Transition Figure 
