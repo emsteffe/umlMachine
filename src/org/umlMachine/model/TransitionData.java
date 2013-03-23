@@ -48,12 +48,12 @@ public class TransitionData {
 	}
 	
 	public String toXML(){
-		return "<Transition action=" + action + 
-				" start=" + start.getName() + 
-				" end=" + end.getName() + 
-				" trigger=" + trigger + 
-				" event=" + event + 
-				" condition=" + condition + 
+		return "<Transition action=\"" + action + 
+				"\" start=\"" + start.getName() + 
+				"\" end=\"" + end.getName() + 
+				"\" trigger=\"" + trigger + 
+				"\" event=\"" + event + 
+				"\" condition=\"" + condition + 
 				"/>";
 	}
 }

@@ -3,6 +3,8 @@ package org.umlMachine.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.umlMachine.controller.FigureFactory;
+
 public class StateData {
 	private boolean isStart = false;
 	private boolean isEnd = false;
@@ -44,6 +46,7 @@ public class StateData {
 	}
 	
 	public void setName(String name){
+		FigureFactory.getInstance().updateName(this.name,name);
 		this.name = name;
 	}
 	
@@ -101,29 +104,17 @@ public class StateData {
 	}
 	
 	public String toXML(){
-		String toReturn = "<State name=" + name + " type=";
+		String toReturn = "<State name=\"" + name + "\" type=\"";
 		if(isStart()) toReturn = toReturn + "start";
 		else if(isEnd()) toReturn = toReturn + "end";
 		else toReturn = toReturn + "norm";
-		toReturn = toReturn + ">\n";
+		toReturn = toReturn + "\">\n";
 		
 		toReturn = toReturn + "\t<Actions>\n";
 		for(String action : actions){
 			toReturn = toReturn + "\t\t<Action>" + action + "</Action>\n";
 		}
 		toReturn = toReturn + "\t</Actions>\n";
-		
-		toReturn = toReturn + "\t<TransitionsIn>\n";
-		for(TransitionData transition : transitionsIn){
-			toReturn = toReturn + "\t\t" + transition.toXML() + "\n";
-		}
-		toReturn = toReturn + "\t</TransitionsIn>\n";
-		
-		toReturn = toReturn + "\t<TransitionsOut>\n";
-		for(TransitionData transition : transitionsOut){
-			toReturn = toReturn + "\t\t" + transition.toXML() + "\n";
-		}
-		toReturn = toReturn + "\t</TransitionsOut>\n";
 		toReturn = toReturn + "</State>";
 		
 		return toReturn;

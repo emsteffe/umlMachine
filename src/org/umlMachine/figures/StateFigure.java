@@ -29,6 +29,7 @@ import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.handle.BoundsOutlineHandle;
 import org.jhotdraw.util.*;
 import org.jhotdraw.xml.*;
+import org.umlMachine.model.StateData;
 
 /**
  * TaskFigure.
@@ -47,6 +48,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 	 * This adapter is used, to connect a TextFigure with the name of
 	 * the TaskFigure model.
 	 */
+	private static int count =0;
 	private static class NameAdapter extends FigureAdapter {
 
 		private StateFigure target;
@@ -87,7 +89,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 
 		super(new RectangleFigure());
 		setLayouter(new VerticalLayouter());
-
+		count++;
 		//Compartments
 		ListFigure nameCompartment = new ListFigure();
 		ListFigure attributeCompartment = new ListFigure();
@@ -121,6 +123,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 		setName(labels.getString("state.defaultName"));
 		dependencies = new HashSet<TransitionFigure>();
 		nameFigure.addFigureListener(new NameAdapter(this));
+		setName("State "+count);
 	}
 
 	public StateFigure(boolean type){ // true->start , false->end
@@ -130,7 +133,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 		ImageFigure imageFigure = new ImageFigure();
 		imageFigure.set(STROKE_COLOR, new Color(255,255,255));
 		imageFigure.setAttributeEnabled(STROKE_COLOR, false);
-
+		count++;
 
 		File file;
 		if(type){
@@ -152,7 +155,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 
 
 		super.setPresentationFigure(imageFigure);
-
+		setName("State "+count);
 	}
 
 	public int getType(){
@@ -188,6 +191,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 
 	public void setName(String newValue) {
 		getNameFigure().setText(newValue);
+		data.setName(newValue);
 	}
 
 	public String getName() {
@@ -230,12 +234,27 @@ public class StateFigure extends GraphicalCompositeFigure {
 		setBounds(new Point2D.Double(x, y), new Point2D.Double(x + w, y + h));
 		readAttributes(in);
 		in.openElement("model");
-		in.openElement("name");
-		setName((String) in.readObject());
-		in.closeElement();
-		in.openElement("duration");
-		//setDuration((Integer) in.readObject());
-		in.closeElement();
+			in.openElement("name");
+				setName((String) in.readObject());
+			in.closeElement();
+			in.openElement("duration");
+				//setDuration((Integer) in.readObject());
+			in.closeElement();
+			in.openElement("data");
+				data.setName(in.getAttribute("name", ""));
+				if(in.getAttribute("type", "").equals("end"))
+					data.setEnd(true);
+				else if(in.getAttribute("type", "").equals("start"))
+					data.setStart(true);
+				in.openElement("actions");
+					int actionCount = in.getElementCount();
+					for(int i= 0; i!= actionCount; i++){
+						in.openElement(i);//open action
+							data.addAction(in.getText());
+						in.closeElement();
+					}
+				in.closeElement();
+			in.closeElement();
 		in.closeElement();
 	}
 
@@ -246,12 +265,28 @@ public class StateFigure extends GraphicalCompositeFigure {
 		out.addAttribute("y", r.y);
 		writeAttributes(out);
 		out.openElement("model");
-		out.openElement("name");
-		out.writeObject(getName());
-		out.closeElement();
-		out.openElement("duration");
-		//out.writeObject(getDuration());
-		out.closeElement();
+			out.openElement("name");
+				out.writeObject(getName());
+			out.closeElement();
+			out.openElement("duration");
+				//out.writeObject(getDuration());
+			out.closeElement();
+			out.openElement("data");
+				out.addAttribute("name", data.getName());
+				if(data.isEnd())
+					out.addAttribute("type", "end");
+				else if(data.isStart())
+					out.addAttribute("type", "start");
+				else
+					out.addAttribute("type", "nor");
+				out.openElement("actions");
+					for(String action : data.getActions()){
+						out.openElement("action");
+							out.addText(action);
+						out.closeElement();
+					}
+				out.closeElement();
+			out.closeElement();
 		out.closeElement();
 	}
 
@@ -324,6 +359,12 @@ public class StateFigure extends GraphicalCompositeFigure {
 
 		}
 		return false;
+	}
+	
+	private StateData data = new StateData();
+	
+	public StateData getData() {
+		return data;
 	}
 
 	// @Override
