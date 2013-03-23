@@ -29,6 +29,7 @@ import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.handle.BoundsOutlineHandle;
 import org.jhotdraw.util.*;
 import org.jhotdraw.xml.*;
+import org.umlMachine.controller.FigureFactory;
 import org.umlMachine.model.StateData;
 
 /**
@@ -48,7 +49,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 	 * This adapter is used, to connect a TextFigure with the name of
 	 * the TaskFigure model.
 	 */
-	private static int count =0;
+
 	private static class NameAdapter extends FigureAdapter {
 
 		private StateFigure target;
@@ -89,7 +90,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 
 		super(new RectangleFigure());
 		setLayouter(new VerticalLayouter());
-		count++;
+	
 		//Compartments
 		ListFigure nameCompartment = new ListFigure();
 		ListFigure attributeCompartment = new ListFigure();
@@ -97,7 +98,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 
 		//Figures
 		TextFigure nameFigure;
-		nameCompartment.add(nameFigure = new TextFigure());
+		nameCompartment.add(nameFigure = new TextFigure("State "+ FigureFactory.getInstance().getNumStates() ));
 		nameFigure.set(FONT_BOLD, true);
 		nameFigure.setAttributeEnabled(FONT_BOLD, false);
 		
@@ -119,11 +120,9 @@ public class StateFigure extends GraphicalCompositeFigure {
 		add(attributeCompartment);
 
 		//Assignments
-		ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.umlMachine.Labels");
-		setName(labels.getString("state.defaultName"));
 		dependencies = new HashSet<TransitionFigure>();
 		nameFigure.addFigureListener(new NameAdapter(this));
-		setName("State "+count);
+
 	}
 
 	public StateFigure(boolean type){ // true->start , false->end
@@ -133,7 +132,11 @@ public class StateFigure extends GraphicalCompositeFigure {
 		ImageFigure imageFigure = new ImageFigure();
 		imageFigure.set(STROKE_COLOR, new Color(255,255,255));
 		imageFigure.setAttributeEnabled(STROKE_COLOR, false);
-		count++;
+		
+		ListFigure nameCompartment = new ListFigure();
+		nameCompartment.add(new TextFigure("e4ge5FFsd4563 + "+ FigureFactory.getInstance().getNumStates()));
+		add(nameCompartment);
+		nameCompartment.setVisible(false);
 
 		File file;
 		if(type){
@@ -155,7 +158,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 
 
 		super.setPresentationFigure(imageFigure);
-		setName("State "+count);
+
 	}
 
 	public int getType(){
@@ -200,6 +203,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 
 	private TextFigure getNameFigure() {
 		if (!isStart && !isEnd){
+			
 			return (TextFigure)((ListFigure) getChild(0)).getChild(0);
 		}
 		else return new TextFigure("");
@@ -361,7 +365,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 		return false;
 	}
 	
-	private StateData data = new StateData();
+	private StateData data = new StateData(isStart,isEnd,"state");
 	
 	public StateData getData() {
 		return data;

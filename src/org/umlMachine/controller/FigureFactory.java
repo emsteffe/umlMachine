@@ -52,6 +52,10 @@ public class FigureFactory {
 		return toReturn;
 	}
 	
+	public int getNumStates(){
+		return figureMap.size();
+	}
+	
 	
 	public TransitionFigure getTransition(){
 		TransitionFigure toReturn = new TransitionFigure();
