@@ -27,7 +27,6 @@ import static org.jhotdraw.draw.AttributeKeys.*;
 import java.util.*;
 import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.handle.BoundsOutlineHandle;
-import org.jhotdraw.util.*;
 import org.jhotdraw.xml.*;
 import org.umlMachine.controller.FigureFactory;
 import org.umlMachine.model.StateData;

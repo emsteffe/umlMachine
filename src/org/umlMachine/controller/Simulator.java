@@ -17,6 +17,14 @@ import org.umlMachine.figures.StateFigure;
 
 public class Simulator {
 	
+	private static Simulator instance = null;
+
+	public static Simulator getInstance(){
+		if(instance == null) instance = new Simulator();
+		return instance;
+	}
+	
+	
 	public boolean simulate(){
 		return false;
 	}
@@ -24,6 +32,19 @@ public class Simulator {
 	public boolean simulate(Set<StateFigure> s){
 		return false;
 	}
+
+
+	public void fromFile() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void fromDiagram() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 }
 	

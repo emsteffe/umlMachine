@@ -195,6 +195,16 @@ public class FileHandler {
 	public static void setFile(String fIle){
 		file = fIle;
 	}
+
+	public void save() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void saveAs() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 	

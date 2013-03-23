@@ -2,41 +2,54 @@ package org.umlMachine.controller.tools;
 
 import java.awt.event.MouseEvent;
 
+import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.tool.AbstractTool;
+import org.umlMachine.controller.FileHandler;
+import org.umlMachine.controller.Simulator;
 
 public class SimulateTool extends AbstractTool {
 
 	/*
 	 * This tool can handle both simulate diagram and simulate from file
-	 * It may be more practical to split it up into different tools
 	 */
 
+	private boolean type;
+	
 	/*
 	 * Create a new simulation tool, pass true for diagram and false for from file
 	 */
 	public SimulateTool(boolean type){
-
-		if(type) {
-			diagram();
-		}else{
-			fromFile();
-		}
-		
+		this.type = type;
 	}
 
 	private void diagram(){
-		//TODO
+		
+		System.out.println("Simulate from Diagram");
+		Simulator.getInstance().fromDiagram();
 	}
 
 	private void fromFile(){
-		//TODO
+		
+		System.out.println("Simulate from File");
+		Simulator.getInstance().fromFile();
+
+	}
+	
+	
+	@Override
+	public void activate(DrawingEditor editor) {
+		super.activate(editor);
+		
+		if(type) diagram();
+		if(!type) fromFile();
+		
+		super.deactivate(editor);
+		fireToolDone();
 	}
 
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 
