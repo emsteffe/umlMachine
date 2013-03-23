@@ -8,6 +8,7 @@ package org.umlMachine.test;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.umlMachine.controller.FigureFactory;
 import org.umlMachine.controller.XMLController;
 import org.umlMachine.figures.StateFigure;
 import org.umlMachine.figures.TransitionFigure;
@@ -15,40 +16,43 @@ import org.umlMachine.model.TransitionData;
 
 public class TestDetails{
 
-	StateFigure defaultFigure = new StateFigure();
+	StateFigure[] Figure = new StateFigure[10];
 	
 	/** constructs the desired number of figures
 	 * and returns the size 
-	 * @param a is the list that is working on
+	 * @param f is a factory
 	 * @param number is the desired number of state figures to be created
 	 */
-	public int construct(ArrayList<StateFigure> a, int number){
-		if (number == 0) return a.size();
-		else
+	public int construct(FigureFactory f, int number){
+		if (number > 0){ 
+			String[] name = new String[number];
 			for (int i = 0; i < number; i++){
-				a.add(defaultFigure);
+				Figure[i] = new StateFigure();
+				name[i] = "name" + i;
+				f.figureMap.put(name[i], Figure[i]);
 			}
-		return a.size();
+		}
+		return f.figureMap.size();
 	}
 	
 	/* creates and checks if successfully created a start state figure */	
 	
-	public boolean createStartState(){
+/*	public boolean createStartState(){
 		StateFigure s = new StateFigure(true);
 		return s.getType() == -1;
 	}
 	
-	/* creates and checks if successfully created an end state figure */
+	/* creates and checks if successfully created an end state figure 
 	
-	public boolean createEndState(){
+//	public boolean createEndState(){
 		StateFigure s = new StateFigure(false);
 		return s.getType() == 1;
 	}
 	
 	/* creates a Transition Figure 
-	 */
+	 
 	
-	public boolean createTransitionFigure() {
+//	public boolean createTransitionFigure() {
 		StateFigure start = new StateFigure(true);
 		StateFigure end = new StateFigure(false);
 		
@@ -57,7 +61,7 @@ public class TestDetails{
 	
 	/* creates two state figures, one is a start state, the other is a regular state
 	 * and will try to create a transition into the start state form the regular state
-	 */
+	 
 	
 	public boolean allowedTransitionIntoStartState(){
 		StateFigure a = new StateFigure(true);
@@ -69,14 +73,14 @@ public class TestDetails{
 	}
 	
 	
-	public boolean allowedTranstionToHaveNoEndStateFigure(ArrayList<StateFigure> l){
+	//public boolean allowedTranstionToHaveNoEndStateFigure(ArrayList<StateFigure> l){
 		StateFigure a = new StateFigure();
 		
 		return false;
 	}
 	
 	
-	public boolean allowedEndStateToHaveTransitionsOut(
+	//public boolean allowedEndStateToHaveTransitionsOut(
 			ArrayList<StateFigure> listFigures2) {
 		// TODO 
 		return false;
@@ -93,7 +97,7 @@ public class TestDetails{
 				"</State>";
 		return s;
 	}
-	public String createDefaultState(){
+	//public String createDefaultState(){
 		
 		String toReturn = "<State name=" + defaultFigure.getName() + " type=";
 		if(defaultFigure.getType() == -1) toReturn = toReturn + "start";
@@ -178,6 +182,7 @@ public class TestDetails{
 		return x.serialize(testList);
 		
 	}
+	*/
 }
 
 	

@@ -14,8 +14,8 @@ import net.n3.nanoxml.XMLElement;
 public class FigureFactory {
 
 	private static FigureFactory instance = null;
-	private FigureFactory(){}
-	private Map<String,StateFigure> figureMap = new HashMap<String,StateFigure>();
+	public FigureFactory(){}
+	public Map<String,StateFigure> figureMap = new HashMap<String,StateFigure>();
 	
 	public static FigureFactory getInstance(){
 		if(instance == null) instance = new FigureFactory();
