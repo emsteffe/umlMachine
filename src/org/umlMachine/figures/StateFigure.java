@@ -27,6 +27,7 @@ import static org.jhotdraw.draw.AttributeKeys.*;
 import java.util.*;
 import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.handle.BoundsOutlineHandle;
+import org.jhotdraw.geom.Insets2D;
 import org.jhotdraw.xml.*;
 import org.umlMachine.controller.FigureFactory;
 import org.umlMachine.model.StateData;
@@ -43,6 +44,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 	private HashSet<TransitionFigure> dependencies;
 	private boolean isEnd = false;
 	private boolean isStart = false;
+	private StateData data = new StateData(isStart,isEnd,"state");
 
 	/**
 	 * This adapter is used, to connect a TextFigure with the name of
@@ -89,25 +91,39 @@ public class StateFigure extends GraphicalCompositeFigure {
 
 		super(new RectangleFigure());
 		setLayouter(new VerticalLayouter());
-	
+
 		//Compartments
 		ListFigure nameCompartment = new ListFigure();
 		ListFigure attributeCompartment = new ListFigure();
 		ListFigure actionCompartment = new ListFigure();
 
 		//Figures
+		//name
 		TextFigure nameFigure;
 		nameCompartment.add(nameFigure = new TextFigure("State "+ FigureFactory.getInstance().getNumStates() ));
+		nameFigure.set(LAYOUT_INSETS, new Insets2D.Double(4, 8, 4, 8));
 		nameFigure.set(FONT_BOLD, true);
 		nameFigure.setAttributeEnabled(FONT_BOLD, false);
-		
-		
-		//These need to be lists of actions/attributes from StateData that can be added to and removed from via right click menu
-		//TODO
-		actionCompartment.add(new TextFigure("Actions"));
-		
-		//TODO
-		attributeCompartment.add(new TextFigure("Attributes"));
+
+		//actions
+		ListFigure actions = new ListFigure();
+		actionCompartment.add(actions);
+
+			//sample data
+			//TODO
+			actions.add(new TextFigure("Action 1"));
+			actions.add(new TextFigure("Action 2"));
+
+
+		//attributes
+		ListFigure attributes = new ListFigure();
+		attributeCompartment.add(attributes);
+
+			//sample data
+			//TODO
+			attributes.add(new TextFigure("Attribute 1"));
+			attributes.add(new TextFigure("Attribute 2"));
+
 
 		SeparatorLineFigure separator = new SeparatorLineFigure();
 
@@ -122,6 +138,27 @@ public class StateFigure extends GraphicalCompositeFigure {
 		dependencies = new HashSet<TransitionFigure>();
 		nameFigure.addFigureListener(new NameAdapter(this));
 
+
+		/*
+		 * Layout of a state figure
+		 * 
+
+		name compartment
+			text figure
+
+		actions compartment
+			list figure
+				text figure
+				text figure
+				.....
+
+		attributes compartment
+			list figure
+				text figure
+				text figure
+				.....
+		 */
+
 	}
 
 	public StateFigure(boolean type){ // true->start , false->end
@@ -131,22 +168,27 @@ public class StateFigure extends GraphicalCompositeFigure {
 		ImageFigure imageFigure = new ImageFigure();
 		imageFigure.set(STROKE_COLOR, new Color(255,255,255));
 		imageFigure.setAttributeEnabled(STROKE_COLOR, false);
-		
+
+		// Name figure is not visible, but must exist for the factory
 		ListFigure nameCompartment = new ListFigure();
-		nameCompartment.add(new TextFigure("e4ge5FFsd4563 + "+ FigureFactory.getInstance().getNumStates()));
 		add(nameCompartment);
 		nameCompartment.setVisible(false);
 
+		//Creates state, does different things for start and end states
 		File file;
 		if(type){
 
+			nameCompartment.add(new TextFigure("jh72%3tr(#FH-uu")); //Unique name
 			file = new File("src/org/umlMachine/images/start.png");
 			isStart = true;
+			data.setStart(true);
 
 		}else{
 
+			nameCompartment.add(new TextFigure("End "+ FigureFactory.getInstance().getNumStates() ));
 			file = new File("src/org/umlMachine/images/end.png");
 			isEnd = true;
+			data.setEnd(true);
 
 		}
 
@@ -157,6 +199,15 @@ public class StateFigure extends GraphicalCompositeFigure {
 
 
 		super.setPresentationFigure(imageFigure);
+
+		/*
+		 * Layout of a start/end figure
+		 * 
+
+		name compartment
+			text figure [hidden]
+
+		 */
 
 	}
 
@@ -181,14 +232,15 @@ public class StateFigure extends GraphicalCompositeFigure {
 			ConnectorHandle ch;
 
 			if(!isEnd){ 
-				//TODO: make transitions created from this handle the same as the transition tool (low priority) 
-				handles.add(ch = new ConnectorHandle(new LocatorConnector(this, RelativeLocator.east()), new TransitionFigure()));
-				ch.setToolTipText("Drag the connector to another state.");
+				//TODO: make transitions created from this handle look the same as the transition tool (low priority) 
+				//handles.add(ch = new ConnectorHandle(new LocatorConnector(this, RelativeLocator.east()), new TransitionFigure()));
+				//ch.setToolTipText("Drag the connector to another state.");
 			}
 
 			break;
 		}
 		return handles;
+
 	}
 
 	public void setName(String newValue) {
@@ -201,20 +253,18 @@ public class StateFigure extends GraphicalCompositeFigure {
 	}
 
 	private TextFigure getNameFigure() {
-		if (!isStart && !isEnd){
-			
-			return (TextFigure)((ListFigure) getChild(0)).getChild(0);
-		}
-		else return new TextFigure("");
+		return (TextFigure)((ListFigure) getChild(0)).getChild(0);
 	}
 
 	public void addAction(String action){
 		//TODO
+		//Actions live in ((ListFigure)getChild(1).getChild(0))
 
 	}
 
 	public void addAttribute(String attribute){
 		//TODO
+		//Attributes live in ((ListFigure)getChild(2).getChild(0))
 
 	}
 
@@ -237,27 +287,27 @@ public class StateFigure extends GraphicalCompositeFigure {
 		setBounds(new Point2D.Double(x, y), new Point2D.Double(x + w, y + h));
 		readAttributes(in);
 		in.openElement("model");
-			in.openElement("name");
-				setName((String) in.readObject());
+		in.openElement("name");
+		setName((String) in.readObject());
+		in.closeElement();
+		in.openElement("duration");
+		//setDuration((Integer) in.readObject());
+		in.closeElement();
+		in.openElement("data");
+		data.setName(in.getAttribute("name", ""));
+		if(in.getAttribute("type", "").equals("end"))
+			data.setEnd(true);
+		else if(in.getAttribute("type", "").equals("start"))
+			data.setStart(true);
+		in.openElement("actions");
+		int actionCount = in.getElementCount();
+		for(int i= 0; i!= actionCount; i++){
+			in.openElement(i);//open action
+			data.addAction(in.getText());
 			in.closeElement();
-			in.openElement("duration");
-				//setDuration((Integer) in.readObject());
-			in.closeElement();
-			in.openElement("data");
-				data.setName(in.getAttribute("name", ""));
-				if(in.getAttribute("type", "").equals("end"))
-					data.setEnd(true);
-				else if(in.getAttribute("type", "").equals("start"))
-					data.setStart(true);
-				in.openElement("actions");
-					int actionCount = in.getElementCount();
-					for(int i= 0; i!= actionCount; i++){
-						in.openElement(i);//open action
-							data.addAction(in.getText());
-						in.closeElement();
-					}
-				in.closeElement();
-			in.closeElement();
+		}
+		in.closeElement();
+		in.closeElement();
 		in.closeElement();
 	}
 
@@ -268,28 +318,28 @@ public class StateFigure extends GraphicalCompositeFigure {
 		out.addAttribute("y", r.y);
 		writeAttributes(out);
 		out.openElement("model");
-			out.openElement("name");
-				out.writeObject(getName());
+		out.openElement("name");
+		out.writeObject(getName());
+		out.closeElement();
+		out.openElement("duration");
+		//out.writeObject(getDuration());
+		out.closeElement();
+		out.openElement("data");
+		out.addAttribute("name", data.getName());
+		if(data.isEnd())
+			out.addAttribute("type", "end");
+		else if(data.isStart())
+			out.addAttribute("type", "start");
+		else
+			out.addAttribute("type", "nor");
+		out.openElement("actions");
+		for(String action : data.getActions()){
+			out.openElement("action");
+			out.addText(action);
 			out.closeElement();
-			out.openElement("duration");
-				//out.writeObject(getDuration());
-			out.closeElement();
-			out.openElement("data");
-				out.addAttribute("name", data.getName());
-				if(data.isEnd())
-					out.addAttribute("type", "end");
-				else if(data.isStart())
-					out.addAttribute("type", "start");
-				else
-					out.addAttribute("type", "nor");
-				out.openElement("actions");
-					for(String action : data.getActions()){
-						out.openElement("action");
-							out.addText(action);
-						out.closeElement();
-					}
-				out.closeElement();
-			out.closeElement();
+		}
+		out.closeElement();
+		out.closeElement();
 		out.closeElement();
 	}
 
@@ -363,9 +413,9 @@ public class StateFigure extends GraphicalCompositeFigure {
 		}
 		return false;
 	}
-	
-	private StateData data = new StateData(isStart,isEnd,"state");
-	
+
+
+
 	public StateData getData() {
 		return data;
 	}

@@ -43,8 +43,8 @@ public class SimulateTool extends AbstractTool {
 		if(type) diagram();
 		if(!type) fromFile();
 		
-		super.deactivate(editor);
 		fireToolDone();
+		super.deactivate(editor);
 	}
 
 

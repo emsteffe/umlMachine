@@ -1,5 +1,6 @@
 package org.umlMachine.controller.tools;
 
+import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
@@ -13,73 +14,95 @@ import javax.swing.undo.CannotUndoException;
 import org.jhotdraw.draw.AttributeKey;
 import org.jhotdraw.draw.CompositeFigure;
 import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.tool.CreationTool;
+import org.umlMachine.controller.FigureFactory;
 import org.umlMachine.figures.StateFigure;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
 
-public class ImageCreationTool extends org.jhotdraw.draw.tool.CreationTool{
-	
-    public ImageCreationTool(StateFigure stateFigure, @Nullable Map<AttributeKey, Object> attributes) {
-        super(stateFigure, attributes, null);
-    }
-	 
+@SuppressWarnings("serial")
+public class ImageCreationTool extends CreationTool{
+
+	public ImageCreationTool(StateFigure stateFigure, @Nullable Map<AttributeKey, Object> attributes) {
+		super(stateFigure, attributes, null);
+	}
 
 
-	    @Override
-	    public void mouseReleased(MouseEvent evt) {
-	        if (createdFigure != null) {
-	            Rectangle2D.Double bounds = createdFigure.getBounds();
-	            if (bounds.width == 0 && bounds.height == 0) {
-	                getDrawing().remove(createdFigure);
-	                if (isToolDoneAfterCreation()) {
-	                    fireToolDone();
-	                }
-	                
-	            } else {
-	            	
-	                //if (Math.abs(anchor.x - evt.getX()) < minimalSizeTreshold.width && Math.abs(anchor.y - evt.getY()) < minimalSizeTreshold.height) {
-	                    createdFigure.willChange();
-	                    createdFigure.setBounds(constrainPoint(new Point(anchor.x, anchor.y)),constrainPoint(new Point(anchor.x + (int) minimalSize.width,anchor.y + (int)  minimalSize.height)));
-	                    createdFigure.changed();
-	                //}
-	                
-	                
-	                if (createdFigure instanceof CompositeFigure) {
-	                    ((CompositeFigure) createdFigure).layout();
-	                }
-	                final Figure addedFigure = createdFigure;
-	                final Drawing addedDrawing = getDrawing();
-	                getDrawing().fireUndoableEditHappened(new AbstractUndoableEdit() {
+	@Override
+	public void activate(DrawingEditor editor) {
+		
+		//Looks for start state in the factory, if it exists then disallow user from making another start state.
+		if(FigureFactory.getInstance().findState("jh72%3tr(#FH-uu") == null){
+			
+			super.activate(editor);
+			getView().setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+			
+		}else {
+			super.activate(editor);
+			System.out.println("Cannot create anther start state.");
+			fireToolDone();
+		}
+	}
 
-	                    @Override
-	                    public String getPresentationName() {
-	                        return presentationName;
-	                    }
 
-	                    @Override
-	                    public void undo() throws CannotUndoException {
-	                        super.undo();
-	                        addedDrawing.remove(addedFigure);
-	                    }
 
-	                    @Override
-	                    public void redo() throws CannotRedoException {
-	                        super.redo();
-	                        addedDrawing.add(addedFigure);
-	                    }
-	                });
-	                Rectangle r = new Rectangle(anchor.x, anchor.y, 0, 0);
-	                r.add(evt.getX(), evt.getY());
-	                maybeFireBoundsInvalidated(r);
-	                creationFinished(createdFigure);
-	                createdFigure = null;
-	            }
-	        } else {
-	            if (isToolDoneAfterCreation()) {
-	                fireToolDone();
-	            }
-	        }
-	    }
+	// Override this method to resize the image back to correct dimensions if user clicked and dragged while placing state
+	@Override
+	public void mouseReleased(MouseEvent evt) {
+		if (createdFigure != null) {
+			Rectangle2D.Double bounds = createdFigure.getBounds();
+			if (bounds.width == 0 && bounds.height == 0) {
+				getDrawing().remove(createdFigure);
+				if (isToolDoneAfterCreation()) {
+					fireToolDone();
+				}
+
+			} else {
+
+				//if (Math.abs(anchor.x - evt.getX()) < minimalSizeTreshold.width && Math.abs(anchor.y - evt.getY()) < minimalSizeTreshold.height) {
+				createdFigure.willChange();
+				createdFigure.setBounds(constrainPoint(new Point(anchor.x, anchor.y)),constrainPoint(new Point(anchor.x + (int) minimalSize.width,anchor.y + (int)  minimalSize.height)));
+				createdFigure.changed();
+				//}
+
+
+				if (createdFigure instanceof CompositeFigure) {
+					((CompositeFigure) createdFigure).layout();
+				}
+				final Figure addedFigure = createdFigure;
+				final Drawing addedDrawing = getDrawing();
+				getDrawing().fireUndoableEditHappened(new AbstractUndoableEdit() {
+
+					@Override
+					public String getPresentationName() {
+						return presentationName;
+					}
+
+					@Override
+					public void undo() throws CannotUndoException {
+						super.undo();
+						addedDrawing.remove(addedFigure);
+					}
+
+					@Override
+					public void redo() throws CannotRedoException {
+						super.redo();
+						addedDrawing.add(addedFigure);
+					}
+				});
+				Rectangle r = new Rectangle(anchor.x, anchor.y, 0, 0);
+				r.add(evt.getX(), evt.getY());
+				maybeFireBoundsInvalidated(r);
+				creationFinished(createdFigure);
+				createdFigure = null;
+			}
+		} else {
+			if (isToolDoneAfterCreation()) {
+				fireToolDone();
+			}
+		}
+	}
 
 }

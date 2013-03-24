@@ -52,12 +52,16 @@ public class SaveTool extends AbstractTool {
 		if(x < 0) saveAs();
 		if(x > 0) serialize();
 		
-		super.deactivate(editor);
 		fireToolDone();
 	}
 	
 	@Override
 	public void mouseDragged(MouseEvent arg0) {		
+	}
+	
+	
+	public void mouseReleased(MouseEvent evt) {
+		fireToolDone();
 	}
 
 }

@@ -16,6 +16,8 @@ public class FigureFactory {
 	private static FigureFactory instance = null;
 	public FigureFactory(){}
 	public Map<String,StateFigure> figureMap = new HashMap<String,StateFigure>();
+	private int numStates;
+
 	
 	public static FigureFactory getInstance(){
 		if(instance == null) instance = new FigureFactory();
@@ -25,6 +27,7 @@ public class FigureFactory {
 	public StateFigure getState(){
 		StateFigure toReturn = new StateFigure();
 		figureMap.put(toReturn.getName(), toReturn);
+		numStates++;
 		return toReturn;
 	}
 	
@@ -41,19 +44,22 @@ public class FigureFactory {
 	
 	public void reloadFactory(Set<StateFigure> toLoad){
 		figureMap.clear();
+		numStates = 0;
 		for(StateFigure state : toLoad){
 			figureMap.put(state.getName(), state);
+			numStates++;
 		}
 	}
 	
 	public StateFigure getState(boolean isStart){
 		StateFigure toReturn = new StateFigure(isStart);
 		figureMap.put(toReturn.getName(), toReturn);
+		numStates++;
 		return toReturn;
 	}
 	
 	public int getNumStates(){
-		return figureMap.size();
+		return numStates;
 	}
 	
 	

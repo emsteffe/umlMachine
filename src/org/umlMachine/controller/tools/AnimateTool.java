@@ -19,7 +19,7 @@ public class AnimateTool extends AbstractTool{
 	public void activate(DrawingEditor editor) {
 		super.activate(editor);
 		
-		System.out.println("Animate");
+		System.out.println("The Factory has [" + FigureFactory.getInstance().getNumStates() + "] states in it.");
 		
 		super.deactivate(editor);
 		fireToolDone();
