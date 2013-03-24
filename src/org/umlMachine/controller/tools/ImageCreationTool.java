@@ -32,18 +32,7 @@ public class ImageCreationTool extends CreationTool{
 
 	@Override
 	public void activate(DrawingEditor editor) {
-		
-		//Looks for start state in the factory, if it exists then disallow user from making another start state.
-		if(FigureFactory.getInstance().findState("jh72%3tr(#FH-uu") == null){
-			
-			super.activate(editor);
-			getView().setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
-			
-		}else {
-			super.activate(editor);
-			System.out.println("Cannot create anther start state.");
-			fireToolDone();
-		}
+		super.activate(editor);
 	}
 
 

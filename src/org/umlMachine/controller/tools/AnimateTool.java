@@ -1,6 +1,8 @@
 package org.umlMachine.controller.tools;
 
+import java.awt.Container;
 import java.awt.Cursor;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 
 import org.jhotdraw.draw.CompositeFigure;
@@ -11,21 +13,29 @@ import org.umlMachine.controller.FigureFactory;
 
 public class AnimateTool extends AbstractTool{
 
-	public AnimateTool(){
-		
-	}
+	public AnimateTool(){}
+	public void mouseDragged(MouseEvent e){}
 
 	@Override
 	public void activate(DrawingEditor editor) {
-		super.activate(editor);
-		
+		super.editor = editor;
+
 		System.out.println("The Factory has [" + FigureFactory.getInstance().getNumStates() + "] states in it.");
-		
-		super.deactivate(editor);
-		fireToolDone();
+		System.out.println(FigureFactory.getInstance().figureMap.toString());
+
 	}
 
 
-	public void mouseDragged(MouseEvent e) {}
+	@Override
+	public void mouseEntered(MouseEvent evt) {		
+		//This is questionable programming -- TODO fix it later
+		super.deactivate(editor);
+		fireToolDone();
+	}
+	
+
+
+
+
 
 }

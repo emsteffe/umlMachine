@@ -12,6 +12,7 @@ import org.umlMachine.controller.FileHandler;
 
 public class SaveTool extends AbstractTool {
 	
+	public void mouseDragged(MouseEvent e) {}
 	
 	/*
 	 * This tool can  handle Save, SaveAs, and Serialize functions
@@ -41,8 +42,7 @@ public class SaveTool extends AbstractTool {
 		System.out.println("Serialize");
 		FileHandler.getInstance().serialize();
 	}
-	
-	
+		
 	
 	@Override
 	public void activate(DrawingEditor editor) {
@@ -52,16 +52,12 @@ public class SaveTool extends AbstractTool {
 		if(x < 0) saveAs();
 		if(x > 0) serialize();
 		
-		fireToolDone();
-	}
+	}	
 	
 	@Override
-	public void mouseDragged(MouseEvent arg0) {		
-	}
-	
-	
-	public void mouseReleased(MouseEvent evt) {
+	public void mouseEntered(MouseEvent evt) {		
+		//This is questionable programming -- TODO fix it later
+		super.deactivate(editor);
 		fireToolDone();
 	}
-
 }

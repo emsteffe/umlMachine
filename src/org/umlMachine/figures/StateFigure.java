@@ -109,20 +109,20 @@ public class StateFigure extends GraphicalCompositeFigure {
 		ListFigure actions = new ListFigure();
 		actionCompartment.add(actions);
 
-			//sample data
-			//TODO
-			actions.add(new TextFigure("Action 1"));
-			actions.add(new TextFigure("Action 2"));
+		//sample data
+		//TODO
+		actions.add(new TextFigure("Action 1"));
+		actions.add(new TextFigure("Action 2"));
 
 
 		//attributes
 		ListFigure attributes = new ListFigure();
 		attributeCompartment.add(attributes);
 
-			//sample data
-			//TODO
-			attributes.add(new TextFigure("Attribute 1"));
-			attributes.add(new TextFigure("Attribute 2"));
+		//sample data
+		//TODO
+		attributes.add(new TextFigure("Attribute 1"));
+		attributes.add(new TextFigure("Attribute 2"));
 
 
 		SeparatorLineFigure separator = new SeparatorLineFigure();
@@ -178,14 +178,15 @@ public class StateFigure extends GraphicalCompositeFigure {
 		File file;
 		if(type){
 
-			nameCompartment.add(new TextFigure("jh72%3tr(#FH-uu")); //Unique name
+			System.out.println("Creating Start");
+			nameCompartment.add(new TextFigure("StartState[jh72%3tr#FHuu]")); //Unique name
 			file = new File("src/org/umlMachine/images/start.png");
 			isStart = true;
 			data.setStart(true);
 
 		}else{
 
-			nameCompartment.add(new TextFigure("End "+ FigureFactory.getInstance().getNumStates() ));
+			nameCompartment.add(new TextFigure("End State"+ FigureFactory.getInstance().getNumStates() ));
 			file = new File("src/org/umlMachine/images/end.png");
 			isEnd = true;
 			data.setEnd(true);
