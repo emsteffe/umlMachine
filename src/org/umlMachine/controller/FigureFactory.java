@@ -78,8 +78,10 @@ public class FigureFactory {
 	public void updateName(String name, String newName) {
 		StateFigure buffer = figureMap.get(name);
 		figureMap.remove(name);
-		buffer.setName(newName);
-		figureMap.put(buffer.getName(), buffer);
+		if(buffer!= null){
+			buffer.setName(newName);
+			figureMap.put(buffer.getName(), buffer);
+		}
 	}
 
 }
