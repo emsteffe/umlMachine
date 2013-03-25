@@ -212,9 +212,6 @@ public class StateFigure extends GraphicalCompositeFigure {
 
 	}
 
-	//Start: -1
-	//End: 1
-	//State: 0
 	public int getType(){
 		if (isStart) return -1;
 		if (isEnd) return 1;

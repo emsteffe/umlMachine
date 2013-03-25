@@ -3,7 +3,6 @@ package org.umlMachine.controller.tools;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Map;
 
@@ -17,23 +16,16 @@ import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.tool.CreationTool;
-import org.umlMachine.controller.FigureFactory;
 import org.umlMachine.figures.StateFigure;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
 
 @SuppressWarnings("serial")
 public class ImageCreationTool extends CreationTool{
-	
-	protected Figure createdFigure;
-	boolean type; //-1 for start, 1 for end
-
 
 	@SuppressWarnings({ "deprecation", "rawtypes" })
 	public ImageCreationTool(StateFigure stateFigure, @Nullable Map<AttributeKey, Object> attributes) {
 		super(stateFigure, attributes, null);
-		
-		type = (stateFigure.getType() == -1);
 	}
 
 
@@ -41,24 +33,12 @@ public class ImageCreationTool extends CreationTool{
 	public void activate(DrawingEditor editor) {
 		super.activate(editor);
 	}
-	
-	 @Override
-	    public void mousePressed(MouseEvent evt) {
-	        super.mousePressed(evt);
-	        getView().clearSelection();
-	        //Get from factory
-	        createdFigure = FigureFactory.getInstance().getState(type);
-	        Point2D.Double p = constrainPoint(viewToDrawing(anchor));
-	        anchor.x = evt.getX();
-	        anchor.y = evt.getY();
-	        createdFigure.setBounds(p, p);
-	        getDrawing().add(createdFigure);
-	    }
+
+
 
 	// Override this method to resize the image back to correct dimensions if user clicked and dragged while placing state
 	@Override
 	public void mouseReleased(MouseEvent evt) {
-		
 		if (createdFigure != null) {
 			Rectangle2D.Double bounds = createdFigure.getBounds();
 			if (bounds.width == 0 && bounds.height == 0) {
@@ -80,9 +60,6 @@ public class ImageCreationTool extends CreationTool{
 					((CompositeFigure) createdFigure).layout();
 				}
 				final Figure addedFigure = createdFigure;
-				
-				
-				
 				final Drawing addedDrawing = getDrawing();
 				getDrawing().fireUndoableEditHappened(new AbstractUndoableEdit() {
 
