@@ -16,9 +16,6 @@ import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.event.FigureAdapter;
 import org.jhotdraw.draw.event.FigureEvent;
 import org.jhotdraw.draw.layouter.VerticalLayouter;
-import org.jhotdraw.draw.connector.LocatorConnector;
-import org.jhotdraw.draw.handle.ConnectorHandle;
-
 import java.io.File;
 import java.io.IOException;
 import java.awt.Color;
@@ -53,10 +50,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 
 	private static class NameAdapter extends FigureAdapter {
 
-		private StateFigure target;
-
 		public NameAdapter(StateFigure target) {
-			this.target = target;
 		}
 
 		@Override
@@ -110,19 +104,25 @@ public class StateFigure extends GraphicalCompositeFigure {
 		actionCompartment.add(actions);
 
 		//sample data
-		//TODO
+		//TODO Make this editable from user.
+		//TODO Add right click add action option 
 		actions.add(new TextFigure("Action 1"));
+		data.addAction("Action 1");
 		actions.add(new TextFigure("Action 2"));
+		data.addAction("Action 2");
 
-
+		
 		//attributes
 		ListFigure attributes = new ListFigure();
 		attributeCompartment.add(attributes);
 
 		//sample data
-		//TODO
+		//TODO Make this editable from user
+		//TODO Add right click add attribute option
 		attributes.add(new TextFigure("Attribute 1"));
+		data.addAction("Attribute 1");
 		attributes.add(new TextFigure("Attribute 2"));
+		data.addAction("Attribute 2");
 
 
 		SeparatorLineFigure separator = new SeparatorLineFigure();
@@ -178,7 +178,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 		File file;
 		if(type){
 
-			System.out.println("Creating Start");
+			//TODO Need to be able to ask the factory if a figure with this name exists to prevent 2 start states
 			nameCompartment.add(new TextFigure("StartState[jh72%3tr#FHuu]")); //Unique name
 			file = new File("src/org/umlMachine/images/start.png");
 			isStart = true;
@@ -230,8 +230,8 @@ public class StateFigure extends GraphicalCompositeFigure {
 			handles.add(new MoveHandle(this, RelativeLocator.northEast()));
 			handles.add(new MoveHandle(this, RelativeLocator.southWest()));
 			handles.add(new MoveHandle(this, RelativeLocator.southEast()));
-			ConnectorHandle ch;
-
+			
+			//ConnectorHandle ch;
 			if(!isEnd){ 
 				//TODO: make transitions created from this handle look the same as the transition tool (low priority) 
 				//handles.add(ch = new ConnectorHandle(new LocatorConnector(this, RelativeLocator.east()), new TransitionFigure()));

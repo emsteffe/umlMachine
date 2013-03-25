@@ -23,6 +23,7 @@ import org.jhotdraw.geom.*;
  * @author  Werner Randelshofer
  * @version $Id: SeparatorLineFigure.java 718 2010-11-21 17:49:53Z rawcoder $
  */
+@SuppressWarnings("serial")
 public class SeparatorLineFigure 
 extends RectangleFigure {
 

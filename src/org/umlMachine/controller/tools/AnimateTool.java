@@ -1,16 +1,12 @@
 package org.umlMachine.controller.tools;
 
-import java.awt.Container;
-import java.awt.Cursor;
-import java.awt.Point;
 import java.awt.event.MouseEvent;
 
-import org.jhotdraw.draw.CompositeFigure;
 import org.jhotdraw.draw.DrawingEditor;
-import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.tool.AbstractTool;
 import org.umlMachine.controller.FigureFactory;
 
+@SuppressWarnings("serial")
 public class AnimateTool extends AbstractTool{
 
 	public AnimateTool(){}

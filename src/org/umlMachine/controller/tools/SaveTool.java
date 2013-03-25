@@ -4,12 +4,8 @@ import java.awt.event.MouseEvent;
 
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.tool.AbstractTool;
-import org.umlMachine.Main;
-import org.umlMachine.UMLMachineApplicationModel;
-import org.umlMachine.UMLMachineView;
-import org.umlMachine.controller.FigureFactory;
-import org.umlMachine.controller.FileHandler;
 
+@SuppressWarnings("serial")
 public class SaveTool extends AbstractTool {
 	
 	public void mouseDragged(MouseEvent e) {}
@@ -27,20 +23,20 @@ public class SaveTool extends AbstractTool {
 	private void save(){
 		
 		System.out.println("Save");
-		FileHandler.getInstance().save();
+
 	}
 	
 	private void saveAs(){
 		
 		System.out.println("Save As");
-		FileHandler.getInstance().saveAs();
+
 		
 	}
 	
 	private void serialize(){
 		
 		System.out.println("Serialize");
-		FileHandler.getInstance().serialize();
+		
 	}
 		
 	

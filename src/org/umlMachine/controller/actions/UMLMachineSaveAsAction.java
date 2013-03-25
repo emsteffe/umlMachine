@@ -1,15 +1,27 @@
 package org.umlMachine.controller.actions;
 
-import org.jhotdraw.app.Application;
-import org.jhotdraw.app.View;
-import org.jhotdraw.app.action.file.SaveFileAsAction;
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+
+import org.jhotdraw.util.ResourceBundleUtil;
 
 @SuppressWarnings("serial")
-public class UMLMachineSaveAsAction extends SaveFileAsAction {
+public class UMLMachineSaveAsAction extends AbstractAction {
 
-	public UMLMachineSaveAsAction(Application app, View view) {
-		super(app, view);
-		// TODO Auto-generated constructor stub
+	public final static String ID = new String("file.saveAs");
+
+	public UMLMachineSaveAsAction(){
+
+		ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.umlMachine.controller.actions.Labels");
+		labels.configureAction(this, ID);
+
 	}
+
+	@Override
+	public void actionPerformed(ActionEvent a) {		
+		System.out.println("Save As...");
+	}
+
 
 }

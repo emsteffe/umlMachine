@@ -11,9 +11,6 @@
 package org.umlMachine;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
-import org.jhotdraw.app.action.view.ViewPropertyAction;
-import org.jhotdraw.app.action.view.ToggleViewPropertyAction;
-import org.jhotdraw.app.action.file.ExportFileAction;
 import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.draw.tool.CreationTool;
 import org.jhotdraw.draw.tool.ConnectionTool;
@@ -30,7 +27,6 @@ import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
 import org.jhotdraw.util.*;
 import org.umlMachine.controller.FigureFactory;
 import org.umlMachine.controller.tools.*;
-import org.umlMachine.figures.*;
 
 /**
  * PertApplicationModel.
@@ -38,10 +34,12 @@ import org.umlMachine.figures.*;
  * @author Werner Randelshofer.
  * @version $Id: PertApplicationModel.java 717 2010-11-21 12:30:57Z rawcoder $
  */
+@SuppressWarnings("serial")
 public class UMLMachineApplicationModel extends DefaultApplicationModel {
 
 
-    private static class ToolButtonListener implements ItemListener {
+    @SuppressWarnings("unused")
+	private static class ToolButtonListener implements ItemListener {
 
         private Tool tool;
         private DrawingEditor editor;
@@ -62,8 +60,6 @@ public class UMLMachineApplicationModel extends DefaultApplicationModel {
      * This editor is shared by all views.
      */
     private DefaultDrawingEditor sharedEditor;
-    private HashMap<String, Action> actions;
-
     /** Creates a new instance. */
     public UMLMachineApplicationModel() {
     }
@@ -88,7 +84,8 @@ public class UMLMachineApplicationModel extends DefaultApplicationModel {
     }
     
 
-    private void addButtonsTo(JToolBar tb, final DrawingEditor editor) {
+    @SuppressWarnings("rawtypes")
+	private void addButtonsTo(JToolBar tb, final DrawingEditor editor) {
         // AttributeKeys for the entitie sets
         HashMap<AttributeKey, Object> attributes;
 

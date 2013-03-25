@@ -1,6 +1,5 @@
 package org.umlMachine.controller.tools;
 
-import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
@@ -17,7 +16,6 @@ import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.tool.CreationTool;
-import org.umlMachine.controller.FigureFactory;
 import org.umlMachine.figures.StateFigure;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -25,6 +23,7 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 @SuppressWarnings("serial")
 public class ImageCreationTool extends CreationTool{
 
+	@SuppressWarnings({ "deprecation", "rawtypes" })
 	public ImageCreationTool(StateFigure stateFigure, @Nullable Map<AttributeKey, Object> attributes) {
 		super(stateFigure, attributes, null);
 	}

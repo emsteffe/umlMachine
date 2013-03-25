@@ -22,8 +22,6 @@ import java.awt.print.Pageable;
 import java.util.*;
 import org.jhotdraw.gui.*;
 import org.jhotdraw.undo.*;
-import org.jhotdraw.util.*;
-import java.awt.*;
 import java.beans.*;
 import java.io.*;
 import java.lang.reflect.*;
@@ -32,7 +30,6 @@ import javax.swing.*;
 import javax.swing.border.*;
 import org.jhotdraw.app.*;
 import org.jhotdraw.draw.*;
-import org.jhotdraw.draw.action.*;
 import org.jhotdraw.gui.URIChooser;
 
 /**

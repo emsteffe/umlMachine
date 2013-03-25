@@ -1,13 +1,12 @@
 package org.umlMachine.controller.tools;
 
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.tool.AbstractTool;
-import org.umlMachine.controller.FileHandler;
 import org.umlMachine.controller.Simulator;
 
+@SuppressWarnings("serial")
 public class SimulateTool extends AbstractTool {
 
 	public void mouseDragged(MouseEvent e) {}

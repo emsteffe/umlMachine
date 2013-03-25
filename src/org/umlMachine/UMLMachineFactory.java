@@ -42,7 +42,8 @@ public class UMLMachineFactory extends DefaultDOMFactory {
     };
     
     /** Creates a new instance. */
-    public UMLMachineFactory() {
+    @SuppressWarnings("rawtypes")
+	public UMLMachineFactory() {
         for (Object[] o : classTagArray) {
             addStorableClass((String) o[1], (Class) o[0]);
         }
