@@ -77,7 +77,7 @@ public class TestDetails{
 		ff.figureMap.get(start).getData().getTransitionsIn().add(t.getData());
 		return false;
 		}catch(Exception x){
-		return false;
+		return true;
 		}
 	}
 	// creates a transition out of end state figure
