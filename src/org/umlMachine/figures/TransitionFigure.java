@@ -152,6 +152,10 @@ public class TransitionFigure extends LineConnectionFigure {
 		data.setEnd(ef.getData());
 		data.setStart(sf.getData());
 	}
+	
+	public TransitionData getData(){
+		return data;
+	}
 
 	@Override
 	public TransitionFigure clone() {
