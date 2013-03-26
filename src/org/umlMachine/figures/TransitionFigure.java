@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import static org.jhotdraw.draw.AttributeKeys.*;
 import org.jhotdraw.draw.*;
 import org.jhotdraw.geom.BezierPath.Node;
+import org.umlMachine.model.StateData;
 import org.umlMachine.model.TransitionData;
 
 /**
@@ -32,6 +33,10 @@ import org.umlMachine.model.TransitionData;
 @SuppressWarnings("serial")
 public class TransitionFigure extends LineConnectionFigure {
 
+	
+	//(String action, StateData start, StateData end, String trigger,String event, String condition)
+	private TransitionData data;
+	
 	protected GraphicalCompositeFigure textArea = new GraphicalCompositeFigure();
 	
 	protected ArrayList<Figure> children = new ArrayList<Figure>();
@@ -127,6 +132,9 @@ public class TransitionFigure extends LineConnectionFigure {
 
 		sf.removeDependency(this);
 		ef.removeDependency(this);
+		
+		data.setEnd(null);
+		data.setStart(null);
 	}
 
 	/**
@@ -140,6 +148,9 @@ public class TransitionFigure extends LineConnectionFigure {
 
 		sf.addDependency(this);
 		ef.addDependency(this);
+		
+		data.setEnd(ef.getData());
+		data.setStart(sf.getData());
 	}
 
 	@Override
