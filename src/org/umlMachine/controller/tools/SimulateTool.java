@@ -27,13 +27,13 @@ public class SimulateTool extends AbstractTool {
 	private void diagram(){
 
 		System.out.println("Simulate from Diagram");
-		Simulator.getInstance().fromDiagram();
+		//Simulator.getInstance().fromDiagram();
 	}
 
 	private void fromFile(){
 
 		System.out.println("Simulate from File");
-		Simulator.getInstance().fromFile();
+		//Simulator.getInstance().fromFile();
 
 	}
 
