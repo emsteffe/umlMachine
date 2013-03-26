@@ -35,7 +35,7 @@ public class TransitionFigure extends LineConnectionFigure {
 
 	
 	//(String action, StateData start, StateData end, String trigger,String event, String condition)
-	private TransitionData data;
+	private TransitionData data = new TransitionData();
 	
 	protected GraphicalCompositeFigure textArea = new GraphicalCompositeFigure();
 	
