@@ -2,14 +2,11 @@
  * helper methods to help with the UMLModelTest.Java
  **/
 package org.umlMachine.test;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.umlMachine.controller.FigureFactory;
 import org.umlMachine.controller.XMLController;
 import org.umlMachine.figures.StateFigure;
 import org.umlMachine.figures.TransitionFigure;
-import org.umlMachine.model.TransitionData;
 
 public class TestDetails{
 
@@ -54,21 +51,20 @@ public class TestDetails{
 		StateFigure e = new StateFigure(false);
 		String start = "start";
 		String end = "end";
-		//TransitionFigure t = new TransitionFigure();
-		TransitionData td = new TransitionData();
+		TransitionFigure t = new TransitionFigure();
 		ff.figureMap.put(start, s);
 		ff.figureMap.put(end, e);
 		try{
-		ff.figureMap.get(start).getData().getTransitionsOut().add(td);
-		ff.figureMap.get(end).getData().getTransitionsIn().add(td);
+		ff.figureMap.get(start).getData().getTransitionsOut().add(t.getData());
+		ff.figureMap.get(end).getData().getTransitionsIn().add(t.getData());
 		return true;
 		}catch(Exception x){
 		return false;
 		}
 	}
 
-	//creates a transition into the start state form the regular state */
-	public boolean allowedTranstionToHaveNoEndState(FigureFactory ff){
+	//creates a transition into the start state form the regular state
+	public boolean allowedTransitionIntoStartState(FigureFactory ff){
 		StateFigure s = new StateFigure(true);
 		StateFigure e = new StateFigure();
 		String start = "start";
@@ -77,20 +73,26 @@ public class TestDetails{
 		ff.figureMap.put(start, s);
 		ff.figureMap.put(normalState, e);
 		try{
-		ff.figureMap.get(normalState).getData().getTransitionsOut().add(td);
-		ff.figureMap.get(start).getData().getTransitionsIn().add(td);
+		ff.figureMap.get(normalState).getData().getTransitionsOut().add(t.getData());
+		ff.figureMap.get(start).getData().getTransitionsIn().add(t.getData());
 		return false;
 		}catch(Exception x){
 		return false;
 		}
 	}
-
+	// creates a transition out of end state figure
 	public boolean allowedEndStateToHaveTransitionsOut(){
-
-		// TODO 
+		StateFigure e = new StateFigure(false);
+		TransitionFigure t = new TransitionFigure();
+		try{
+		e.getData().addTransitionOut(t.getData());
 		return true;
+		}catch (Exception x){
+		return false;
+		}
 
 	}
+	/*
 	public String expected2(){
 		String s = "<State name=state1 type=start>\n"+
 				"\t<Actions>\n"+
@@ -117,7 +119,6 @@ public class TestDetails{
 				"</State>\n";
 		return s;
 	}
-	/*
 	public String serializeData(XMLController x){
 		StateFigure one = new StateFigure();
 		StateFigure two = new StateFigure();
