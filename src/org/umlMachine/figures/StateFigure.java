@@ -99,6 +99,8 @@ public class StateFigure extends GraphicalCompositeFigure {
 		nameFigure.set(FONT_BOLD, true);
 		nameFigure.setAttributeEnabled(FONT_BOLD, false);
 
+
+
 		//actions
 		ListFigure actions = new ListFigure();
 		actionCompartment.add(actions);
@@ -145,12 +147,16 @@ public class StateFigure extends GraphicalCompositeFigure {
 
 		name compartment
 			text figure
+			
+		Separator
 
 		actions compartment
 			list figure
 				text figure
 				text figure
 				.....
+
+		Separator
 
 		attributes compartment
 			list figure
@@ -199,6 +205,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 		}
 
 
+		dependencies = new HashSet<TransitionFigure>();
 		super.setPresentationFigure(imageFigure);
 
 		/*
@@ -259,13 +266,13 @@ public class StateFigure extends GraphicalCompositeFigure {
 
 	public void addAction(String action){
 		//TODO
-		//Actions live in ((ListFigure)getChild(1).getChild(0))
+		//Actions live in ((ListFigure)getChild(2).getChild(0))
 
 	}
 
 	public void addAttribute(String attribute){
 		//TODO
-		//Attributes live in ((ListFigure)getChild(2).getChild(0))
+		//Attributes live in ((ListFigure)getChild(4).getChild(0))
 
 	}
 

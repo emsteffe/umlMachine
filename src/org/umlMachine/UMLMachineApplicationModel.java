@@ -102,10 +102,10 @@ public class UMLMachineApplicationModel extends DefaultApplicationModel {
         tb.addSeparator();
         
         //creation
-        ButtonFactory.addToolTo(tb, editor, new CreationTool(FigureFactory.getInstance().getState(), attributes), "createState", labels);
+        ButtonFactory.addToolTo(tb, editor, new StateCreationTool(attributes), "createState", labels);
         ButtonFactory.addToolTo(tb, editor, new ConnectionTool(FigureFactory.getInstance().getTransition(), attributes), "createTransition", labels);
-        ButtonFactory.addToolTo(tb, editor, new ImageCreationTool(FigureFactory.getInstance().getState(true), attributes), "createStart", labels);
-        ButtonFactory.addToolTo(tb, editor, new ImageCreationTool(FigureFactory.getInstance().getState(false), attributes), "createEnd", labels);
+        ButtonFactory.addToolTo(tb, editor, new ImageCreationTool(true, attributes), "createStart", labels);
+        ButtonFactory.addToolTo(tb, editor, new ImageCreationTool(false, attributes), "createEnd", labels);
         
         tb.addSeparator();
         
