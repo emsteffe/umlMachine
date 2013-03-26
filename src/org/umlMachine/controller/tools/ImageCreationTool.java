@@ -41,8 +41,15 @@ public class ImageCreationTool extends CreationTool{
 	@SuppressWarnings("unchecked")
 	@Override
 	protected Figure createFigure() {
-		//Figure f = (Figure) prototype.clone();
-		Figure f = FigureFactory.getInstance().getState(type);
+		
+		Figure f;
+		//If you are trying to make a start state and one already exists...
+		if(type && (FigureFactory.getInstance().findState("StartState[jh72%3tr#FHuu]")!=null) ){
+			f = FigureFactory.getInstance().getState(false);
+		}else{
+			f = FigureFactory.getInstance().getState(type);
+		}
+				
 		getEditor().applyDefaultAttributesTo(f);
 		if (prototypeAttributes != null) {
 			for (Map.Entry<AttributeKey, Object> entry : prototypeAttributes.entrySet()) {
