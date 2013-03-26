@@ -89,7 +89,7 @@ public class UMLMachineApplicationModel extends DefaultApplicationModel {
 	private void addButtonsTo(JToolBar tb, final DrawingEditor editor) {
         // AttributeKeys for the entitie sets
         HashMap<AttributeKey, Object> attributes;
-
+        RefModel.editor = editor;
         ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.umlMachine.Labels");
         attributes = new HashMap<AttributeKey, Object>();
         attributes.put(AttributeKeys.FILL_COLOR, Color.white);
@@ -121,7 +121,7 @@ public class UMLMachineApplicationModel extends DefaultApplicationModel {
         ButtonFactory.addToolTo(tb, editor, new AnimateTool(), "animate", labels);
         FigureFactory.getInstance().reloadFactory(new HashSet<StateFigure>());
         
-       (new RefModel()).set(editor);
+       
     }
 
     /**

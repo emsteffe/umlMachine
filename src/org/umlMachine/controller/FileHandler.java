@@ -63,7 +63,7 @@ public class FileHandler {
 		XMLController xml = new XMLController();
 		
 		
-		d.showSaveDialog((Component) (new RefModel()).get().getActiveView());
+		d.showSaveDialog((Component)RefModel.editor.getActiveView());
 		while(!done){
 			try {
 				TimeUnit.SECONDS.sleep(1);
@@ -86,7 +86,7 @@ public class FileHandler {
 	}
 	
 	public void importDiagram(){
-		d.showOpenDialog((Component) (new RefModel()).get().getActiveView());
+		d.showOpenDialog((Component)RefModel.editor.getActiveView());
 		XMLController xml = new XMLController();
 		while(!done){
 			try {
@@ -112,7 +112,7 @@ public class FileHandler {
 	}
 	
 	public Set<StateData> loadSerial(){
-		d.showOpenDialog((Component) (new RefModel()).get().getActiveView());
+		d.showOpenDialog((Component)RefModel.editor.getActiveView());
 		XMLController xml = new XMLController();
 		Set<StateData> toReturn = null;
 		while(!done){
@@ -143,7 +143,7 @@ public class FileHandler {
 		}
 		String serialOut = xml.serialize(toSerialize);
 		
-		d.showSaveDialog((Component) (new RefModel()).get().getActiveView());
+		d.showSaveDialog((Component) RefModel.editor.getActiveView());
 		while(!done){
 			try {
 				TimeUnit.SECONDS.sleep(1);
@@ -195,7 +195,7 @@ public class FileHandler {
 	
 	public File getFile(){
 		File toReturn = null;
-		d.showOpenDialog((Component) (new RefModel()).get().getActiveView());
+		d.showOpenDialog((Component) (RefModel.editor.getActiveView()));
 		XMLController xml = new XMLController();
 		while(!done){
 			try {
