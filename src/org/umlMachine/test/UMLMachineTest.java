@@ -1,3 +1,5 @@
+//Used for integration testing 
+
 package org.umlMachine.test;
 
 import static org.junit.Assert.*;
@@ -24,7 +26,7 @@ public class UMLMachineTest extends TestDetails {
 	}
 	
 	@Test
-	/* test to see if the number of desired state figures are really created */
+	// test to see if the number of desired state figures are really created 
 	
 	public void testForNumbersOfFiguresCreatedInList(){
 		constructModel();
@@ -38,34 +40,34 @@ public class UMLMachineTest extends TestDetails {
 	}
 	
 	@Test
-	/* test to see if successfully created a start state figure */
+	// test to see if successfully created a start state figure
 	public void testCreatedStartStateSuccessfully(){
 		constructModel();
 		assertTrue("Start state not created successfully",createStartState(FF));
 	}
 	
 	@Test
-	/* test to see if successfully created an end state figure */
+	// test to see if successfully created an end state figure
 	public void testCreatedEndStateSuccessfully(){
 		constructModel();
 		assertTrue("End state not created successfully", createEndState(FF));
 	}
 	
 	@Test
-	/* test to see if successfully created a transition figure */
+	// test to see if successfully created a transition figure
 	public void testCreatedTransitionFigureSuccessfully(){
 		constructModel();
 		assertTrue("Transition figure not created successfully", createTransitionFigure(FF));
 		
 	}
-	/*@Test
-	/* test to see if allowed a transition going into start state figure 
+	@Test
+	// test to see if allowed a transition going into start state figure 
 	public void testForNoTransitionIntoStartState(){
 		constructModel();
 		assertFalse("Allowed transition into start figure", AllowedTransitionIntoStartState(FF));
 	}
 	
-	@Test
+	/*@Test
 	/* test to see if allowed a transition to have no transition out figure 
 	
 	public void testForMissingTransitionEndState(){

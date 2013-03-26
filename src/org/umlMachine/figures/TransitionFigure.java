@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import static org.jhotdraw.draw.AttributeKeys.*;
 import org.jhotdraw.draw.*;
 import org.jhotdraw.geom.BezierPath.Node;
+import org.umlMachine.model.TransitionData;
 
 /**
  * DependencyFigure.
@@ -34,7 +35,7 @@ public class TransitionFigure extends LineConnectionFigure {
 	protected GraphicalCompositeFigure textArea = new GraphicalCompositeFigure();
 	
 	protected ArrayList<Figure> children = new ArrayList<Figure>();
-
+	
 	/** Creates a new instance. */
 	public TransitionFigure() {
 

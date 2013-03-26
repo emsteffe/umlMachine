@@ -8,6 +8,8 @@ import java.util.List;
 import org.umlMachine.controller.FigureFactory;
 import org.umlMachine.controller.XMLController;
 import org.umlMachine.figures.StateFigure;
+import org.umlMachine.figures.TransitionFigure;
+import org.umlMachine.model.TransitionData;
 
 public class TestDetails{
 
@@ -30,7 +32,7 @@ public class TestDetails{
 		return ff.figureMap.size();
 	}
 	
-	/* creates and checks if successfully created a start state figure */	
+	// creates and checks if successfully created a start state figure	
 	public boolean createStartState(FigureFactory ff){
 		StateFigure s = new StateFigure(true);
 		String name = "start";
@@ -38,7 +40,7 @@ public class TestDetails{
 		return ff.figureMap.get(name).getType() == -1;
 	}
 
-	/* creates and checks if successfully created an end state figure */
+	// creates and checks if successfully created an end state figure
 	public boolean createEndState(FigureFactory ff){
 		StateFigure s = new StateFigure(false);
 		String name = "end";
@@ -46,17 +48,41 @@ public class TestDetails{
 		return ff.figureMap.get(name).getType() == 1;
 	}
 
-	/* creates a Transition Figure */
+	// creates a Transition Figure between two States
 	public boolean createTransitionFigure(FigureFactory ff){
-		//to do
+		StateFigure s = new StateFigure(true);
+		StateFigure e = new StateFigure(false);
+		String start = "start";
+		String end = "end";
+		//TransitionFigure t = new TransitionFigure();
+		TransitionData td = new TransitionData();
+		ff.figureMap.put(start, s);
+		ff.figureMap.put(end, e);
+		try{
+		ff.figureMap.get(start).getData().getTransitionsOut().add(td);
+		ff.figureMap.get(end).getData().getTransitionsIn().add(td);
 		return true;
+		}catch(Exception x){
+		return false;
+		}
 	}
 
-	/* creates two state figures, one is a start state, the other is a regular state
-	 * and will try to create a transition into the start state form the regular state */
-	public boolean allowedTranstionToHaveNoEndState(ArrayList<StateFigure> l){
-
+	//creates a transition into the start state form the regular state */
+	public boolean allowedTranstionToHaveNoEndState(FigureFactory ff){
+		StateFigure s = new StateFigure(true);
+		StateFigure e = new StateFigure();
+		String start = "start";
+		String normalState = "state1";
+		TransitionFigure t = new TransitionFigure();
+		ff.figureMap.put(start, s);
+		ff.figureMap.put(normalState, e);
+		try{
+		ff.figureMap.get(normalState).getData().getTransitionsOut().add(td);
+		ff.figureMap.get(start).getData().getTransitionsIn().add(td);
 		return false;
+		}catch(Exception x){
+		return false;
+		}
 	}
 
 	public boolean allowedEndStateToHaveTransitionsOut(){
