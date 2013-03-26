@@ -36,13 +36,13 @@ public class Simulator {
 
 	public void fromFile() {
 		// TODO Auto-generated method stub
-		
+		FileHandler.getInstance().getFile();
 	}
 
 
 	public void fromDiagram() {
 		// TODO Auto-generated method stub
-		
+		FileHandler.getInstance().getFile();
 	}
 
 	

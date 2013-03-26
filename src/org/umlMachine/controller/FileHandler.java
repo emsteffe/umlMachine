@@ -18,6 +18,7 @@ returns bool. true on success storing
 package org.umlMachine.controller;
 
 
+import java.awt.Component;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,13 +32,14 @@ import javax.swing.JFrame;
 
 import org.jhotdraw.gui.JFileURIChooser;
 import org.umlMachine.figures.StateFigure;
+import org.umlMachine.model.RefModel;
 import org.umlMachine.model.StateData;
 import org.umlMachine.model.TransitionData;
 
 public class FileHandler {
-	
+	private JFileURIChooser d;
 	private FileHandler(){
-		JFileURIChooser d = new JFileURIChooser();
+		d = new JFileURIChooser();
 		fileSelect = new JFrame();
 		FileHandlerListener k = new FileHandlerListener();
 		d.addActionListener(k);
@@ -61,7 +63,7 @@ public class FileHandler {
 		XMLController xml = new XMLController();
 		
 		
-		fileSelect.setVisible(true);
+		d.showSaveDialog((Component) (new RefModel()).get().getActiveView());
 		while(!done){
 			try {
 				TimeUnit.SECONDS.sleep(1);
@@ -84,7 +86,7 @@ public class FileHandler {
 	}
 	
 	public void importDiagram(){
-		fileSelect.setVisible(true);
+		d.showOpenDialog((Component) (new RefModel()).get().getActiveView());
 		XMLController xml = new XMLController();
 		while(!done){
 			try {
@@ -110,7 +112,7 @@ public class FileHandler {
 	}
 	
 	public Set<StateData> loadSerial(){
-		fileSelect.setVisible(true);
+		d.showOpenDialog((Component) (new RefModel()).get().getActiveView());
 		XMLController xml = new XMLController();
 		Set<StateData> toReturn = null;
 		while(!done){
@@ -141,7 +143,7 @@ public class FileHandler {
 		}
 		String serialOut = xml.serialize(toSerialize);
 		
-		fileSelect.setVisible(true);
+		d.showSaveDialog((Component) (new RefModel()).get().getActiveView());
 		while(!done){
 			try {
 				TimeUnit.SECONDS.sleep(1);
@@ -189,6 +191,24 @@ public class FileHandler {
 	public static void setOption(int oPtion){
 		if(oPtion != CANCEL && oPtion != OK) return;
 		option = oPtion;
+	}
+	
+	public File getFile(){
+		File toReturn = null;
+		d.showOpenDialog((Component) (new RefModel()).get().getActiveView());
+		XMLController xml = new XMLController();
+		while(!done){
+			try {
+				TimeUnit.SECONDS.sleep(1);
+			} catch (InterruptedException e) {}
+		}
+		if(option != 0){
+			try{
+				System.out.println("got file from user: "+file);
+				toReturn = new File(file);
+			}catch(Exception e){}
+		}
+		return toReturn;
 	}
 	
 	public static void setFile(String fIle){

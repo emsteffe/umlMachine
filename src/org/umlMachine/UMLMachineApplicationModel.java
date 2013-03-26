@@ -27,6 +27,7 @@ import org.jhotdraw.util.*;
 import org.umlMachine.controller.FigureFactory;
 import org.umlMachine.controller.tools.*;
 import org.umlMachine.figures.StateFigure;
+import org.umlMachine.model.RefModel;
 
 /**
  * PertApplicationModel.
@@ -119,7 +120,8 @@ public class UMLMachineApplicationModel extends DefaultApplicationModel {
         // Implement this in later deliverable
         ButtonFactory.addToolTo(tb, editor, new AnimateTool(), "animate", labels);
         FigureFactory.getInstance().reloadFactory(new HashSet<StateFigure>());
-
+        
+       (new RefModel()).set(editor);
     }
 
     /**
