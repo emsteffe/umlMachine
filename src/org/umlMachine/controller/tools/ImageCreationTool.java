@@ -31,6 +31,7 @@ public class ImageCreationTool extends CreationTool{
 	boolean type; //true = start, false = end
 
 
+	@SuppressWarnings({ "deprecation", "rawtypes" })
 	public ImageCreationTool(Boolean b, HashMap<AttributeKey, Object> attributes) {
 		super(new StateFigure(), attributes, null);
 		type = b;
@@ -38,7 +39,7 @@ public class ImageCreationTool extends CreationTool{
 	}
 
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	protected Figure createFigure() {
 		

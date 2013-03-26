@@ -13,15 +13,11 @@ package org.umlMachine.figures;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.decoration.ArrowTip;
 import org.jhotdraw.draw.layouter.HorizontalLayouter;
-import org.jhotdraw.draw.tool.TextAreaCreationTool;
-
 import java.awt.*;
 import java.util.ArrayList;
 
 import static org.jhotdraw.draw.AttributeKeys.*;
 import org.jhotdraw.draw.*;
-import org.jhotdraw.geom.BezierPath.Node;
-import org.umlMachine.model.StateData;
 import org.umlMachine.model.TransitionData;
 
 /**
@@ -56,11 +52,7 @@ public class TransitionFigure extends LineConnectionFigure {
 		textArea.add(list);
 		
 		textArea.setLayouter(new HorizontalLayouter());
-		
-		TextAreaFigure textbox = new TextAreaFigure("Text");
-		
-		
-		
+				
 		//TODO find a way to to add textArea to the screen? 
 		
 

@@ -12,7 +12,6 @@ package org.umlMachine;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.jhotdraw.draw.tool.Tool;
-import org.jhotdraw.draw.tool.CreationTool;
 import org.jhotdraw.draw.tool.ConnectionTool;
 import java.awt.*;
 import java.awt.event.*;

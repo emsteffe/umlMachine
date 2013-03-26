@@ -8,9 +8,6 @@ import org.umlMachine.figures.StateFigure;
 import org.umlMachine.figures.TransitionFigure;
 import org.umlMachine.model.TransitionData;
 
-//import org.umlMachine.xml.XMLElement;
-import net.n3.nanoxml.XMLElement;
-
 public class FigureFactory {
 
 	private static FigureFactory instance = null;
@@ -30,6 +27,7 @@ public class FigureFactory {
 		numStates++;
 		return toReturn;
 	}
+	
 	
 	public Set<StateFigure> getStates(){
 		Set<StateFigure> toReturn = new HashSet<StateFigure>();
