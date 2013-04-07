@@ -80,16 +80,17 @@ public class StateFigure extends GraphicalCompositeFigure {
 			}
 		}
 	}
-
+private ListFigure attributeCompartment = new ListFigure();
+private ListFigure actionCompartment = new ListFigure();
 	public StateFigure() {
 
 		super(new RectangleFigure());
 		setLayouter(new VerticalLayouter());
 
 		//Compartments
-		ListFigure nameCompartment = new ListFigure();
-		ListFigure attributeCompartment = new ListFigure();
-		ListFigure actionCompartment = new ListFigure();
+		nameCompartment = new ListFigure();
+		attributeCompartment = new ListFigure();
+		actionCompartment = new ListFigure();
 
 		//Figures
 		//name
@@ -166,17 +167,19 @@ public class StateFigure extends GraphicalCompositeFigure {
 		 */
 
 	}
-
+	private ImageFigure imageFigure = null;
+	private ListFigure nameCompartment = new ListFigure();
 	public StateFigure(boolean type){ // true->start , false->end
 
+		
 		super(new EllipseFigure());
 
-		ImageFigure imageFigure = new ImageFigure();
+		imageFigure = new ImageFigure();
 		imageFigure.set(STROKE_COLOR, new Color(255,255,255));
 		imageFigure.setAttributeEnabled(STROKE_COLOR, false);
 
 		// Name figure is not visible, but must exist for the factory
-		ListFigure nameCompartment = new ListFigure();
+		nameCompartment = new ListFigure();
 		add(nameCompartment);
 		nameCompartment.setVisible(false);
 
@@ -317,6 +320,11 @@ public class StateFigure extends GraphicalCompositeFigure {
 		in.closeElement();
 		in.closeElement();
 		in.closeElement();
+		if(data.isStart()){
+			//make it a start date
+		}else if(data.isEnd()){
+			//make it an end state
+		}
 	}
 
 	@Override

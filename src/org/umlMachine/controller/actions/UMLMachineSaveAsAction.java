@@ -4,7 +4,9 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
+import org.jhotdraw.app.action.file.SaveFileAction;
 import org.jhotdraw.util.ResourceBundleUtil;
+import org.umlMachine.model.RefModel;
 
 @SuppressWarnings("serial")
 public class UMLMachineSaveAsAction extends AbstractAction {
@@ -20,7 +22,9 @@ public class UMLMachineSaveAsAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(ActionEvent a) {		
-		System.out.println("Save As...");
+		SaveFileAction action;
+		action = new SaveFileAction(RefModel.app,RefModel.view,true );
+		action.actionPerformed(a);
 	}
 
 

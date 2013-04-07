@@ -82,6 +82,8 @@ public class UMLMachineApplicationModel extends DefaultApplicationModel {
         if (a.isSharingToolsAmongViews()) {
             ((UMLMachineView) p).setEditor(getSharedEditor());
         }
+        RefModel.app = a;
+        RefModel.view = p;
     }
     
 
