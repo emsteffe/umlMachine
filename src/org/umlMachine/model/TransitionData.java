@@ -1,5 +1,9 @@
 package org.umlMachine.model;
 
+import java.util.StringTokenizer;
+
+import org.umlMachine.controller.FigureFactory;
+
 public class TransitionData {
 	
 	private StateData start;
@@ -54,6 +58,21 @@ public class TransitionData {
 				"\" trigger=\"" + trigger + 
 				"\" event=\"" + event + 
 				"\" condition=\"" + condition + 
-				"/>";
+				"\"/>";
+	}
+	
+	public void setFromXML(String xml){
+		StringTokenizer tokens = new StringTokenizer(xml.trim(),"\"");
+		tokens.nextToken();//start
+		start = FigureFactory.getInstance().findState(tokens.nextToken().trim()).getData();//value for start
+		tokens.nextToken();
+		end = FigureFactory.getInstance().findState(tokens.nextToken().trim()).getData();
+		tokens.nextToken();
+		trigger = tokens.nextToken();
+		tokens.nextToken();
+		event = tokens.nextToken();
+		tokens.nextToken();
+		condition= tokens.nextToken();
+		
 	}
 }

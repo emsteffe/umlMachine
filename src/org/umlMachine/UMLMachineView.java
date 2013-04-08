@@ -31,6 +31,9 @@ import javax.swing.border.*;
 import org.jhotdraw.app.*;
 import org.jhotdraw.draw.*;
 import org.jhotdraw.gui.URIChooser;
+import org.umlMachine.controller.FigureFactory;
+import org.umlMachine.figures.StateFigure;
+import org.umlMachine.model.TransitionData;
 
 /**
  * A view for Pert diagrams.
@@ -139,6 +142,25 @@ public class UMLMachineView extends AbstractView {
         Drawing drawing = view.getDrawing();
         OutputFormat outputFormat = drawing.getOutputFormats().get(0);
         outputFormat.write(f, drawing);
+        BufferedWriter writer=null;
+       	try{
+       		File file = new File(f.toString().substring(6));
+       		writer = new BufferedWriter(new FileWriter(file,true));
+       		Set<StateFigure> states = FigureFactory.getInstance().getStates();
+       		//System.out.println(FigureFactory.getInstance().getNumStates());
+       		writer.write("\r\n<transitions>");
+       			for(StateFigure state : states){
+       				//System.out.println("writing state "+state.getName());
+       				//System.out.println("has " + state.getDependencies().size() + "transitions");
+       				//System.out.println("data has "+state.getData().getTransitionsOut());
+       				
+       				for(TransitionData transition : state.getData().getTransitionsOut()){
+       					writer.write("\r\n");
+       					writer.write(transition.toXML());
+       				}
+       			}
+       		writer.write("\r\n</transitions>");
+       	}catch(IOException e){} finally{if(writer != null)writer.close();}
     }
 
     /**
@@ -150,6 +172,28 @@ public class UMLMachineView extends AbstractView {
             final Drawing drawing = createDrawing();
             InputFormat inputFormat = drawing.getInputFormats().get(0);
             inputFormat.read(f, drawing, true);
+            BufferedReader reader = null;
+            try{
+           		File file = new File(f.toString().substring(6));
+           		reader = new BufferedReader(new FileReader(file));
+           		String line = reader.readLine();
+           		HashSet<TransitionData> data = new HashSet<TransitionData>();
+           		while(line != null){
+           			if(line.contains("<transition ")){
+           				TransitionData toAdd = new TransitionData();
+           				line = line.substring(12,line.indexOf("/>"));
+           				toAdd.setFromXML(line);
+           				data.add(toAdd);
+           			}
+           			line = reader.readLine();
+           		}
+           		
+           		for(TransitionData transition : data){
+           			transition.getStart().addTransitionOut(transition);
+           		}
+           	}catch(IOException e){}finally {if(reader != null)reader.close();}
+            
+            
             SwingUtilities.invokeAndWait(new Runnable() {
 
                 @Override

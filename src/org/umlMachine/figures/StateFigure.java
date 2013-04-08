@@ -100,7 +100,7 @@ private ListFigure actionCompartment = new ListFigure();
 		nameFigure.set(FONT_BOLD, true);
 		nameFigure.setAttributeEnabled(FONT_BOLD, false);
 
-
+		data.forceName("State "+ FigureFactory.getInstance().getNumStates());
 
 		//actions
 		ListFigure actions = new ListFigure();
@@ -182,7 +182,6 @@ private ListFigure actionCompartment = new ListFigure();
 		nameCompartment = new ListFigure();
 		add(nameCompartment);
 		nameCompartment.setVisible(false);
-
 		//Creates state, does different things for start and end states
 		File file;
 		if(type){
@@ -192,7 +191,6 @@ private ListFigure actionCompartment = new ListFigure();
 			file = new File("src/org/umlMachine/images/start.png");
 			isStart = true;
 			data.setStart(true);
-
 		}else{
 
 			nameCompartment.add(new TextFigure("End State"+ FigureFactory.getInstance().getNumStates() ));
@@ -208,6 +206,8 @@ private ListFigure actionCompartment = new ListFigure();
 		}
 
 
+		data.forceName("State "+ FigureFactory.getInstance().getNumStates());
+		
 		dependencies = new HashSet<TransitionFigure>();
 		super.setPresentationFigure(imageFigure);
 
@@ -286,6 +286,7 @@ private ListFigure actionCompartment = new ListFigure();
 		that.getNameFigure().addFigureListener(new NameAdapter(that));
 		//that.getDurationFigure().addFigureListener(new DurationAdapter(that));
 		//that.updateStartTime();
+		that.getData().forceName(that.getName());
 		return that;
 	}
 
@@ -370,7 +371,7 @@ private ListFigure actionCompartment = new ListFigure();
 
 	public void addDependency(TransitionFigure f) {
 		dependencies.add(f);
-
+		
 	}
 
 	public void removeDependency(TransitionFigure f) {

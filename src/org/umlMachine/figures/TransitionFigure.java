@@ -125,8 +125,9 @@ public class TransitionFigure extends LineConnectionFigure {
 		sf.removeDependency(this);
 		ef.removeDependency(this);
 		
-		data.setEnd(null);
-		data.setStart(null);
+		
+		sf.getData().removeTransitionOut(data);
+		
 	}
 
 	/**
@@ -138,11 +139,16 @@ public class TransitionFigure extends LineConnectionFigure {
 		StateFigure sf = (StateFigure) start.getOwner();
 		StateFigure ef = (StateFigure) end.getOwner();
 
+		
 		sf.addDependency(this);
 		ef.addDependency(this);
 		
-		data.setEnd(ef.getData());
+		System.out.println("connecting " + sf.getName()+ " to "+ ef.getName());
+		
 		data.setStart(sf.getData());
+		data.setEnd(ef.getData());
+		sf.getData().addTransitionOut(data);
+		
 	}
 	
 	public TransitionData getData(){
@@ -151,7 +157,7 @@ public class TransitionFigure extends LineConnectionFigure {
 
 	@Override
 	public TransitionFigure clone() {
-		TransitionFigure that = (TransitionFigure) super.clone();
+		TransitionFigure that = new TransitionFigure();
 
 		return that;
 	}

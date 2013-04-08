@@ -51,13 +51,13 @@ public class FigureFactory {
 	
 	public StateFigure getState(boolean isStart){
 		StateFigure toReturn = new StateFigure(isStart);
-		figureMap.put(toReturn.getName(), toReturn);
+		figureMap.put("State "+numStates, toReturn);
 		numStates++;
 		return toReturn;
 	}
 	
 	public int getNumStates(){
-		return numStates;
+		return figureMap.size();
 	}
 	
 	
