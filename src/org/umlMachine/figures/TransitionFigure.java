@@ -12,12 +12,11 @@ package org.umlMachine.figures;
 
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.decoration.ArrowTip;
-import org.jhotdraw.draw.layouter.HorizontalLayouter;
+import org.jhotdraw.draw.liner.ElbowLiner;
 import java.awt.*;
-import java.util.ArrayList;
-
 import static org.jhotdraw.draw.AttributeKeys.*;
 import org.jhotdraw.draw.*;
+import org.umlMachine.model.RefModel;
 import org.umlMachine.model.TransitionData;
 
 /**
@@ -27,38 +26,15 @@ import org.umlMachine.model.TransitionData;
  * @version $Id: DependencyFigure.java 718 2010-11-21 17:49:53Z rawcoder $
  */
 @SuppressWarnings("serial")
-public class TransitionFigure extends LineConnectionFigure {
+public class TransitionFigure extends LineConnectionFigure  {
 
-	
 	//(String action, StateData start, StateData end, String trigger,String event, String condition)
 	private TransitionData data = new TransitionData();
-	
-	protected GraphicalCompositeFigure textArea = new GraphicalCompositeFigure();
-	
-	protected ArrayList<Figure> children = new ArrayList<Figure>();
+
 	
 	/** Creates a new instance. */
 	public TransitionFigure() {
 
-		ListFigure list = new ListFigure();
-		
-		//TODO Make this real data from TransitionData
-		list.add(new TextFigure("Event"));
-		list.add(new TextFigure(" / "));
-		list.add(new TextFigure("Action"));
-		list.add(new TextFigure(" / "));
-		list.add(new TextFigure("Condition"));
-		
-		textArea.add(list);
-		
-		textArea.setLayouter(new HorizontalLayouter());
-				
-		//TODO find a way to to add textArea to the screen? 
-		
-
-		//TODO check if start is end, change from straight line to curved.
-		
-		
 		//Visual Attributes
 		set(STROKE_COLOR, new Color(0,0,0));
 		set(STROKE_WIDTH, 2d);
@@ -67,9 +43,13 @@ public class TransitionFigure extends LineConnectionFigure {
 		setAttributeEnabled(START_DECORATION, false);
 		setAttributeEnabled(STROKE_DASHES, false);
 		setAttributeEnabled(FONT_ITALIC, false);
-		setAttributeEnabled(FONT_UNDERLINE, false);
+		setAttributeEnabled(FONT_UNDERLINE, false);	
+		
+		ElbowLiner elbow = new ElbowLiner();
+		setLiner(elbow);
+		
 	}
-	
+
 
 
 	/**
@@ -78,8 +58,7 @@ public class TransitionFigure extends LineConnectionFigure {
 	 */
 	@Override
 	public boolean canConnect(Connector start, Connector end) {
-		if ((start.getOwner() instanceof StateFigure)
-				&& (end.getOwner() instanceof StateFigure)) {
+		if ((start.getOwner() instanceof StateFigure) && (end.getOwner() instanceof StateFigure)) {
 
 			StateFigure sf = (StateFigure) start.getOwner();
 			StateFigure ef = (StateFigure) end.getOwner();
@@ -89,15 +68,21 @@ public class TransitionFigure extends LineConnectionFigure {
 				return false;            	
 			}
 
-			// Disallow multiple connections to same dependent
-			if (ef.getPredecessors().contains(sf)) {
-				return false;
+			//Prevent duplicate transitions
+			for(TransitionData t : sf.getData().getTransitionsOut()){
+				if(t.getEnd().equals(ef.getData())){
+					return false;
+				}					
 			}
-
-			// Disallow cyclic connections
-			return !sf.isDependentOf(ef);
+			
+			//Prevent back and forth overlapping transitions
+			for(TransitionData t : ef.getData().getTransitionsOut()){
+				if(t.getEnd().equals(sf.getData())){
+					return false;
+				}				
+			}
+			return true;
 		}
-
 		return false;
 	}
 
@@ -124,10 +109,9 @@ public class TransitionFigure extends LineConnectionFigure {
 
 		sf.removeDependency(this);
 		ef.removeDependency(this);
-		
-		
+
 		sf.getData().removeTransitionOut(data);
-		
+
 	}
 
 	/**
@@ -139,18 +123,18 @@ public class TransitionFigure extends LineConnectionFigure {
 		StateFigure sf = (StateFigure) start.getOwner();
 		StateFigure ef = (StateFigure) end.getOwner();
 
-		
+
 		sf.addDependency(this);
 		ef.addDependency(this);
-		
+
 		System.out.println("connecting " + sf.getName()+ " to "+ ef.getName());
-		
+
 		data.setStart(sf.getData());
 		data.setEnd(ef.getData());
 		sf.getData().addTransitionOut(data);
-		
+
 	}
-	
+
 	public TransitionData getData(){
 		return data;
 	}

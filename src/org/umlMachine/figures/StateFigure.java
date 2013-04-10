@@ -53,35 +53,14 @@ public class StateFigure extends GraphicalCompositeFigure {
 		public NameAdapter(StateFigure target) {
 		}
 
-		@Override
 		public void attributeChanged(FigureEvent e) {
-			// We could fire a property change event here, in case
-			// some other object would like to observe us.
-			//target.firePropertyChange("name", e.getOldValue(), e.getNewValue());
+
 		}
 	}
 
-	@SuppressWarnings("unused")
-	private static class DurationAdapter extends FigureAdapter {
+	private ListFigure attributeCompartment = new ListFigure();
+	private ListFigure actionCompartment = new ListFigure();
 
-		private StateFigure target;
-
-		public DurationAdapter(StateFigure target) {
-			this.target = target;
-		}
-
-		@Override
-		public void attributeChanged(FigureEvent evt) {
-			// We could fire a property change event here, in case
-			// some other object would like to observe us.
-			//target.firePropertyChange("duration", e.getOldValue(), e.getNewValue());
-			for (StateFigure succ : target.getSuccessors()) {
-				//succ.updateStartTime();
-			}
-		}
-	}
-private ListFigure attributeCompartment = new ListFigure();
-private ListFigure actionCompartment = new ListFigure();
 	public StateFigure() {
 
 		super(new RectangleFigure());
@@ -114,7 +93,7 @@ private ListFigure actionCompartment = new ListFigure();
 		actions.add(new TextFigure("Action 2"));
 		data.addAction("Action 2");
 
-		
+
 		//attributes
 		ListFigure attributes = new ListFigure();
 		attributeCompartment.add(attributes);
@@ -148,7 +127,7 @@ private ListFigure actionCompartment = new ListFigure();
 
 		name compartment
 			text figure
-			
+
 		Separator
 
 		actions compartment
@@ -171,7 +150,7 @@ private ListFigure actionCompartment = new ListFigure();
 	private ListFigure nameCompartment = new ListFigure();
 	public StateFigure(boolean type){ // true->start , false->end
 
-		
+
 		super(new EllipseFigure());
 
 		imageFigure = new ImageFigure();
@@ -207,7 +186,7 @@ private ListFigure actionCompartment = new ListFigure();
 
 
 		data.forceName("State "+ FigureFactory.getInstance().getNumStates());
-		
+
 		dependencies = new HashSet<TransitionFigure>();
 		super.setPresentationFigure(imageFigure);
 
@@ -240,7 +219,7 @@ private ListFigure actionCompartment = new ListFigure();
 			handles.add(new MoveHandle(this, RelativeLocator.northEast()));
 			handles.add(new MoveHandle(this, RelativeLocator.southWest()));
 			handles.add(new MoveHandle(this, RelativeLocator.southEast()));
-			
+
 			//ConnectorHandle ch;
 			if(!isEnd){ 
 				//TODO: make transitions created from this handle look the same as the transition tool (low priority) 
@@ -371,7 +350,7 @@ private ListFigure actionCompartment = new ListFigure();
 
 	public void addDependency(TransitionFigure f) {
 		dependencies.add(f);
-		
+
 	}
 
 	public void removeDependency(TransitionFigure f) {
