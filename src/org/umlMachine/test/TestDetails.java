@@ -5,8 +5,8 @@ package org.umlMachine.test;
 
 import org.umlMachine.controller.FigureFactory;
 import org.umlMachine.controller.XMLController;
-import org.umlMachine.figures.StateFigure;
-import org.umlMachine.figures.TransitionFigure;
+import org.umlMachine.model.figures.StateFigure;
+import org.umlMachine.model.figures.TransitionFigure;
 
 public class TestDetails{
 

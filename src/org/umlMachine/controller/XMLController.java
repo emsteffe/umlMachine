@@ -11,8 +11,8 @@ import java.util.Set;
 import org.jhotdraw.xml.DefaultDOMFactory;
 import org.jhotdraw.xml.NanoXMLDOMInput;
 import org.jhotdraw.xml.NanoXMLDOMOutput;
-import org.umlMachine.figures.StateFigure;
 import org.umlMachine.model.*;
+import org.umlMachine.model.figures.StateFigure;
 
 public class XMLController {
 	

@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import org.umlMachine.figures.StateFigure;
-import org.umlMachine.figures.TransitionFigure;
 import org.umlMachine.model.TransitionData;
+import org.umlMachine.model.figures.StateFigure;
+import org.umlMachine.model.figures.TransitionFigure;
 
 public class FigureFactory {
 

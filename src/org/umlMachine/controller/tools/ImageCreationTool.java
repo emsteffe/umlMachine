@@ -19,7 +19,7 @@ import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.tool.CreationTool;
 import org.umlMachine.controller.FigureFactory;
-import org.umlMachine.figures.StateFigure;
+import org.umlMachine.model.figures.StateFigure;
 
 import com.sun.istack.internal.Nullable;
 
