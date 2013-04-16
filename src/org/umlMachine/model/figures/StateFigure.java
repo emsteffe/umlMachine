@@ -251,6 +251,10 @@ public class StateFigure extends GraphicalCompositeFigure {
 		//Actions live in ((ListFigure)getChild(2).getChild(0))
 
 	}
+	
+	public List<String> getActions(){
+		return new ArrayList<String>();
+	}
 
 	public void addAttribute(String attribute){
 		//TODO

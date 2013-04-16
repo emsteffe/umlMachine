@@ -21,6 +21,11 @@ public class FigureFactory {
 		return instance;
 	}
 	
+	public static void clear(){
+		instance.figureMap.clear();
+		instance.numStates = 0;
+	}
+	
 	public StateFigure getState(){
 		StateFigure toReturn = new StateFigure();
 		figureMap.put(toReturn.getName(), toReturn);
