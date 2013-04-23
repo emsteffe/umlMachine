@@ -12,7 +12,10 @@ package org.umlMachine.model.figures;
 
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.decoration.ArrowTip;
+import org.jhotdraw.draw.layouter.LocatorLayouter;
 import org.jhotdraw.draw.liner.ElbowLiner;
+import org.jhotdraw.draw.locator.RelativeLocator;
+
 import java.awt.*;
 import static org.jhotdraw.draw.AttributeKeys.*;
 import org.jhotdraw.draw.*;
@@ -25,7 +28,8 @@ import org.umlMachine.model.TransitionData;
  * @version $Id: DependencyFigure.java 718 2010-11-21 17:49:53Z rawcoder $
  */
 @SuppressWarnings("serial")
-public class TransitionFigure extends LineConnectionFigure  {
+public class TransitionFigure extends LabeledLineConnectionFigure  {
+
 
 	//(String action, StateData start, StateData end, String trigger,String event, String condition)
 	private TransitionData data = new TransitionData();
@@ -46,6 +50,13 @@ public class TransitionFigure extends LineConnectionFigure  {
 		
 		ElbowLiner elbow = new ElbowLiner();
 		setLiner(elbow);
+		
+		TextFigure label = new TextFigure("Transition");
+		add(label);
+		
+		setLayouter(new LocatorLayouter());
+		LocatorLayouter.LAYOUT_LOCATOR.set(label, new RelativeLocator(.5,.5,false));
+
 		
 	}
 
@@ -74,12 +85,15 @@ public class TransitionFigure extends LineConnectionFigure  {
 				}					
 			}
 			
+			/*
 			//Prevent back and forth overlapping transitions
 			for(TransitionData t : ef.getData().getTransitionsOut()){
 				if(t.getEnd().equals(sf.getData())){
 					return false;
 				}				
 			}
+			*/
+			
 			return true;
 		}
 		return false;

@@ -19,9 +19,14 @@ import org.jhotdraw.draw.layouter.VerticalLayouter;
 import java.io.File;
 import java.io.IOException;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
 import java.awt.geom.*;
 import static org.jhotdraw.draw.AttributeKeys.*;
 import java.util.*;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+
 import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.handle.BoundsOutlineHandle;
 import org.jhotdraw.geom.Insets2D;
@@ -58,8 +63,47 @@ public class StateFigure extends GraphicalCompositeFigure {
 		}
 	}
 
+
+	/*
+	willChange();
+	this.StateFigure.willChange();
+
+	changed();
+	this.StateFigue.changed();
+	 */
+
 	private ListFigure attributeCompartment = new ListFigure();
 	private ListFigure actionCompartment = new ListFigure();
+
+	@Override
+	public Collection<Action> getActions(Point2D.Double p){
+		LinkedList<Action> actions = new LinkedList<Action>();
+
+		actions.add(new AddActionAction(this));
+
+		return actions;
+
+	}
+
+	class AddActionAction extends AbstractAction{
+
+		StateFigure fig;
+
+		public AddActionAction(StateFigure fig){
+			this.fig = fig;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+
+			//fig.getActionCompartment().add(new TextFigure());
+
+		}
+
+
+
+	}
+
 
 	public StateFigure() {
 
@@ -251,7 +295,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 		//Actions live in ((ListFigure)getChild(2).getChild(0))
 
 	}
-	
+
 	public List<String> getActions(){
 		return new ArrayList<String>();
 	}
@@ -362,6 +406,13 @@ public class StateFigure extends GraphicalCompositeFigure {
 
 	}
 
+	public void highlight(boolean b){
+		
+		willChange();
+		
+		changed();
+
+	}
 
 	/**
 	 * Returns dependent PertTasks which are directly connected via a
