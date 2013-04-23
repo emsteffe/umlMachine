@@ -113,6 +113,7 @@ public class UMLMachineMenuBuilder extends DefaultMenuBuilder {
         am.put(SimulateFromFileAction.ID,new SimulateFromFileAction()); 
         am.put(SimulateDiagramAction.ID,new SimulateDiagramAction()); 
         am.put(AnimateAction.ID,new AnimateAction());
+        am.put(ValidateAction.ID,new ValidateAction());
 
         
         if (null != (a = am.get(SimulateFromFileAction.ID))) {
@@ -124,6 +125,10 @@ public class UMLMachineMenuBuilder extends DefaultMenuBuilder {
         }
         
         if (null != (a = am.get(AnimateAction.ID))) {
+            m.add(a);
+        }
+        
+        if (null != (a = am.get(ValidateAction.ID))) {
             m.add(a);
         }
         

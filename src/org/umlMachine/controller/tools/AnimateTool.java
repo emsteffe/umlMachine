@@ -21,7 +21,6 @@ public class AnimateTool extends AbstractTool{
 
 	}
 
-
 	@Override
 	public void mouseEntered(MouseEvent evt) {		
 		//This is questionable programming -- TODO fix it later

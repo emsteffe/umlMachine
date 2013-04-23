@@ -119,10 +119,11 @@ public class UMLMachineApplicationModel extends DefaultApplicationModel {
         tb.addSeparator();
         ButtonFactory.addToolTo(tb, editor, new SimulateTool(false), "fromfile", labels);
         ButtonFactory.addToolTo(tb, editor, new SimulateTool(true), "simulateDiagram", labels);
-        
-        
-        // Implement this in later deliverable
         ButtonFactory.addToolTo(tb, editor, new AnimateTool(), "animate", labels);
+        tb.addSeparator();
+        ButtonFactory.addToolTo(tb, editor, new ValidateTool(), "validate", labels);
+
+        
         FigureFactory.getInstance().reloadFactory(new HashSet<StateFigure>());
         
        

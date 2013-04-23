@@ -13,7 +13,9 @@ package org.umlMachine.model.figures;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.decoration.ArrowTip;
 import org.jhotdraw.draw.layouter.LocatorLayouter;
+import org.jhotdraw.draw.liner.CurvedLiner;
 import org.jhotdraw.draw.liner.ElbowLiner;
+import org.jhotdraw.draw.locator.BezierPointLocator;
 import org.jhotdraw.draw.locator.RelativeLocator;
 
 import java.awt.*;
@@ -55,11 +57,9 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
 		add(label);
 		
 		setLayouter(new LocatorLayouter());
-		LocatorLayouter.LAYOUT_LOCATOR.set(label, new RelativeLocator(.5,.5,false));
-
+		LocatorLayouter.LAYOUT_LOCATOR.set(label, new BezierPointLocator(1,0));
 		
 	}
-
 
 
 	/**
@@ -85,14 +85,14 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
 				}					
 			}
 			
-			/*
-			//Prevent back and forth overlapping transitions
+			//Back and forth overlapping transitions
 			for(TransitionData t : ef.getData().getTransitionsOut()){
 				if(t.getEnd().equals(sf.getData())){
-					return false;
+					//TODO find a way to make the transition lines not right on top of one another (low priority)
+					//To just disallow this behavior: return false;
 				}				
 			}
-			*/
+			
 			
 			return true;
 		}

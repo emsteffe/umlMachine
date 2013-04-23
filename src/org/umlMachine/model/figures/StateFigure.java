@@ -100,14 +100,14 @@ public class StateFigure extends GraphicalCompositeFigure {
 
 		}
 
-
-
 	}
-
+	
+	
+	
 
 	public StateFigure() {
 
-		super(new RectangleFigure());
+		super(new RoundRectangleFigure());
 		setLayouter(new VerticalLayouter());
 
 		//Compartments
