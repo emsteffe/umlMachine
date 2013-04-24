@@ -1,66 +1,59 @@
 package org.umlMachine.model;
 
+import java.util.ArrayList;
 import java.util.StringTokenizer;
-
 import org.umlMachine.controller.FigureFactory;
 
 public class TransitionData {
-	
+
 	private StateData start;
 	private StateData end;
-	private String trigger;
-	private String action;
+	private ArrayList<String> actions;
 	private String event;
-	private String condition;
 	
 	public TransitionData(){}
-	
-	public TransitionData(String action, StateData start, StateData end, String trigger,String event, String condition){
+
+	@SuppressWarnings("unchecked")
+	public TransitionData(ArrayList<String> actions, StateData start, StateData end,String event){
 		this.start = start;
 		this.end = end;
-		this.trigger = trigger;
-		this.action = action;
-		this.condition = condition;
+		this.actions = (ArrayList<String>) actions.clone();
 		this.event = event;
 	}
-	
+
+	// get/set basic stuff
 	public void setStart(StateData start){this.start = start;}
 	public void setEnd(StateData end){this.end = end;}
-	public void setTrigger(String trigger){this.trigger = trigger;}
-	public void setAction(String action){this.action = action;}
-	public void setCondition(String condition){this.condition = condition;}
 	public void setEvent(String event){this.event = event;}
+	public StateData getStart(){return start;}
+	public StateData getEnd(){return end;}
+	public String getEvent(){return event;}
 	
-	
-	public StateData getStart(){
-		return start;
-	}
-	public StateData getEnd(){
-		return end;
-	}
-	public String getTrigger(){
-		return trigger;
-	}
-	public String getAction(){
-		return action;
-	}
-	public String getEvent(){
-		return event;
-	}
-	public String condition(){
-		return condition;
+	public void addAction(String action){
+		actions.add(action);
 	}
 	
+	public void removeAction(String action){
+		actions.remove(action);
+	}
+
 	public String toXML(){
-		return "<Transition action=\"" + action + 
-				"\" start=\"" + start.getName() + 
-				"\" end=\"" + end.getName() + 
-				"\" trigger=\"" + trigger + 
-				"\" event=\"" + event + 
-				"\" condition=\"" + condition + 
-				"\"/>";
+		String toReturn = "<Transition ";
+		toReturn = toReturn + "\t<Actions>\n";
+		
+		for(String action : actions){
+			toReturn = toReturn + "\t\t<Action>" + action + "</Action>\n";
+		}
+		
+		toReturn = toReturn + "\t</Actions>\n";
+		toReturn = toReturn + "\" start=\"" + start.getName();
+		toReturn = toReturn + "\" end=\"" + end.getName();
+		toReturn = toReturn + "\" event=\"" + event;
+		toReturn = toReturn + "\"/>";
+		
+		return toReturn;
 	}
-	
+
 	public void setFromXML(String xml){
 		StringTokenizer tokens = new StringTokenizer(xml.trim(),"\"");
 		tokens.nextToken();//start
@@ -68,11 +61,8 @@ public class TransitionData {
 		tokens.nextToken();
 		end = FigureFactory.getInstance().findState(tokens.nextToken().trim()).getData();
 		tokens.nextToken();
-		trigger = tokens.nextToken();
-		tokens.nextToken();
 		event = tokens.nextToken();
-		tokens.nextToken();
-		condition= tokens.nextToken();
-		
+
+
 	}
 }

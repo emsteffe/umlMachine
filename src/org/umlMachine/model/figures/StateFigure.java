@@ -1,13 +1,4 @@
-/*
- * @(#)TaskFigure.java
- *
- * Copyright (c) 1996-2010 by the original authors of JHotDraw and all its
- * contributors. All rights reserved.
- *
- * You may not use, copy or modify this file, except in compliance with the 
- * license agreement you entered into with the copyright holders. For details
- * see accompanying license terms.
- */
+
 package org.umlMachine.model.figures;
 
 import org.jhotdraw.draw.locator.RelativeLocator;
@@ -23,10 +14,8 @@ import java.awt.event.ActionEvent;
 import java.awt.geom.*;
 import static org.jhotdraw.draw.AttributeKeys.*;
 import java.util.*;
-
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-
 import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.handle.BoundsOutlineHandle;
 import org.jhotdraw.geom.Insets2D;
@@ -35,34 +24,26 @@ import org.umlMachine.controller.FigureFactory;
 import org.umlMachine.model.StateData;
 
 /**
- * TaskFigure.
- *
- * @author Werner Randelshofer.
- * @version $Id: TaskFigure.java 727 2011-01-09 13:23:59Z rawcoder $
+ * Lowell Johnson
  */
 @SuppressWarnings("serial")
 public class StateFigure extends GraphicalCompositeFigure {
 
-	private HashSet<TransitionFigure> dependencies;
 	private boolean isEnd = false;
 	private boolean isStart = false;
 	private StateData data = new StateData(isStart,isEnd,"state");
 
-	/**
-	 * This adapter is used, to connect a TextFigure with the name of
-	 * the TaskFigure model.
-	 */
 
 	private static class NameAdapter extends FigureAdapter {
-
-		public NameAdapter(StateFigure target) {
-		}
-
-		public void attributeChanged(FigureEvent e) {
-
-		}
+		public NameAdapter(StateFigure target) {}
+		public void attributeChanged(FigureEvent e) {}
 	}
 
+
+	/*
+	 * From discussion
+	 * TODO Make this work
+	 */
 
 	/*
 	willChange();
@@ -71,9 +52,6 @@ public class StateFigure extends GraphicalCompositeFigure {
 	changed();
 	this.StateFigue.changed();
 	 */
-
-	private ListFigure attributeCompartment = new ListFigure();
-	private ListFigure actionCompartment = new ListFigure();
 
 	@Override
 	public Collection<Action> getActions(Point2D.Double p){
@@ -101,67 +79,61 @@ public class StateFigure extends GraphicalCompositeFigure {
 		}
 
 	}
-	
-	
-	
+
+	/*
+	 * End From Discussion
+	 */
 
 	public StateFigure() {
 
+		//The Figure itself
 		super(new RoundRectangleFigure());
 		setLayouter(new VerticalLayouter());
 
 		//Compartments
-		nameCompartment = new ListFigure();
-		attributeCompartment = new ListFigure();
-		actionCompartment = new ListFigure();
+		ListFigure nameCompartment = new ListFigure();
+		ListFigure actionCompartment = new ListFigure();
+		SeparatorLineFigure separator = new SeparatorLineFigure();
+		add(nameCompartment);
+		add(separator);
+		add(actionCompartment);
 
-		//Figures
-		//name
+		//Internals
+		//Name
 		TextFigure nameFigure;
-		nameCompartment.add(nameFigure = new TextFigure("State "+ FigureFactory.getInstance().getNumStates() ));
+		nameCompartment.add(nameFigure = new TextFigure("State "+ (int)(FigureFactory.getInstance().getNumStates() + 1) ));
 		nameFigure.set(LAYOUT_INSETS, new Insets2D.Double(4, 8, 4, 8));
 		nameFigure.set(FONT_BOLD, true);
 		nameFigure.setAttributeEnabled(FONT_BOLD, false);
 
-		data.forceName("State "+ FigureFactory.getInstance().getNumStates());
+		//Actions
+		ListFigure entryActions = new ListFigure();
+		ListFigure internalActions = new ListFigure();
+		ListFigure exitActions = new ListFigure();
+		actionCompartment.add(entryActions);
+		actionCompartment.add(internalActions);
+		actionCompartment.add(exitActions);
+		entryActions.set(LAYOUT_INSETS, new Insets2D.Double(4, 8, 0, 8));
+		internalActions.set(LAYOUT_INSETS, new Insets2D.Double(1, 8, 1, 8));
+		exitActions.set(LAYOUT_INSETS, new Insets2D.Double(0, 8, 4, 8));
 
-		//actions
-		ListFigure actions = new ListFigure();
-		actionCompartment.add(actions);
+		//entry
 
-		//sample data
-		//TODO Make this editable from user.
-		//TODO Add right click add action option 
-		actions.add(new TextFigure("Action 1"));
-		data.addAction("Action 1");
-		actions.add(new TextFigure("Action 2"));
-		data.addAction("Action 2");
+		//TODO
+		entryActions.add(new TextFigure("Entry/action"));
 
+		//internal
 
-		//attributes
-		ListFigure attributes = new ListFigure();
-		attributeCompartment.add(attributes);
+		//TODO
+		internalActions.add(new TextFigure("Event/action"));
 
-		//sample data
-		//TODO Make this editable from user
-		//TODO Add right click add attribute option
-		attributes.add(new TextFigure("Attribute 1"));
-		data.addAction("Attribute 1");
-		attributes.add(new TextFigure("Attribute 2"));
-		data.addAction("Attribute 2");
+		//exit
+
+		//TODO
+		exitActions.add(new TextFigure("Exit/action"));
 
 
-		SeparatorLineFigure separator = new SeparatorLineFigure();
-
-		//Order
-		add(nameCompartment);
-		add(separator);
-		add(actionCompartment);
-		add(separator);
-		add(attributeCompartment);
-
-		//Assignments
-		dependencies = new HashSet<TransitionFigure>();
+		//I'm sure this is important
 		nameFigure.addFigureListener(new NameAdapter(this));
 
 
@@ -171,79 +143,107 @@ public class StateFigure extends GraphicalCompositeFigure {
 
 		name compartment
 			text figure
-
 		Separator
-
 		actions compartment
 			list figure
 				text figure
 				text figure
 				.....
 
-		Separator
-
-		attributes compartment
-			list figure
-				text figure
-				text figure
-				.....
 		 */
 
 	}
-	private ImageFigure imageFigure = null;
-	private ListFigure nameCompartment = new ListFigure();
-	public StateFigure(boolean type){ // true->start , false->end
 
+	public StateFigure(boolean type){ // true=start , false=end
 
+		//Figure itself
 		super(new EllipseFigure());
-
-		imageFigure = new ImageFigure();
+		ImageFigure imageFigure = new ImageFigure();
 		imageFigure.set(STROKE_COLOR, new Color(255,255,255));
 		imageFigure.setAttributeEnabled(STROKE_COLOR, false);
+		super.setPresentationFigure(imageFigure);
 
 		// Name figure is not visible, but must exist for the factory
-		nameCompartment = new ListFigure();
+		ListFigure nameCompartment = new ListFigure();
 		add(nameCompartment);
 		nameCompartment.setVisible(false);
+
 		//Creates state, does different things for start and end states
 		File file;
-		if(type){
+		nameCompartment.add(new TextFigure(""));
+		data.forceName("State "+ FigureFactory.getInstance().getNumStates());
 
-			//TODO Need to be able to ask the factory if a figure with this name exists to prevent 2 start states
-			nameCompartment.add(new TextFigure("StartState[jh72%3tr#FHuu]")); //Unique name
+		if(type){
 			file = new File("src/org/umlMachine/view/images/start.png");
 			isStart = true;
 			data.setStart(true);
 		}else{
-
-			nameCompartment.add(new TextFigure("End State"+ FigureFactory.getInstance().getNumStates() ));
 			file = new File("src/org/umlMachine/view/images/end.png");
 			isEnd = true;
 			data.setEnd(true);
-
 		}
 
 		try {
 			imageFigure.loadImage(file);
-		} catch (IOException e) {
-		}
-
-
-		data.forceName("State "+ FigureFactory.getInstance().getNumStates());
-
-		dependencies = new HashSet<TransitionFigure>();
-		super.setPresentationFigure(imageFigure);
+		} catch (IOException e) {}
 
 		/*
 		 * Layout of a start/end figure
 		 * 
-
-		name compartment
-			text figure [hidden]
-
+		 * 
+		name compartment [hidden]
+			text figure 
 		 */
 
 	}
+
+	/*
+	 * Name get/set
+	 */
+
+	public void setName(String newValue) {
+		getNameFigure().setText(newValue);
+		data.setName(newValue);
+	}
+
+	public String getName() {
+		return getNameFigure().getText();
+	}
+
+	private TextFigure getNameFigure() {
+		return (TextFigure)((ListFigure) getChild(0)).getChild(0);
+	}
+
+	/*
+	 * Actions get/set
+	 */
+
+	public void addAction(String a){
+		data.addAction(a);
+		//TODO Add it to the figure
+	}
+
+	public List<String> getActions(){
+		return data.getActions();
+	}
+
+	/*
+	 * Highlighting 
+	 */
+
+	public void highlight(boolean b){
+		willChange();
+		//TODO		
+		changed();
+
+	}
+
+	///////////////////////////////////////
+	//////////////////////////////////////
+
+	/*
+	 * Boring stuff 
+	 */
 
 	public int getType(){
 		if (isStart) return -1;
@@ -274,45 +274,22 @@ public class StateFigure extends GraphicalCompositeFigure {
 			break;
 		}
 		return handles;
-
-	}
-
-	public void setName(String newValue) {
-		getNameFigure().setText(newValue);
-		data.setName(newValue);
-	}
-
-	public String getName() {
-		return getNameFigure().getText();
-	}
-
-	private TextFigure getNameFigure() {
-		return (TextFigure)((ListFigure) getChild(0)).getChild(0);
-	}
-
-	public void addAction(String action){
-		//TODO
-		//Actions live in ((ListFigure)getChild(2).getChild(0))
-
-	}
-
-	public List<String> getActions(){
-		return new ArrayList<String>();
-	}
-
-	public void addAttribute(String attribute){
-		//TODO
-		//Attributes live in ((ListFigure)getChild(4).getChild(0))
-
 	}
 
 	@Override
+	public int getLayer() {
+		return 0;
+	}	
+
+	public StateData getData() {
+		return data;
+	}
+
+	@Override
+	//I really hope JHotDraw is not not using this thing. TODO maybe
 	public StateFigure clone() {
 		StateFigure that = (StateFigure) super.clone();
-		that.dependencies = new HashSet<TransitionFigure>();
 		that.getNameFigure().addFigureListener(new NameAdapter(that));
-		//that.getDurationFigure().addFigureListener(new DurationAdapter(that));
-		//that.updateStartTime();
 		that.getData().forceName(that.getName());
 		return that;
 	}
@@ -330,7 +307,6 @@ public class StateFigure extends GraphicalCompositeFigure {
 		setName((String) in.readObject());
 		in.closeElement();
 		in.openElement("duration");
-		//setDuration((Integer) in.readObject());
 		in.closeElement();
 		in.openElement("data");
 		data.setName(in.getAttribute("name", ""));
@@ -366,7 +342,6 @@ public class StateFigure extends GraphicalCompositeFigure {
 		out.writeObject(getName());
 		out.closeElement();
 		out.openElement("duration");
-		//out.writeObject(getDuration());
 		out.closeElement();
 		out.openElement("data");
 		out.addAttribute("name", data.getName());
@@ -386,93 +361,6 @@ public class StateFigure extends GraphicalCompositeFigure {
 		out.closeElement();
 		out.closeElement();
 	}
-
-	@Override
-	public int getLayer() {
-		return 0;
-	}
-
-	public Set<TransitionFigure> getDependencies() {
-		return Collections.unmodifiableSet(dependencies);
-	}
-
-	public void addDependency(TransitionFigure f) {
-		dependencies.add(f);
-
-	}
-
-	public void removeDependency(TransitionFigure f) {
-		dependencies.remove(f);
-
-	}
-
-	public void highlight(boolean b){
-		
-		willChange();
-		
-		changed();
-
-	}
-
-	/**
-	 * Returns dependent PertTasks which are directly connected via a
-	 * PertDependency to this TaskFigure.
-	 */
-	public List<StateFigure> getSuccessors() {
-		LinkedList<StateFigure> list = new LinkedList<StateFigure>();
-		for (TransitionFigure c : getDependencies()) {
-			if (c.getStartFigure() == this) {
-				list.add((StateFigure) c.getEndFigure());
-			}
-
-		}
-		return list;
-	}
-
-	/**
-	 * Returns predecessor PertTasks which are directly connected via a
-	 * PertDependency to this TaskFigure.
-	 */
-	public List<StateFigure> getPredecessors() {
-		LinkedList<StateFigure> list = new LinkedList<StateFigure>();
-		for (TransitionFigure c : getDependencies()) {
-			if (c.getEndFigure() == this) {
-				list.add((StateFigure) c.getStartFigure());
-			}
-
-		}
-		return list;
-	}
-
-	/**
-	 * Returns true, if the current task is a direct or
-	 * indirect dependent of the specified task.
-	 * If the dependency is cyclic, then this method returns true
-	 * if <code>this</code> is passed as a parameter and for every other
-	 * task in the cycle.
-	 */
-	public boolean isDependentOf(StateFigure t) {
-		if (this == t) {
-			return true;
-		}
-
-		for (StateFigure pre : getPredecessors()) {
-			if (pre.isDependentOf(t)) {
-				return true;
-			}
-
-		}
-		return false;
-	}
-
-
-
-	public StateData getData() {
-		return data;
-	}
-
-	// @Override
-	//public String toString() {return "TaskFigure#" + hashCode() + " " + getName() + " " + getDuration() + " " + getStartTime();}
 
 }
 

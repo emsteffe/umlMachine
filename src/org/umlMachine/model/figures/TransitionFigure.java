@@ -1,43 +1,25 @@
-/*
- * @(#)DependencyFigure.java
- *
- * Copyright (c) 1996-2010 by the original authors of JHotDraw and all its
- * contributors. All rights reserved.
- *
- * You may not use, copy or modify this file, except in compliance with the 
- * license agreement you entered into with the copyright holders. For details
- * see accompanying license terms.
- */
+
 package org.umlMachine.model.figures;
 
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.decoration.ArrowTip;
 import org.jhotdraw.draw.layouter.LocatorLayouter;
-import org.jhotdraw.draw.liner.CurvedLiner;
 import org.jhotdraw.draw.liner.ElbowLiner;
 import org.jhotdraw.draw.locator.BezierPointLocator;
-import org.jhotdraw.draw.locator.RelativeLocator;
-
 import java.awt.*;
 import static org.jhotdraw.draw.AttributeKeys.*;
 import org.jhotdraw.draw.*;
 import org.umlMachine.model.TransitionData;
 
 /**
- * DependencyFigure.
- *
- * @author Werner Randelshofer.
- * @version $Id: DependencyFigure.java 718 2010-11-21 17:49:53Z rawcoder $
+ * Lowell Johnson
  */
 @SuppressWarnings("serial")
 public class TransitionFigure extends LabeledLineConnectionFigure  {
 
-
 	//(String action, StateData start, StateData end, String trigger,String event, String condition)
 	private TransitionData data = new TransitionData();
 
-	
-	/** Creates a new instance. */
 	public TransitionFigure() {
 
 		//Visual Attributes
@@ -49,23 +31,27 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
 		setAttributeEnabled(STROKE_DASHES, false);
 		setAttributeEnabled(FONT_ITALIC, false);
 		setAttributeEnabled(FONT_UNDERLINE, false);	
-		
 		ElbowLiner elbow = new ElbowLiner();
-		setLiner(elbow);
-		
-		TextFigure label = new TextFigure("Transition");
-		add(label);
-		
 		setLayouter(new LocatorLayouter());
-		LocatorLayouter.LAYOUT_LOCATOR.set(label, new BezierPointLocator(1,0));
-		
+		setLiner(elbow);
+
+
+		TextFigure label1 = new TextFigure("Event");
+		TextFigure label2 = new TextFigure("Action");
+		ListFigure compartment = new ListFigure();
+
+		compartment.add(label1);
+		compartment.add(label2);
+
+		add(compartment);
+
+
+		//TODO Fix minor bug regarding perfectly straight transition lines (low proiority)
+		LocatorLayouter.LAYOUT_LOCATOR.set(compartment, new BezierPointLocator(1,0));
+
 	}
 
 
-	/**
-	 * Checks if two figures can be connected. Implement this method
-	 * to constrain the allowed connections between figures.
-	 */
 	@Override
 	public boolean canConnect(Connector start, Connector end) {
 		if ((start.getOwner() instanceof StateFigure) && (end.getOwner() instanceof StateFigure)) {
@@ -84,7 +70,7 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
 					return false;
 				}					
 			}
-			
+
 			//Back and forth overlapping transitions
 			for(TransitionData t : ef.getData().getTransitionsOut()){
 				if(t.getEnd().equals(sf.getData())){
@@ -92,8 +78,8 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
 					//To just disallow this behavior: return false;
 				}				
 			}
-			
-			
+
+
 			return true;
 		}
 		return false;
@@ -111,34 +97,18 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
 		return false;
 	}
 
-	/**
-	 * Handles the disconnection of a connection.
-	 * Override this method to handle this event.
-	 */
 	@Override
 	protected void handleDisconnect(Connector start, Connector end) {
 		StateFigure sf = (StateFigure) start.getOwner();
-		StateFigure ef = (StateFigure) end.getOwner();
-
-		sf.removeDependency(this);
-		ef.removeDependency(this);
 
 		sf.getData().removeTransitionOut(data);
 
 	}
 
-	/**
-	 * Handles the connection of a connection.
-	 * Override this method to handle this event.
-	 */
 	@Override
 	protected void handleConnect(Connector start, Connector end) {
 		StateFigure sf = (StateFigure) start.getOwner();
 		StateFigure ef = (StateFigure) end.getOwner();
-
-
-		sf.addDependency(this);
-		ef.addDependency(this);
 
 		System.out.println("connecting " + sf.getName()+ " to "+ ef.getName());
 
@@ -153,10 +123,9 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
 	}
 
 	@Override
+	//I hope we aren't using this
 	public TransitionFigure clone() {
-		TransitionFigure that = new TransitionFigure();
-
-		return that;
+		return (TransitionFigure) super.clone();
 	}
 
 	@Override
@@ -164,14 +133,4 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
 		return 1;
 	}
 
-	@Override
-	public void removeNotify(Drawing d) {
-		if (getStartFigure() != null) {
-			((StateFigure) getStartFigure()).removeDependency(this);
-		}
-		if (getEndFigure() != null) {
-			((StateFigure) getEndFigure()).removeDependency(this);
-		}
-		super.removeNotify(d);
-	}
 }
