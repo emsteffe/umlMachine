@@ -31,63 +31,85 @@ public class StateFigure extends GraphicalCompositeFigure {
 
 	private boolean isEnd = false;
 	private boolean isStart = false;
+	private boolean isParent = false;
+	private boolean isChild = false;
+	private static RoundRectangleFigure figure;
 	private StateData data = new StateData(isStart,isEnd,"state");
-
-
-	private static class NameAdapter extends FigureAdapter {
-		public NameAdapter(StateFigure target) {}
-		public void attributeChanged(FigureEvent e) {}
-	}
-
-
+	
+	
 	/*
-	 * From discussion
-	 * TODO Make this work
+	 * Right Click Menu Items
+	 * 
+	 * Add Entry Action
+	 * Add Internal Action
+	 * Add Exit Action
+	 * 
+	 * Remove Action
+	 * 
+	 * Make Parent
+	 * Make Child 
+	 * Abandon Family
 	 */
-
-	/*
-	willChange();
-	this.StateFigure.willChange();
-
-	changed();
-	this.StateFigue.changed();
-	 */
-
+	
 	@Override
 	public Collection<Action> getActions(Point2D.Double p){
 		LinkedList<Action> actions = new LinkedList<Action>();
-
-		actions.add(new AddActionAction(this));
-
+		actions.add(new AddActionAction(this,"Add Entry Action"));
+		actions.add(new AddActionAction(this,"Add Internal Action"));
+		actions.add(new AddActionAction(this,"Add Exit Action"));
+		actions.add(new MakeParentChildAction(this,"Make Parent"));
+		actions.add(new MakeParentChildAction(this,"Make Child"));
+		actions.add(new MakeParentChildAction(this,"Abandon Family"));
 		return actions;
-
 	}
 
 	class AddActionAction extends AbstractAction{
-
 		StateFigure fig;
+		private String name;
 
-		public AddActionAction(StateFigure fig){
+		public AddActionAction(StateFigure fig, String name){
+			super(name);
+			this.name = name;
 			this.fig = fig;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			if(isStart || isEnd){
+				System.out.println("Can't add actions to this kind state.");
+				return;
+			}
+			
+			//go go gadget string parsing
+			fig.addAction(name.substring(4,name.indexOf(' ', 4)) + "/Default Action" );			
+		}
+
+	}
+
+	class MakeParentChildAction extends AbstractAction{
+		StateFigure fig;
+		String type;
+		
+		public MakeParentChildAction(StateFigure fig, String type){
+			super(type);
+			this.fig = fig;
+			this.type = type;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-
-			//fig.getActionCompartment().add(new TextFigure());
-
+			if(type.equals("Make Parent")) fig.makeParent();
+			if(type.equals("Make Child")) fig.makeChild();
+			if(type.equals("Abandon Family")) fig.makeNormal();
 		}
-
+		
 	}
-
-	/*
-	 * End From Discussion
-	 */
 
 	public StateFigure() {
 
 		//The Figure itself
-		super(new RoundRectangleFigure());
+		super(figure);
+		figure = new RoundRectangleFigure();
 		setLayouter(new VerticalLayouter());
 
 		//Compartments
@@ -114,42 +136,44 @@ public class StateFigure extends GraphicalCompositeFigure {
 		actionCompartment.add(internalActions);
 		actionCompartment.add(exitActions);
 		entryActions.set(LAYOUT_INSETS, new Insets2D.Double(4, 8, 0, 8));
-		internalActions.set(LAYOUT_INSETS, new Insets2D.Double(1, 8, 1, 8));
+		internalActions.set(LAYOUT_INSETS, new Insets2D.Double(-1, 8, -1, 8));
 		exitActions.set(LAYOUT_INSETS, new Insets2D.Double(0, 8, 4, 8));
 
 		//entry
-
-		//TODO
-		entryActions.add(new TextFigure("Entry/action"));
-
+		addAction("Entry/action1");
+		
+		addAction("Entry/action5");
+		removeAction("Entry/action5");
+		
 		//internal
-
-		//TODO
-		internalActions.add(new TextFigure("Event/action"));
+		addAction("Internal/action2");
+		
+		addAction("Internal/action4");
+		removeAction("Internal/action4");
 
 		//exit
+		addAction("Exit/action3");
+		
+		addAction("Exit/action6");
+		removeAction("Exit/action6");
 
-		//TODO
-		exitActions.add(new TextFigure("Exit/action"));
-
-
-		//I'm sure this is important
-		nameFigure.addFigureListener(new NameAdapter(this));
-
-
+		
 		/*
 		 * Layout of a state figure
-		 * 
-
+		 *
 		name compartment
 			text figure
 		Separator
 		actions compartment
-			list figure
+			entry list figure
 				text figure
+				...
+			internal list figure
 				text figure
-				.....
-
+				...
+			exit list figure
+				text figure
+				...
 		 */
 
 	}
@@ -217,32 +241,133 @@ public class StateFigure extends GraphicalCompositeFigure {
 	/*
 	 * Actions get/set
 	 */
-
+	
 	public void addAction(String a){
 		data.addAction(a);
-		//TODO Add it to the figure
+		willChange();
+		addActionFigure(new TextFigure(a));
+		changed();
 	}
+	
+	public void removeAction(String a){
+		data.removeAction(a);
+		removeActionFigure(a);
+		
+	}
+	
+	private void addActionFigure(TextFigure action){
+		ListFigure compartment = (ListFigure) getChild(2);
+		String a = action.getText();
+		
+		if(a.startsWith("Entry/")){
+			((ListFigure)compartment.getChild(0)).add(action);
+			
+		}else if(a.startsWith("Exit/")){
+			((ListFigure)compartment.getChild(2)).add(action);
+			
+		}else{
+			((ListFigure)compartment.getChild(1)).add(action);
+		}
 
+	}
+	
+		
+	private void removeActionFigure(String a){
+		
+		ListFigure compartment = (ListFigure) getChild(2);
+		ListFigure entryActions = (ListFigure) ((ListFigure)compartment.getChild(0));
+		ListFigure internalActions = (ListFigure) ((ListFigure)compartment.getChild(1));
+		ListFigure exitActions = (ListFigure) ((ListFigure)compartment.getChild(2));
+
+		willChange();
+
+		searchLoop: 
+		if(a.startsWith("Entry/")){	
+			int i = ((ListFigure)compartment.getChild(0)).getChildCount();
+			while(i>0) {
+				if(((TextFigure)entryActions.getChild(--i)).getText().equals(a)){
+					entryActions.removeChild(i);
+					break searchLoop;
+				}
+			}
+		}else if(a.startsWith("Exit/")){
+			int i = ((ListFigure)compartment.getChild(2)).getChildCount();
+			while(i>0) {
+				if(((TextFigure)exitActions.getChild(--i)).getText().equals(a)){
+					exitActions.removeChild(i);
+					break searchLoop;
+				}
+			}
+		}else{
+			int i = ((ListFigure)compartment.getChild(1)).getChildCount();
+			while(i > 0) {
+				if(((TextFigure)internalActions.getChild(--i)).getText().equals(a)){
+					internalActions.removeChild(i);
+					break searchLoop;
+				}
+			}
+		}
+		
+		changed();
+	}
+	
 	public List<String> getActions(){
 		return data.getActions();
 	}
+	
+	//TODO These methods need to be smarter
+	public void makeParent(){
+		isChild = false;
+		isParent = true;
+		highlight(false);
+	}
 
+	public void makeChild(){
+		isParent = false;
+		isChild  = true;
+		highlight(false);
+	}
+	
+	public void makeNormal(){
+		isParent = false;
+		isChild  = false;
+		highlight(false);
+	}
+	
+	
 	/*
 	 * Highlighting 
 	 */
 
 	public void highlight(boolean b){
+		
+		Color on = new Color(135,235,235);
+		Color off = new Color(255,255,255);
+		if(isParent) off = new Color(240,50,50);
+		if(isChild) off = new Color(250,160,160);
+			
 		willChange();
-		//TODO		
-		changed();
+		figure.setAttributeEnabled(FILL_COLOR, true);
+		
+		if(b){
+			figure.set(FILL_COLOR, on);
+		}else{
+			figure.set(FILL_COLOR, off);
+			this.setPresentationFigure(figure);
+		}	
+		
 
+		this.setPresentationFigure(figure);
+		figure.setAttributeEnabled(FILL_COLOR, false);
+		this.
+		changed();
 	}
 
 	///////////////////////////////////////
 	//////////////////////////////////////
 
 	/*
-	 * Boring stuff 
+	 * Boring stuff :D
 	 */
 
 	public int getType(){
@@ -289,7 +414,6 @@ public class StateFigure extends GraphicalCompositeFigure {
 	//I really hope JHotDraw is not not using this thing. TODO maybe
 	public StateFigure clone() {
 		StateFigure that = (StateFigure) super.clone();
-		that.getNameFigure().addFigureListener(new NameAdapter(that));
 		that.getData().forceName(that.getName());
 		return that;
 	}
