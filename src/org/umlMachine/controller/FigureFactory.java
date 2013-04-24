@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import org.umlMachine.model.StateData;
 import org.umlMachine.model.TransitionData;
 import org.umlMachine.model.figures.StateFigure;
 import org.umlMachine.model.figures.TransitionFigure;
@@ -24,6 +26,10 @@ public class FigureFactory {
 	public static void clear(){
 		instance.figureMap.clear();
 		instance.numStates = 0;
+	}
+	
+	public StateFigure findState(StateData data){
+		return findState(data.getName());
 	}
 	
 	public StateFigure getState(){
