@@ -180,6 +180,7 @@ public class UMLMachineView extends AbstractView {
            		String line = reader.readLine();
            		HashSet<TransitionData> data = new HashSet<TransitionData>();
            		//transition is now multiline able.
+           		//
            		while(line != null){
            			if(line.contains("<transition ")){
            				TransitionData toAdd = new TransitionData();
