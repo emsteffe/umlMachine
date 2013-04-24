@@ -229,6 +229,10 @@ public class StateFigure extends GraphicalCompositeFigure {
 		getNameFigure().setText(newValue);
 		data.setName(newValue);
 	}
+	
+	public void shade(boolean on){
+		//dummy stub
+	}
 
 	public String getName() {
 		return getNameFigure().getText();
@@ -427,26 +431,26 @@ public class StateFigure extends GraphicalCompositeFigure {
 		setBounds(new Point2D.Double(x, y), new Point2D.Double(x + w, y + h));
 		readAttributes(in);
 		in.openElement("model");
-		in.openElement("name");
-		setName((String) in.readObject());
-		in.closeElement();
-		in.openElement("duration");
-		in.closeElement();
-		in.openElement("data");
-		data.setName(in.getAttribute("name", ""));
-		if(in.getAttribute("type", "").equals("end"))
-			data.setEnd(true);
-		else if(in.getAttribute("type", "").equals("start"))
-			data.setStart(true);
-		in.openElement("actions");
-		int actionCount = in.getElementCount();
-		for(int i= 0; i!= actionCount; i++){
-			in.openElement(i);//open action
-			data.addAction(in.getText());
+			in.openElement("name");
+				setName((String) in.readObject());
 			in.closeElement();
-		}
-		in.closeElement();
-		in.closeElement();
+			in.openElement("duration");
+			in.closeElement();
+			in.openElement("data");
+				data.setName(in.getAttribute("name", ""));
+				if(in.getAttribute("type", "").equals("end"))
+					data.setEnd(true);
+				else if(in.getAttribute("type", "").equals("start"))
+					data.setStart(true);
+				in.openElement("actions");
+					int actionCount = in.getElementCount();
+					for(int i= 0; i!= actionCount; i++){
+						in.openElement(i);//open action
+							data.addAction(in.getText());
+						in.closeElement();
+					}
+				in.closeElement();
+			in.closeElement();
 		in.closeElement();
 		if(data.isStart()){
 			//make it a start date
@@ -462,27 +466,28 @@ public class StateFigure extends GraphicalCompositeFigure {
 		out.addAttribute("y", r.y);
 		writeAttributes(out);
 		out.openElement("model");
-		out.openElement("name");
-		out.writeObject(getName());
-		out.closeElement();
-		out.openElement("duration");
-		out.closeElement();
-		out.openElement("data");
-		out.addAttribute("name", data.getName());
-		if(data.isEnd())
-			out.addAttribute("type", "end");
-		else if(data.isStart())
-			out.addAttribute("type", "start");
-		else
-			out.addAttribute("type", "nor");
-		out.openElement("actions");
-		for(String action : data.getActions()){
-			out.openElement("action");
-			out.addText(action);
+			out.openElement("name");
+				out.writeObject(getName());
 			out.closeElement();
-		}
-		out.closeElement();
-		out.closeElement();
+			out.openElement("duration");
+			out.closeElement();
+			out.openElement("data");
+				out.addAttribute("name", data.getName());
+				if(data.isEnd())
+					out.addAttribute("type", "end");
+				else if(data.isStart())
+					out.addAttribute("type", "start");
+				else
+					out.addAttribute("type", "nor");
+				out.openElement("actions");
+					for(String action : data.getActions()){
+						out.openElement("action");
+						out.addText(action);
+						out.closeElement();
+					}
+		
+				out.closeElement();
+			out.closeElement();
 		out.closeElement();
 	}
 
