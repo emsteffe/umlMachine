@@ -38,18 +38,21 @@ public class TransitionData {
 	}
 
 	public String toXML(){
-		String toReturn = "<Transition ";
-		toReturn = toReturn + "\t<Actions>\n";
+		String toReturn = "<transition ";
 		
-		for(String action : actions){
-			toReturn = toReturn + "\t\t<Action>" + action + "</Action>\n";
-		}
-		
-		toReturn = toReturn + "\t</Actions>\n";
 		toReturn = toReturn + "\" start=\"" + start.getName();
 		toReturn = toReturn + "\" end=\"" + end.getName();
 		toReturn = toReturn + "\" event=\"" + event;
-		toReturn = toReturn + "\"/>";
+		toReturn = toReturn + "\">";
+		toReturn = toReturn + "\t<actions>\n";
+		
+		for(String action : actions){
+			toReturn = toReturn + "\t\t<action>" + action + "</action>\n";
+		}
+		
+		toReturn = toReturn + "\t</actions>\n";
+		
+		toReturn =toReturn + "</transition>";
 		
 		return toReturn;
 	}
