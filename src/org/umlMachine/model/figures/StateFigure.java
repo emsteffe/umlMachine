@@ -230,9 +230,6 @@ public class StateFigure extends GraphicalCompositeFigure {
 		data.setName(newValue);
 	}
 	
-	public void shade(boolean on){
-		//dummy stub
-	}
 
 	public String getName() {
 		return getNameFigure().getText();
