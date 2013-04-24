@@ -74,10 +74,9 @@ public class XMLController {
 		for(int i= 0; i!= transitionCount; i++){
 			in.openElement(i); //open Transition
 			TransitionData transition = new TransitionData();
-			transition.setAction(in.getAttribute("action", ""));
-			transition.setCondition(in.getAttribute("condition", ""));
+			transition.addAction(in.getAttribute("action", ""));
+			//make it multi action
 			transition.setEvent(in.getAttribute("event", ""));
-			transition.setTrigger(in.getAttribute("trigger",""));
 			transition.setStart(tempMap.get(in.getAttribute("start", "")));
 			transition.setEnd(tempMap.get(in.getAttribute("end", "")));
 			transition.getStart().addTransitionOut(transition);
@@ -124,12 +123,10 @@ public class XMLController {
 			in.openElement(i); // open transitiondata
 			in.openElement(0); // open transition
 			TransitionData toAdd = new TransitionData();
-			toAdd.setAction(in.getAttribute("action", ""));
-			toAdd.setCondition(in.getAttribute("condition", ""));
+			toAdd.addAction(in.getAttribute("action", ""));
 			toAdd.setEvent(in.getAttribute("event", ""));
 			toAdd.setStart(FigureFactory.getInstance().findState(in.getAttribute("start", "")).getData());
 			toAdd.setEnd(FigureFactory.getInstance().findState(in.getAttribute("end", "")).getData());
-			toAdd.setTrigger(in.getAttribute("trigger", ""));
 			toReturn.add(toAdd);
 			in.closeElement(); // close transition
 			in.closeElement(); // transitiondata
