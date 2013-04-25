@@ -13,8 +13,8 @@ import org.umlMachine.controller.FigureFactory;
 import org.umlMachine.controller.XMLController;
 import org.umlMachine.model.StateData;
 import org.umlMachine.model.TransitionData;
-import org.umlMachine.model.figures.StateFigure;
-import org.umlMachine.model.figures.TransitionFigure;
+import org.umlMachine.view.figures.StateFigure;
+import org.umlMachine.view.figures.TransitionFigure;
 
 public class UMLMachineTest extends TestDetails {
 

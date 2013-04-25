@@ -13,7 +13,7 @@ package org.umlMachine.controller;
 
 import java.util.Set;
 
-import org.umlMachine.model.figures.StateFigure;
+import org.umlMachine.view.figures.StateFigure;
 
 public class Simulator {
 	

@@ -1,11 +1,9 @@
 
-package org.umlMachine.model.figures;
+package org.umlMachine.view.figures;
 
 import org.jhotdraw.draw.locator.RelativeLocator;
 import org.jhotdraw.draw.handle.MoveHandle;
 import org.jhotdraw.draw.handle.Handle;
-import org.jhotdraw.draw.event.FigureAdapter;
-import org.jhotdraw.draw.event.FigureEvent;
 import org.jhotdraw.draw.layouter.VerticalLayouter;
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +31,6 @@ public class StateFigure extends GraphicalCompositeFigure {
 	private boolean isStart = false;
 	private boolean isParent = false;
 	private boolean isChild = false;
-	private static RoundRectangleFigure figure;
 	private StateData data = new StateData(isStart,isEnd,"state");
 	
 	
@@ -108,8 +105,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 	public StateFigure() {
 
 		//The Figure itself
-		super(figure);
-		figure = new RoundRectangleFigure();
+		super(new RoundRectangleFigure());
 		setLayouter(new VerticalLayouter());
 
 		//Compartments
@@ -320,21 +316,23 @@ public class StateFigure extends GraphicalCompositeFigure {
 	public void makeParent(){
 		isChild = false;
 		isParent = true;
+		data.makeParent();
 		highlight(false);
 	}
 
 	public void makeChild(){
 		isParent = false;
 		isChild  = true;
+		data.makeChild();
 		highlight(false);
 	}
 	
 	public void makeNormal(){
 		isParent = false;
 		isChild  = false;
+		data.makeNormal();
 		highlight(false);
 	}
-	
 	
 	/*
 	 * Highlighting 
@@ -342,25 +340,23 @@ public class StateFigure extends GraphicalCompositeFigure {
 
 	public void highlight(boolean b){
 		
+		RoundRectangleFigure fig = (RoundRectangleFigure) this.getPresentationFigure();
+		
 		Color on = new Color(135,235,235);
 		Color off = new Color(255,255,255);
 		if(isParent) off = new Color(240,50,50);
 		if(isChild) off = new Color(250,160,160);
 			
 		willChange();
-		figure.setAttributeEnabled(FILL_COLOR, true);
+		fig.setAttributeEnabled(FILL_COLOR, true);
 		
 		if(b){
-			figure.set(FILL_COLOR, on);
+			fig.set(FILL_COLOR, on);
 		}else{
-			figure.set(FILL_COLOR, off);
-			this.setPresentationFigure(figure);
+			fig.set(FILL_COLOR, off);
 		}	
 		
-
-		this.setPresentationFigure(figure);
-		figure.setAttributeEnabled(FILL_COLOR, false);
-		this.
+		fig.setAttributeEnabled(FILL_COLOR, false);
 		changed();
 	}
 

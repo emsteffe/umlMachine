@@ -9,7 +9,7 @@
  * see accompanying license terms.
  */
 
-package org.umlMachine.model.figures;
+package org.umlMachine.view.figures;
 
 import java.awt.Graphics2D;
 import java.awt.geom.*;

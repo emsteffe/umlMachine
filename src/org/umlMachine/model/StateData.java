@@ -8,6 +8,8 @@ import org.umlMachine.controller.FigureFactory;
 public class StateData {
 	private boolean isStart = false;
 	private boolean isEnd = false;
+	private boolean isParent = false;
+	private boolean isChild = false;
 	private String name;
 	private ArrayList<String> entryActions;
 	private ArrayList<String> internalActions;
@@ -63,6 +65,29 @@ public class StateData {
 	public String getName(){
 		return name;
 	}
+	
+	//I have no idea if we are going to use this
+	public int getFamilyType(){
+		if(isChild) return -1;
+		if(isParent) return 1;
+		return 0;
+	}
+	
+	public void makeParent(){
+		isChild = false;
+		isParent = true;	
+	}
+	
+	public void makeChild(){
+		isParent = false;
+		isChild = true;
+	}
+	
+	public void makeNormal(){
+		isParent = false;
+		isChild = false;
+	}
+	
 
 	public void removeAction(String a)	{
 		if(a.startsWith("Entry/")){

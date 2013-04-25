@@ -1,5 +1,5 @@
 
-package org.umlMachine.model.figures;
+package org.umlMachine.view.figures;
 
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.decoration.ArrowTip;

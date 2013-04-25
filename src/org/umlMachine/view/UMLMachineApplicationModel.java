@@ -28,7 +28,7 @@ import org.umlMachine.controller.FigureFactory;
 import org.umlMachine.controller.UMLMachineMenuBuilder;
 import org.umlMachine.controller.tools.*;
 import org.umlMachine.model.RefModel;
-import org.umlMachine.model.figures.StateFigure;
+import org.umlMachine.view.figures.StateFigure;
 
 
 /**

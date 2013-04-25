@@ -1,4 +1,4 @@
-package org.umlMachine.model.figures;
+package org.umlMachine.view.figures;
 
 import org.jhotdraw.draw.liner.ElbowLiner;
 

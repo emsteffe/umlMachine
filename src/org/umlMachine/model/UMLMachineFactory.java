@@ -15,7 +15,9 @@ import org.jhotdraw.draw.locator.RelativeLocator;
 import org.jhotdraw.draw.connector.LocatorConnector;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.decoration.ArrowTip;
-import org.umlMachine.model.figures.*;
+import org.umlMachine.view.figures.SeparatorLineFigure;
+import org.umlMachine.view.figures.StateFigure;
+import org.umlMachine.view.figures.TransitionFigure;
 import org.jhotdraw.draw.*;
 import org.jhotdraw.xml.*;
 /**

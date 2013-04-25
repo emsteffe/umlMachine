@@ -34,7 +34,7 @@ import org.jhotdraw.gui.URIChooser;
 import org.umlMachine.controller.FigureFactory;
 import org.umlMachine.model.TransitionData;
 import org.umlMachine.model.UMLMachineFactory;
-import org.umlMachine.model.figures.StateFigure;
+import org.umlMachine.view.figures.StateFigure;
 
 /**
  * A view for Pert diagrams.

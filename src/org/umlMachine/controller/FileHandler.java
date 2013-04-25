@@ -34,7 +34,7 @@ import org.jhotdraw.gui.JFileURIChooser;
 import org.umlMachine.model.RefModel;
 import org.umlMachine.model.StateData;
 import org.umlMachine.model.TransitionData;
-import org.umlMachine.model.figures.StateFigure;
+import org.umlMachine.view.figures.StateFigure;
 
 public class FileHandler {
 	private JFileURIChooser d;

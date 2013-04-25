@@ -7,8 +7,8 @@ import java.util.Set;
 
 import org.umlMachine.model.StateData;
 import org.umlMachine.model.TransitionData;
-import org.umlMachine.model.figures.StateFigure;
-import org.umlMachine.model.figures.TransitionFigure;
+import org.umlMachine.view.figures.StateFigure;
+import org.umlMachine.view.figures.TransitionFigure;
 
 public class FigureFactory {
 

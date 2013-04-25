@@ -6,7 +6,7 @@ import java.util.Set;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.tool.AbstractTool;
 import org.umlMachine.controller.FigureFactory;
-import org.umlMachine.model.figures.StateFigure;
+import org.umlMachine.view.figures.StateFigure;
 
 @SuppressWarnings("serial")
 public class AnimateTool extends AbstractTool{
