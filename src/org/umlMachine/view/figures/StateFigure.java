@@ -32,8 +32,8 @@ public class StateFigure extends GraphicalCompositeFigure {
 	private boolean isParent = false;
 	private boolean isChild = false;
 	private StateData data = new StateData(isStart,isEnd,"state");
-	
-	
+
+
 	/*
 	 * Right Click Menu Items
 	 * 
@@ -47,7 +47,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 	 * Make Child 
 	 * Abandon Family
 	 */
-	
+
 	@Override
 	public Collection<Action> getActions(Point2D.Double p){
 		LinkedList<Action> actions = new LinkedList<Action>();
@@ -69,14 +69,14 @@ public class StateFigure extends GraphicalCompositeFigure {
 			this.name = name;
 			this.fig = fig;
 		}
-		
+
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			if(isStart || isEnd){
 				System.out.println("Can't add actions to this kind state.");
 				return;
 			}
-			
+
 			//go go gadget string parsing
 			fig.addAction(name.substring(4,name.indexOf(' ', 4)) + "/Default Action" );			
 		}
@@ -86,7 +86,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 	class MakeParentChildAction extends AbstractAction{
 		StateFigure fig;
 		String type;
-		
+
 		public MakeParentChildAction(StateFigure fig, String type){
 			super(type);
 			this.fig = fig;
@@ -99,7 +99,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 			if(type.equals("Make Child")) fig.makeChild();
 			if(type.equals("Abandon Family")) fig.makeNormal();
 		}
-		
+
 	}
 
 	public StateFigure() {
@@ -137,23 +137,23 @@ public class StateFigure extends GraphicalCompositeFigure {
 
 		//entry
 		addAction("Entry/action1");
-		
+
 		addAction("Entry/action5");
 		removeAction("Entry/action5");
-		
+
 		//internal
 		addAction("Internal/action2");
-		
+
 		addAction("Internal/action4");
 		removeAction("Internal/action4");
 
 		//exit
 		addAction("Exit/action3");
-		
+
 		addAction("Exit/action6");
 		removeAction("Exit/action6");
 
-		
+
 		/*
 		 * Layout of a state figure
 		 *
@@ -225,7 +225,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 		getNameFigure().setText(newValue);
 		data.setName(newValue);
 	}
-	
+
 
 	public String getName() {
 		return getNameFigure().getText();
@@ -238,39 +238,39 @@ public class StateFigure extends GraphicalCompositeFigure {
 	/*
 	 * Actions get/set
 	 */
-	
+
 	public void addAction(String a){
 		data.addAction(a);
 		willChange();
 		addActionFigure(new TextFigure(a));
 		changed();
 	}
-	
+
 	public void removeAction(String a){
 		data.removeAction(a);
 		removeActionFigure(a);
-		
+
 	}
-	
+
 	private void addActionFigure(TextFigure action){
 		ListFigure compartment = (ListFigure) getChild(2);
 		String a = action.getText();
-		
+
 		if(a.startsWith("Entry/")){
 			((ListFigure)compartment.getChild(0)).add(action);
-			
+
 		}else if(a.startsWith("Exit/")){
 			((ListFigure)compartment.getChild(2)).add(action);
-			
+
 		}else{
 			((ListFigure)compartment.getChild(1)).add(action);
 		}
 
 	}
-	
-		
+
+
 	private void removeActionFigure(String a){
-		
+
 		ListFigure compartment = (ListFigure) getChild(2);
 		ListFigure entryActions = (ListFigure) ((ListFigure)compartment.getChild(0));
 		ListFigure internalActions = (ListFigure) ((ListFigure)compartment.getChild(1));
@@ -279,39 +279,39 @@ public class StateFigure extends GraphicalCompositeFigure {
 		willChange();
 
 		searchLoop: 
-		if(a.startsWith("Entry/")){	
-			int i = ((ListFigure)compartment.getChild(0)).getChildCount();
-			while(i>0) {
-				if(((TextFigure)entryActions.getChild(--i)).getText().equals(a)){
-					entryActions.removeChild(i);
-					break searchLoop;
+			if(a.startsWith("Entry/")){	
+				int i = ((ListFigure)compartment.getChild(0)).getChildCount();
+				while(i>0) {
+					if(((TextFigure)entryActions.getChild(--i)).getText().equals(a)){
+						entryActions.removeChild(i);
+						break searchLoop;
+					}
+				}
+			}else if(a.startsWith("Exit/")){
+				int i = ((ListFigure)compartment.getChild(2)).getChildCount();
+				while(i>0) {
+					if(((TextFigure)exitActions.getChild(--i)).getText().equals(a)){
+						exitActions.removeChild(i);
+						break searchLoop;
+					}
+				}
+			}else{
+				int i = ((ListFigure)compartment.getChild(1)).getChildCount();
+				while(i > 0) {
+					if(((TextFigure)internalActions.getChild(--i)).getText().equals(a)){
+						internalActions.removeChild(i);
+						break searchLoop;
+					}
 				}
 			}
-		}else if(a.startsWith("Exit/")){
-			int i = ((ListFigure)compartment.getChild(2)).getChildCount();
-			while(i>0) {
-				if(((TextFigure)exitActions.getChild(--i)).getText().equals(a)){
-					exitActions.removeChild(i);
-					break searchLoop;
-				}
-			}
-		}else{
-			int i = ((ListFigure)compartment.getChild(1)).getChildCount();
-			while(i > 0) {
-				if(((TextFigure)internalActions.getChild(--i)).getText().equals(a)){
-					internalActions.removeChild(i);
-					break searchLoop;
-				}
-			}
-		}
-		
+
 		changed();
 	}
-	
+
 	public List<String> getActions(){
 		return data.getActions();
 	}
-	
+
 	//TODO These methods need to be smarter
 	public void makeParent(){
 		isChild = false;
@@ -321,41 +321,42 @@ public class StateFigure extends GraphicalCompositeFigure {
 	}
 
 	public void makeChild(){
-		isParent = false;
-		isChild  = true;
-		data.makeChild();
-		highlight(false);
+		if(data.makeChild()){
+			isParent = false;
+			isChild  = true;
+			highlight(false);
+		}
 	}
-	
+
 	public void makeNormal(){
 		isParent = false;
 		isChild  = false;
 		data.makeNormal();
 		highlight(false);
 	}
-	
+
 	/*
 	 * Highlighting 
 	 */
 
 	public void highlight(boolean b){
-		
+
 		RoundRectangleFigure fig = (RoundRectangleFigure) this.getPresentationFigure();
-		
+
 		Color on = new Color(135,235,235);
 		Color off = new Color(255,255,255);
 		if(isParent) off = new Color(240,50,50);
 		if(isChild) off = new Color(250,160,160);
-			
+
 		willChange();
 		fig.setAttributeEnabled(FILL_COLOR, true);
-		
+
 		if(b){
 			fig.set(FILL_COLOR, on);
 		}else{
 			fig.set(FILL_COLOR, off);
 		}	
-		
+
 		fig.setAttributeEnabled(FILL_COLOR, false);
 		changed();
 	}
@@ -424,26 +425,26 @@ public class StateFigure extends GraphicalCompositeFigure {
 		setBounds(new Point2D.Double(x, y), new Point2D.Double(x + w, y + h));
 		readAttributes(in);
 		in.openElement("model");
-			in.openElement("name");
-				setName((String) in.readObject());
+		in.openElement("name");
+		setName((String) in.readObject());
+		in.closeElement();
+		in.openElement("duration");
+		in.closeElement();
+		in.openElement("data");
+		data.setName(in.getAttribute("name", ""));
+		if(in.getAttribute("type", "").equals("end"))
+			data.setEnd(true);
+		else if(in.getAttribute("type", "").equals("start"))
+			data.setStart(true);
+		in.openElement("actions");
+		int actionCount = in.getElementCount();
+		for(int i= 0; i!= actionCount; i++){
+			in.openElement(i);//open action
+			data.addAction(in.getText());
 			in.closeElement();
-			in.openElement("duration");
-			in.closeElement();
-			in.openElement("data");
-				data.setName(in.getAttribute("name", ""));
-				if(in.getAttribute("type", "").equals("end"))
-					data.setEnd(true);
-				else if(in.getAttribute("type", "").equals("start"))
-					data.setStart(true);
-				in.openElement("actions");
-					int actionCount = in.getElementCount();
-					for(int i= 0; i!= actionCount; i++){
-						in.openElement(i);//open action
-							data.addAction(in.getText());
-						in.closeElement();
-					}
-				in.closeElement();
-			in.closeElement();
+		}
+		in.closeElement();
+		in.closeElement();
 		in.closeElement();
 		if(data.isStart()){
 			//make it a start date
@@ -459,28 +460,28 @@ public class StateFigure extends GraphicalCompositeFigure {
 		out.addAttribute("y", r.y);
 		writeAttributes(out);
 		out.openElement("model");
-			out.openElement("name");
-				out.writeObject(getName());
+		out.openElement("name");
+		out.writeObject(getName());
+		out.closeElement();
+		out.openElement("duration");
+		out.closeElement();
+		out.openElement("data");
+		out.addAttribute("name", data.getName());
+		if(data.isEnd())
+			out.addAttribute("type", "end");
+		else if(data.isStart())
+			out.addAttribute("type", "start");
+		else
+			out.addAttribute("type", "nor");
+		out.openElement("actions");
+		for(String action : data.getActions()){
+			out.openElement("action");
+			out.addText(action);
 			out.closeElement();
-			out.openElement("duration");
-			out.closeElement();
-			out.openElement("data");
-				out.addAttribute("name", data.getName());
-				if(data.isEnd())
-					out.addAttribute("type", "end");
-				else if(data.isStart())
-					out.addAttribute("type", "start");
-				else
-					out.addAttribute("type", "nor");
-				out.openElement("actions");
-					for(String action : data.getActions()){
-						out.openElement("action");
-						out.addText(action);
-						out.closeElement();
-					}
-		
-				out.closeElement();
-			out.closeElement();
+		}
+
+		out.closeElement();
+		out.closeElement();
 		out.closeElement();
 	}
 

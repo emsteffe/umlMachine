@@ -9,7 +9,7 @@ public class TransitionData {
 	private StateData start;
 	private StateData end;
 	private ArrayList<String> actions;
-	private String event;
+	private String event = "";
 	
 	public TransitionData(){}
 

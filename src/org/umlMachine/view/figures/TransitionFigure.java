@@ -52,6 +52,7 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
 	}
 
 
+	//TODO All the the cases where this method returns false really should report why it's not a valid connection back to the user
 	@Override
 	public boolean canConnect(Connector start, Connector end) {
 		if ((start.getOwner() instanceof StateFigure) && (end.getOwner() instanceof StateFigure)) {
@@ -69,7 +70,7 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
 				if(t.getEnd().equals(ef.getData())){
 					return false;
 				}					
-			}
+			}	
 
 			//Back and forth overlapping transitions
 			for(TransitionData t : ef.getData().getTransitionsOut()){
@@ -79,6 +80,63 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
 				}				
 			}
 
+			//Disallow ambiguous transitions
+			for(TransitionData t : ef.getData().getTransitionsOut()){
+				//Check transitions out
+				if(t.getEvent().equals(this.data.getEvent()) ){
+					return false;
+				}
+
+				//Check the start state's internal transitions
+				for(String trigger : sf.getData().getInternalTriggers()){
+					if(trigger.equals(t.getEvent())) return false;					
+				}
+
+				//Now we are going to check parent's stuff. 
+				//The continue keyword is one of two useful things I learned in the 361 discussions.
+				//The other one has to do with Space Jam.
+				if(sf.getData().getParent() == null) continue;
+
+				//Check against the start figure's parent's transitions out
+				for(TransitionData parentTrans : sf.getData().getParent().getTransitionsOut() ){
+					if(parentTrans.getEvent().equals(t.getEvent())) return false;					
+				}
+
+				//Check against the start figure's internal triggers
+				for(String parentInternal : sf.getData().getParent().getInternalTriggers() ){
+					if(parentInternal.equals(t.getEvent())) return false;
+				}
+
+			}
+
+			/*
+			 * Parent/children checking
+			 */
+
+			//Start state is a child
+			if(sf.getData().getParent() != null ){ 
+
+				//End state has a parent and it's not the same as state state's parent
+				if((ef.getData().getParent() != null) && (ef.getData().getParent() != sf.getData().getParent())) return false;
+
+				//Children cannot connect to parents (no nesting allowed)
+				if(ef.getData().getFamilyType() == 1) return false;
+
+				//TODO Confirm this design choice
+				//Disallow children from connecting to other states outside of its family
+				//If end state does have transitions coming into it, it must only have ONE and it must be the (soon to be) parent state
+				if(ef.getData().getTransitionsIn().size() > 1) return false;
+				if(ef.getData().getTransitionsIn().size() == 1 &&
+						ef.getData().getTransitionsIn().get(0).getStart() != sf.getData().getParent()) return false;
+			}
+
+			//End state is a child
+			if(ef.getData().getParent() != null){
+
+				//Parents cannot connect to someone else's children. That's just not right.
+				if( (sf.getData().getFamilyType() == 1) && (ef.getData().getParent() != sf.getData()) ) return false;
+
+			}
 
 			return true;
 		}
@@ -87,13 +145,15 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
 
 	@Override
 	public boolean canConnect(Connector start) {
+
 		//Prevent transitions out of END state
 		if( (start.getOwner() instanceof StateFigure)){
-			//nested loops to avoid casting errors
+			//nested loop here to avoid casting errors, there is probably a more elegant solution
 			if (( (StateFigure)start.getOwner() ).getType() != 1){
 				return true;
 			}
 		}
+
 		return false;
 	}
 
@@ -110,11 +170,17 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
 		StateFigure sf = (StateFigure) start.getOwner();
 		StateFigure ef = (StateFigure) end.getOwner();
 
-		System.out.println("connecting " + sf.getName()+ " to "+ ef.getName());
-
 		data.setStart(sf.getData());
 		data.setEnd(ef.getData());
+
+		ef.getData().addTransitionIn(data);
 		sf.getData().addTransitionOut(data);
+
+		//Convert end state to a sibling of the start state if applicable 
+		//The state should be able to find the parent on it's own. *crosses fingers*
+		if(  (sf.getData().getParent() != null) && (ef.getData().getParent() != sf.getData().getParent()) ){
+			ef.makeChild();
+		}	
 
 	}
 

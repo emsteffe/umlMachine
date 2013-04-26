@@ -10,6 +10,7 @@ public class StateData {
 	private boolean isEnd = false;
 	private boolean isParent = false;
 	private boolean isChild = false;
+	private StateData parent = null;
 	private String name;
 	private ArrayList<String> entryActions;
 	private ArrayList<String> internalActions;
@@ -18,7 +19,6 @@ public class StateData {
 	private ArrayList<TransitionData> transitionsIn;
 
 	public StateData(){
-
 		entryActions = new ArrayList<String>();
 		internalActions = new ArrayList<String>();
 		exitActions = new ArrayList<String>();
@@ -65,29 +65,66 @@ public class StateData {
 	public String getName(){
 		return name;
 	}
-	
-	//I have no idea if we are going to use this
+
 	public int getFamilyType(){
 		if(isChild) return -1;
 		if(isParent) return 1;
 		return 0;
+	}	
+
+	public StateData getParent(){
+		return parent;
 	}
-	
+
+	//For a state to become a child it needs to have exactly one parent state available
+	//TODO This is really bad at error handling. Fix it later.
+	@SuppressWarnings("unchecked")
+	public boolean makeChild(){
+		
+		//Already a child or a parent
+		if(isChild || isParent) return false;
+		
+		ArrayList<StateData> candidates = new ArrayList<StateData>();
+		ArrayList<TransitionData> transIn = (ArrayList<TransitionData>) transitionsIn.clone();
+		
+		//Gather a list of all available parents directly connected to this state
+		for(TransitionData trans : transIn){
+			if(trans.getStart().isParent) candidates.add(trans.getStart());
+		}
+		
+		//Get any parents of children states connected to us
+		for(TransitionData trans : transIn){
+			if(trans.getStart().parent != null) candidates.add(trans.getStart().parent);
+		}
+		
+		//No available parents
+		if(candidates.size() == 0) return false;
+		
+		//Ensure that there is only one available parent, even if it appears multiple times in the list
+		for(StateData x : candidates){
+			for(StateData y : candidates){
+				if(x != y) return false;
+			}	
+		}
+		
+		//This line seems too simple and it makes me uneasy
+		parent = candidates.get(0);
+
+		isParent = false;
+		isChild = true;
+
+		return true;
+	}
+
 	public void makeParent(){
 		isChild = false;
 		isParent = true;	
 	}
-	
-	public void makeChild(){
-		isParent = false;
-		isChild = true;
-	}
-	
+
 	public void makeNormal(){
 		isParent = false;
 		isChild = false;
 	}
-	
 
 	public void removeAction(String a)	{
 		if(a.startsWith("Entry/")){
@@ -118,6 +155,14 @@ public class StateData {
 		return actions;
 	}
 
+	public List<String> getInternalTriggers(){
+		ArrayList<String> triggers = new ArrayList<String>();
+		for(String action:internalActions){
+			triggers.add(action.substring(0, action.indexOf('/')));
+		}	
+		return triggers;
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<TransitionData> getTransitionsOut(){
 		return (List<TransitionData>) transitionsOut.clone();
@@ -131,14 +176,16 @@ public class StateData {
 	public void addTransitionOut(TransitionData transition){
 		if(!transitionsOut.contains(transition)){
 			transitionsOut.add(transition);
-			transition.getEnd().addTransitionIn(transition);
+			//transition.getEnd().addTransitionIn(transition);
 		}
 	}
 
 	public void addTransitionIn(TransitionData transition){
-		if(!transitionsIn.contains(transition)){
-			transitionsIn.add(transition);
-		}
+		//Because of prototyping, every transition is the same object.
+		//TODO re-implement
+		//if(!transitionsIn.contains(transition)){
+		transitionsIn.add(transition);
+		//}
 	}
 
 	public void removeTransitionOut(TransitionData transition){
