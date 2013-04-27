@@ -51,8 +51,6 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
 
 	}
 
-
-	//TODO All the the cases where this method returns false really should report why it's not a valid connection back to the user
 	@Override
 	public boolean canConnect(Connector start, Connector end) {
 		if ((start.getOwner() instanceof StateFigure) && (end.getOwner() instanceof StateFigure)) {
@@ -60,16 +58,15 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
 			StateFigure sf = (StateFigure) start.getOwner();
 			StateFigure ef = (StateFigure) end.getOwner();
 
-			// Prevent transitions into START state
-			if(ef.getType() == -1){
-				return false;            	
-			}
+			//Prevent transitions into START state
+			if(ef.getType() == -1) return error("Can't create transition to start state.");            	
 
+			//Prevent transitions out of END state
+			if(sf.getType() == 1) return error("Can't create transition out of end states.");
+			
 			//Prevent duplicate transitions
 			for(TransitionData t : sf.getData().getTransitionsOut()){
-				if(t.getEnd().equals(ef.getData())){
-					return false;
-				}					
+				if(t.getEnd().equals(ef.getData())) return error("This transtion path already exists.");				
 			}	
 
 			//Back and forth overlapping transitions
@@ -81,15 +78,14 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
 			}
 
 			//Disallow ambiguous transitions
-			for(TransitionData t : ef.getData().getTransitionsOut()){
+			for(TransitionData t : sf.getData().getTransitionsOut()){
+				
 				//Check transitions out
-				if(t.getEvent().equals(this.data.getEvent()) ){
-					return false;
-				}
+				if(t.getEvent().equals(this.data.getEvent())) return error("Can't make a transition with the same name as another outgoing transition.");
 
-				//Check the start state's internal transitions
+				//Check internal transitions
 				for(String trigger : sf.getData().getInternalTriggers()){
-					if(trigger.equals(t.getEvent())) return false;					
+					if(trigger.equals(t.getEvent())) return error("Can't create a transition with the same name as an internal transition.");					
 				}
 
 				//Now we are going to check parent's stuff. 
@@ -99,12 +95,12 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
 
 				//Check against the start figure's parent's transitions out
 				for(TransitionData parentTrans : sf.getData().getParent().getTransitionsOut() ){
-					if(parentTrans.getEvent().equals(t.getEvent())) return false;					
+					if(parentTrans.getEvent().equals(t.getEvent())) return error("Can't create a transition with the same name as a parent's outgoing transition");					
 				}
 
 				//Check against the start figure's internal triggers
 				for(String parentInternal : sf.getData().getParent().getInternalTriggers() ){
-					if(parentInternal.equals(t.getEvent())) return false;
+					if(parentInternal.equals(t.getEvent())) return error("Can't create a transition with the same name as a parent internal transition.");
 				}
 
 			}
@@ -117,44 +113,36 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
 			if(sf.getData().getParent() != null ){ 
 
 				//End state has a parent and it's not the same as state state's parent
-				if((ef.getData().getParent() != null) && (ef.getData().getParent() != sf.getData().getParent())) return false;
+				if((ef.getData().getParent() != null) && (ef.getData().getParent() != sf.getData().getParent())) return error("Can't create a transtion to a figure with a different parent.");
 
 				//Children cannot connect to parents (no nesting allowed)
-				if(ef.getData().getFamilyType() == 1) return false;
+				if(ef.getData().getFamilyType() == 1) return error("Can't create a transition from a child to a parent.");
 
 				//TODO Confirm this design choice
 				//Disallow children from connecting to other states outside of its family
 				//If end state does have transitions coming into it, it must only have ONE and it must be the (soon to be) parent state
-				if(ef.getData().getTransitionsIn().size() > 1) return false;
+				if(ef.getData().getTransitionsIn().size() > 1) return error("This figure has too many transitions coming into it.");
 				if(ef.getData().getTransitionsIn().size() == 1 &&
-						ef.getData().getTransitionsIn().get(0).getStart() != sf.getData().getParent()) return false;
+						ef.getData().getTransitionsIn().get(0).getStart() != sf.getData().getParent()) return error("The transition connected to this figure is not the desired parent.");
 			}
 
 			//End state is a child
 			if(ef.getData().getParent() != null){
 
 				//Parents cannot connect to someone else's children. That's just not right.
-				if( (sf.getData().getFamilyType() == 1) && (ef.getData().getParent() != sf.getData()) ) return false;
+				if( (sf.getData().getFamilyType() == 1) && (ef.getData().getParent() != sf.getData()) ) return error("Cannot connect a parent figure to a child of another parent.");
 
 			}
 
 			return true;
 		}
-		return false;
+		return error("How did you manage this?!");
 	}
 
 	@Override
 	public boolean canConnect(Connector start) {
 
-		//Prevent transitions out of END state
-		if( (start.getOwner() instanceof StateFigure)){
-			//nested loop here to avoid casting errors, there is probably a more elegant solution
-			if (( (StateFigure)start.getOwner() ).getType() != 1){
-				return true;
-			}
-		}
-
-		return false;
+		return true;
 	}
 
 	@Override
@@ -182,6 +170,11 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
 			ef.makeChild();
 		}	
 
+	}
+	
+	private boolean error(String x){
+		System.out.println(x);
+		return false;
 	}
 
 	public TransitionData getData(){

@@ -82,7 +82,10 @@ public class StateData {
 	public boolean makeChild(){
 		
 		//Already a child or a parent
-		if(isChild || isParent) return false;
+		if(isChild || isParent) {
+			System.out.println("This state is already has a family.");
+			return false;
+		}
 		
 		ArrayList<StateData> candidates = new ArrayList<StateData>();
 		ArrayList<TransitionData> transIn = (ArrayList<TransitionData>) transitionsIn.clone();
@@ -98,12 +101,18 @@ public class StateData {
 		}
 		
 		//No available parents
-		if(candidates.size() == 0) return false;
+		if(candidates.size() == 0) {
+			System.out.println("No parents available");
+			return false;
+		}
 		
 		//Ensure that there is only one available parent, even if it appears multiple times in the list
 		for(StateData x : candidates){
 			for(StateData y : candidates){
-				if(x != y) return false;
+				if(x != y) {
+					System.out.println("Too many valid parents.");
+					return false;
+				}
 			}	
 		}
 		
