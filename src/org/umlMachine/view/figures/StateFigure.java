@@ -33,24 +33,10 @@ public class StateFigure extends GraphicalCompositeFigure {
 	private boolean isChild = false;
 	private StateData data = new StateData(isStart,isEnd,"state");
 
-
-	/*
-	 * Right Click Menu Items
-	 * 
-	 * Add Entry Action
-	 * Add Internal Action
-	 * Add Exit Action
-	 * 
-	 * Remove Action
-	 * 
-	 * Make Parent
-	 * Make Child 
-	 * Abandon Family
-	 */
-
 	@Override
 	public Collection<Action> getActions(Point2D.Double p){
 		LinkedList<Action> actions = new LinkedList<Action>();
+		//Right click menu items
 		actions.add(new AddActionAction(this,"Add Entry Action"));
 		actions.add(new AddActionAction(this,"Add Internal Action"));
 		actions.add(new AddActionAction(this,"Add Exit Action"));
@@ -136,22 +122,13 @@ public class StateFigure extends GraphicalCompositeFigure {
 		exitActions.set(LAYOUT_INSETS, new Insets2D.Double(0, 8, 4, 8));
 
 		//entry
-		addAction("Entry/action1");
-
-		addAction("Entry/action5");
-		removeAction("Entry/action5");
+		addAction("Entry/action");
 
 		//internal
-		addAction("Internal/action2");
-
-		addAction("Internal/action4");
-		removeAction("Internal/action4");
+		addAction("Internal/action");
 
 		//exit
-		addAction("Exit/action3");
-
-		addAction("Exit/action6");
-		removeAction("Exit/action6");
+		addAction("Exit/action");
 
 
 		/*
@@ -267,8 +244,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 		}
 
 	}
-
-
+	
 	private void removeActionFigure(String a){
 
 		ListFigure compartment = (ListFigure) getChild(2);
@@ -314,10 +290,12 @@ public class StateFigure extends GraphicalCompositeFigure {
 
 	//TODO These methods need to be smarter
 	public void makeParent(){
-		isChild = false;
-		isParent = true;
-		data.makeParent();
-		highlight(false);
+		if (data.makeParent()){
+			isChild = false;
+			isParent = true;
+			highlight(false);
+		}
+		
 	}
 
 	public void makeChild(){

@@ -9,6 +9,7 @@ import org.jhotdraw.draw.locator.BezierPointLocator;
 import java.awt.*;
 import static org.jhotdraw.draw.AttributeKeys.*;
 import org.jhotdraw.draw.*;
+import org.umlMachine.model.StateData;
 import org.umlMachine.model.TransitionData;
 
 /**
@@ -63,7 +64,7 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
 
 			//Prevent transitions out of END state
 			if(sf.getType() == 1) return error("Can't create transition out of end states.");
-			
+
 			//Prevent duplicate transitions
 			for(TransitionData t : sf.getData().getTransitionsOut()){
 				if(t.getEnd().equals(ef.getData())) return error("This transtion path already exists.");				
@@ -79,7 +80,7 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
 
 			//Disallow ambiguous transitions
 			for(TransitionData t : sf.getData().getTransitionsOut()){
-				
+
 				//Check transitions out
 				if(t.getEvent().equals(this.data.getEvent())) return error("Can't make a transition with the same name as another outgoing transition.");
 
@@ -149,6 +150,18 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
 	protected void handleDisconnect(Connector start, Connector end) {
 		StateFigure sf = (StateFigure) start.getOwner();
 
+		if(sf.getData().getFamilyType() == 1){
+			//If you delete a parent state, then orphan off the children
+			for(TransitionData t : sf.getData().getTransitionsOut()){
+				StateData dest = t.getEnd();
+				
+				if(dest.getParent() == sf.getData()){
+					sf.makeNormal();
+				}
+
+			}
+		}
+
 		sf.getData().removeTransitionOut(data);
 
 	}
@@ -171,7 +184,7 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
 		}	
 
 	}
-	
+
 	private boolean error(String x){
 		System.out.println(x);
 		return false;

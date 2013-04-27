@@ -125,9 +125,14 @@ public class StateData {
 		return true;
 	}
 
-	public void makeParent(){
+	public boolean makeParent(){
+		
+		//Too many things to check to make this safe, so just disable it for now
+		if(isChild || isParent) return error("This state is already a child state");
+		
 		isChild = false;
 		isParent = true;	
+		return true;
 	}
 
 	public void makeNormal(){
@@ -200,7 +205,8 @@ public class StateData {
 	public void removeTransitionOut(TransitionData transition){
 		if(transitionsOut.contains(transition)){
 			transitionsOut.remove(transition);
-			transition.getEnd().removeTransitionIn(transition);
+			transition.getEnd().removeTransitionIn(transition);		
+			
 		}
 	}
 
@@ -208,6 +214,11 @@ public class StateData {
 		if(transitionsIn.contains(transition)){
 			transitionsIn.remove(transition);
 		}
+	}
+	
+	private boolean error(String x){
+		System.out.println(x);
+		return false;
 	}
 
 	public String toXML(){
