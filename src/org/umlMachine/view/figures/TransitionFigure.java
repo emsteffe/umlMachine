@@ -3,12 +3,15 @@ package org.umlMachine.view.figures;
 
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.decoration.ArrowTip;
+import org.jhotdraw.draw.event.FigureAdapter;
+import org.jhotdraw.draw.event.FigureEvent;
 import org.jhotdraw.draw.layouter.LocatorLayouter;
 import org.jhotdraw.draw.liner.ElbowLiner;
 import org.jhotdraw.draw.locator.BezierPointLocator;
 import java.awt.*;
 import static org.jhotdraw.draw.AttributeKeys.*;
 import org.jhotdraw.draw.*;
+import org.umlMachine.controller.FigureFactory;
 import org.umlMachine.model.StateData;
 import org.umlMachine.model.TransitionData;
 
@@ -37,9 +40,16 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
 		setLiner(elbow);
 
 
-		TextFigure label1 = new TextFigure("Event");
+		TextFigure label1 = new TextFigure("Event " + TransitionData.getCount());
 		TextFigure label2 = new TextFigure("Action");
+		data.setEvent("Event "+TransitionData.getCount());
+		data.addAction("Action");
 		ListFigure compartment = new ListFigure();
+		EventAdapter eventAdapter = new EventAdapter(label1,this);
+		ActionAdapter actionAdapter = new ActionAdapter(label2,this);
+		
+		label1.addFigureListener(eventAdapter);
+		label2.addFigureListener(actionAdapter);
 
 		compartment.add(label1);
 		compartment.add(label2);
@@ -50,6 +60,52 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
 		//TODO Fix minor bug regarding perfectly straight transition lines (low proiority)
 		LocatorLayouter.LAYOUT_LOCATOR.set(compartment, new BezierPointLocator(1,0));
 
+	}
+	boolean ignore = false;
+	protected static class EventAdapter extends FigureAdapter {
+
+        private TextFigure target;
+        private TransitionFigure parent;
+
+        public EventAdapter(TextFigure target, TransitionFigure parent) {
+            this.target = target;
+            this.parent = parent;
+        }
+
+        @Override
+        public void attributeChanged(FigureEvent e) {
+        	System.out.println("attempting change of "+e.getOldValue()+" to "+e.getNewValue());
+            for(TransitionData trans:((StateFigure)parent.getStartFigure()).getData().getTransitionsOut()){
+            	if(!parent.ignore){
+            	if(e.getNewValue().equals(trans.getEvent())){
+            		target.setText((String) e.getOldValue());
+            		parent.ignore = true;
+            	}else{
+            		parent.getData().setEvent((String) e.getNewValue());
+            	}
+            	}else{
+            		System.out.println("back to old val");
+            		parent.ignore = false;
+            	}
+            }
+        }
+	}
+	
+	protected static class ActionAdapter extends FigureAdapter {
+
+        private TextFigure target;
+        private TransitionFigure parent;
+
+        public ActionAdapter(TextFigure target, TransitionFigure parent) {
+            this.target = target;
+            this.parent = parent;
+        }
+
+        @Override
+        public void attributeChanged(FigureEvent e) {
+            	parent.getData().removeAction((String) e.getOldValue());
+            	parent.getData().addAction((String) e.getNewValue());
+        }
 	}
 
 	@Override
@@ -197,9 +253,9 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
 	@Override
 	//I hope we aren't using this
 	public TransitionFigure clone() {
-		return (TransitionFigure) super.clone();
+		return new TransitionFigure();
 	}
-
+	
 	@Override
 	public int getLayer() {
 		return 1;

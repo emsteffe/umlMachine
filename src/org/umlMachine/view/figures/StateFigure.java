@@ -2,6 +2,8 @@
 package org.umlMachine.view.figures;
 
 import org.jhotdraw.draw.locator.RelativeLocator;
+import org.jhotdraw.draw.event.FigureAdapter;
+import org.jhotdraw.draw.event.FigureEvent;
 import org.jhotdraw.draw.handle.MoveHandle;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.layouter.VerticalLayouter;
@@ -88,6 +90,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 
 	}
 
+	
 	public StateFigure() {
 
 		//The Figure itself
@@ -102,18 +105,27 @@ public class StateFigure extends GraphicalCompositeFigure {
 		add(separator);
 		add(actionCompartment);
 
+		
 		//Internals
 		//Name
 		TextFigure nameFigure;
-		nameCompartment.add(nameFigure = new TextFigure("State "+ (int)(FigureFactory.getInstance().getNumStates() + 1) ));
+		nameCompartment.add(nameFigure = new TextFigure("State "+ (int)(FigureFactory.getInstance().getNumStates()) ));
 		nameFigure.set(LAYOUT_INSETS, new Insets2D.Double(4, 8, 4, 8));
 		nameFigure.set(FONT_BOLD, true);
 		nameFigure.setAttributeEnabled(FONT_BOLD, false);
+		data.setName(nameFigure.getText());
 
+		FigureAdapter nameAdapter = new NameAdapter(nameFigure,this);
+		
+
+		nameFigure.addFigureListener(nameAdapter);
 		//Actions
 		ListFigure entryActions = new ListFigure();
+		
 		ListFigure internalActions = new ListFigure();
 		ListFigure exitActions = new ListFigure();
+		
+		
 		actionCompartment.add(entryActions);
 		actionCompartment.add(internalActions);
 		actionCompartment.add(exitActions);
@@ -150,6 +162,57 @@ public class StateFigure extends GraphicalCompositeFigure {
 		 */
 
 	}
+	
+	protected static class NameAdapter extends FigureAdapter {
+
+        private TextFigure target;
+        private StateFigure parent;
+
+        public NameAdapter(TextFigure target, StateFigure parent) {
+            this.target = target;
+            this.parent = parent;
+        }
+
+        @Override
+        public void attributeChanged(FigureEvent e) {
+            // We could fire a property change event here, in case
+            // some other object would like to observe us.
+        	StateFigure state = FigureFactory.getInstance().findState((String)e.getNewValue());
+        	if(!parent.ignore){
+        	if(state != null){
+        		parent.ignore = true;
+        		parent.setName((String) e.getOldValue());
+        	}else{
+        		parent.setName((String) e.getNewValue());
+        	}
+        	}else{
+        		System.out.println("back to old val");
+        		parent.ignore = false;
+        	}
+        }
+    }
+	
+	protected static class ActionAdapter extends FigureAdapter {
+
+        private TextFigure target;
+        private StateFigure parent;
+
+        public ActionAdapter(TextFigure target, StateFigure parent) {
+            this.target = target;
+            this.parent = parent;
+        }
+
+        @Override
+        public void attributeChanged(FigureEvent e) {
+            // We could fire a property change event here, in case
+            // some other object would like to observe us.
+        	System.out.println("changing " + e.getOldValue() + " to "+ e.getNewValue());
+        	parent.getData().removeAction((String) e.getOldValue());
+        	parent.getData().addAction((String) e.getNewValue());
+        }
+    }
+	
+	boolean ignore = false;
 
 	public StateFigure(boolean type){ // true=start , false=end
 
@@ -167,7 +230,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 
 		//Creates state, does different things for start and end states
 		File file;
-		nameCompartment.add(new TextFigure(""));
+		nameCompartment.add(new TextFigure("State "+ (int)(FigureFactory.getInstance().getNumStates()) ));
 		data.forceName("State "+ FigureFactory.getInstance().getNumStates());
 
 		if(type){
@@ -200,6 +263,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 
 	public void setName(String newValue) {
 		getNameFigure().setText(newValue);
+		System.out.println("setting name to "+ newValue);
 		data.setName(newValue);
 	}
 
@@ -219,7 +283,13 @@ public class StateFigure extends GraphicalCompositeFigure {
 	public void addAction(String a){
 		data.addAction(a);
 		willChange();
-		addActionFigure(new TextFigure(a));
+		TextFigure toAdd = new TextFigure(a);
+		addActionFigure(toAdd);
+		
+		FigureAdapter actionAdapter = new ActionAdapter(toAdd,this);
+		toAdd.addFigureListener(actionAdapter);
+		//add default add to data here
+		
 		changed();
 	}
 

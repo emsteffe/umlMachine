@@ -1,6 +1,7 @@
 package org.umlMachine.model;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 import org.umlMachine.controller.FigureFactory;
 
@@ -8,13 +9,19 @@ public class TransitionData {
 
 	private StateData start;
 	private StateData end;
-	private ArrayList<String> actions;
+	private ArrayList<String> actions = new ArrayList<String>();
 	private String event = "";
+	private static int count = 0;
 	
-	public TransitionData(){}
+	public TransitionData(){count++;}
+	
+	public static int getCount(){
+		return count;
+	}
 
 	@SuppressWarnings("unchecked")
 	public TransitionData(ArrayList<String> actions, StateData start, StateData end,String event){
+		count++;
 		this.start = start;
 		this.end = end;
 		this.actions = (ArrayList<String>) actions.clone();
@@ -30,11 +37,16 @@ public class TransitionData {
 	public String getEvent(){return event;}
 	
 	public void addAction(String action){
+		System.out.println("adding action to trans "+ action);
 		actions.add(action);
 	}
 	
 	public void removeAction(String action){
 		actions.remove(action);
+	}
+	
+	public List<String> getActions(){
+		return actions;
 	}
 
 	public String toXML(){

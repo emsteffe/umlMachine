@@ -168,7 +168,8 @@ public class StateData {
 		actions.addAll(exitActions);
 		return actions;
 	}
-
+	
+	
 	public List<String> getInternalTriggers(){
 		ArrayList<String> triggers = new ArrayList<String>();
 		for(String action:internalActions){
