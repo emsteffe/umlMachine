@@ -83,11 +83,42 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
             	}else{
             		parent.getData().setEvent((String) e.getNewValue());
             	}
+            	
+            	
+            	
+            	
             	}else{
             		System.out.println("back to old val");
             		parent.ignore = false;
             	}
             }
+            for(String action:((StateFigure)parent.getStartFigure()).getData().getActions()){
+            	if(!parent.ignore){
+            		String event = "";
+            		try{
+            		 event = action.substring(0, action.indexOf("/"));
+            		}catch(Exception k){
+            			parent.ignore = true;
+            			target.setText((String) e.getOldValue());
+                		break;
+            		}
+            	if(e.getNewValue().equals(event)){
+            		parent.ignore = true;
+            		target.setText((String) e.getOldValue());
+            	}else{
+            		System.out.println("ignoring parent");
+            		parent.getData().setEvent((String) e.getNewValue());
+            	}
+            	
+            	
+            	
+            	
+            	}else{
+            		System.out.println("back to old val");
+            		parent.ignore = false;
+            	}
+            }
+            
         }
 	}
 	
