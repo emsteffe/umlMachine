@@ -221,9 +221,29 @@ public class StateData {
 		System.out.println(x);
 		return false;
 	}
+	
+	public boolean isParent(){
+		return isParent;
+	}
+	
+	public boolean isChild(){
+		return isChild;
+	}
+	
+	public void setIsChild(boolean set){
+		isChild = set;
+	}
+	
+	public void setIsParent(boolean set){
+		isParent = set;
+	}
+	
+	public void setParent(StateData parent){
+		this.parent = parent;
+	}
 
 	public String toXML(){
-		String toReturn = "<State name=\"" + name + "\" type=\"";
+		String toReturn = "<State name=\"" + name + "\" parent=\"" + parent +  "\" parent=\"" + isParent +  "\" parent=\"" + isChild +  "\" type=\"";
 		if(isStart()) toReturn = toReturn + "start";
 		else if(isEnd()) toReturn = toReturn + "end";
 		else toReturn = toReturn + "norm";

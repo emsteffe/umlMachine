@@ -480,6 +480,11 @@ public class StateFigure extends GraphicalCompositeFigure {
 		in.closeElement();
 		in.openElement("data");
 		data.setName(in.getAttribute("name", ""));
+		String parent = in.getAttribute("parent", "");
+		if(!parent.equals(""))
+			data.setParent(FigureFactory.getInstance().findState(parent).data);
+		data.setIsChild(Boolean.parseBoolean(in.getAttribute("isParent", "false")));
+		data.setIsParent(Boolean.parseBoolean(in.getAttribute("isChild", "false")));
 		if(in.getAttribute("type", "").equals("end"))
 			data.setEnd(true);
 		else if(in.getAttribute("type", "").equals("start"))
@@ -516,6 +521,12 @@ public class StateFigure extends GraphicalCompositeFigure {
 		out.closeElement();
 		out.openElement("data");
 		out.addAttribute("name", data.getName());
+		if(data.getParent()!= null)
+			out.addAttribute("parent", data.getParent().getName());
+		else
+			out.addAttribute("parent", "");
+		out.addAttribute("isParent", data.isParent());
+		out.addAttribute("isChild", data.isChild());
 		if(data.isEnd())
 			out.addAttribute("type", "end");
 		else if(data.isStart())
