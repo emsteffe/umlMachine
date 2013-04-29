@@ -11,6 +11,7 @@
 
 package org.umlMachine.model;
 
+import org.jhotdraw.draw.liner.ElbowLiner;
 import org.jhotdraw.draw.locator.RelativeLocator;
 import org.jhotdraw.draw.connector.LocatorConnector;
 import org.jhotdraw.draw.connector.ChopRectangleConnector;
@@ -40,7 +41,8 @@ public class UMLMachineFactory extends DefaultDOMFactory {
         { ChopRectangleConnector.class, "rectConnector" },
         { LocatorConnector.class, "locConnector" },
         { RelativeLocator.class, "relativeLocator" },
-        { ArrowTip.class, "arrowTip" }
+        { ArrowTip.class, "arrowTip" },
+        { ElbowLiner.class, "org.jhotdraw.draw.liner.ElbowLiner"}
     };
     
     /** Creates a new instance. */

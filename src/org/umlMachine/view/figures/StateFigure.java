@@ -499,6 +499,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 		}else if(data.isEnd()){
 			//make it an end state
 		}
+		FigureFactory.getInstance().addState(this);
 	}
 
 	@Override

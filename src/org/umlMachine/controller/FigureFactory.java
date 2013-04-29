@@ -33,6 +33,7 @@ public class FigureFactory {
 	}
 	
 	public StateFigure getState(){
+		System.out.println("Factory creating state "+numStates);
 		StateFigure toReturn = new StateFigure();
 		figureMap.put(toReturn.getName(), toReturn);
 		numStates++;
@@ -85,12 +86,18 @@ public class FigureFactory {
 	}
 
 	public void updateName(String name, String newName) {
+		System.out.println("updating name "+name+" to "+newName);
 		StateFigure buffer = figureMap.get(name);
 		figureMap.remove(name);
 		if(buffer!= null){
+			System.out.println("buffer is not null");
 			buffer.setName(newName);
 			figureMap.put(buffer.getName(), buffer);
 		}
+	}
+	
+	public void addState(StateFigure state){
+		figureMap.put(state.getName(), state);
 	}
 
 }

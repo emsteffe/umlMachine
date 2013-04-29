@@ -182,14 +182,24 @@ public class UMLMachineView extends AbstractView {
            		//transition is now multiline able.
            		//
            		while(line != null){
+           			System.out.println("reading line "+line);
+           			String wholeTrans = "";
            			if(line.contains("<transition ")){
-           				TransitionData toAdd = new TransitionData();
-           				line = line.substring(12,line.indexOf("/>"));
-           				toAdd.setFromXML(line);
+               			wholeTrans = wholeTrans + line;
+               			while(!line.contains("</transition>")){
+               				line = reader.readLine();
+               				wholeTrans = wholeTrans + line;
+               			}
+               			
+               			TransitionData toAdd = new TransitionData();
+               			wholeTrans = wholeTrans.replaceAll("\t", "");
+           				toAdd.setFromXML(wholeTrans);
            				data.add(toAdd);
-           			}
+               		}
            			line = reader.readLine();
            		}
+           		
+           		
            		
            		for(TransitionData transition : data){
            			transition.getStart().addTransitionOut(transition);
