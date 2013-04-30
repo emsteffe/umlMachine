@@ -48,6 +48,12 @@ public class XMLController {
 			in.openElement(i);//open state
 			StateData data = new StateData();
 			data.setName(in.getAttribute("name", ""));
+			String parent = in.getAttribute("parent", "") ;
+			System.out.println(parent);
+			if(parent != null && !parent.equals("") && !parent.equals("null"))
+				data.setParent(FigureFactory.getInstance().findState(parent).getData());
+			data.setIsChild(Boolean.parseBoolean(in.getAttribute("isParent", "false")));
+			data.setIsParent(Boolean.parseBoolean(in.getAttribute("isChild", "false")));
 			if(in.getAttribute("type", "").equals("start"))
 				data.setStart(true);
 			else if(in.getAttribute("type", "").equals("end"))
@@ -74,6 +80,15 @@ public class XMLController {
 		for(int i= 0; i!= transitionCount; i++){
 			in.openElement(i); //open Transition
 			TransitionData transition = new TransitionData();
+			
+			in.openElement("actions");
+			int actionCount = in.getElementCount();
+			for(int k = 0; k!= actionCount; k++){
+				in.openElement(k);
+				transition.addAction(in.getText());
+				in.closeElement();
+			}
+			in.closeElement();
 			transition.addAction(in.getAttribute("action", ""));
 			//make it multi action
 			transition.setEvent(in.getAttribute("event", ""));

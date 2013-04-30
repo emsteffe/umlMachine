@@ -243,7 +243,7 @@ public class StateData {
 	}
 
 	public String toXML(){
-		String toReturn = "<State name=\"" + name + "\" parent=\"" + parent +  "\" parent=\"" + isParent +  "\" parent=\"" + isChild +  "\" type=\"";
+		String toReturn = "<State name=\"" + name + "\" parent=\"" + parent +  "\" isParent=\"" + isParent +  "\" isChild=\"" + isChild +  "\" type=\"";
 		if(isStart()) toReturn = toReturn + "start";
 		else if(isEnd()) toReturn = toReturn + "end";
 		else toReturn = toReturn + "norm";

@@ -33,6 +33,7 @@ public class ValidateTool extends AbstractTool{
 				for(String s : trans.getActions()){
 					System.out.println("\t\t\t"+s);
 				}
+				System.out.println("\t\t\t"+trans.getStart().getName()+" -> "+trans.getEnd().getName());
 			}
 		}
 

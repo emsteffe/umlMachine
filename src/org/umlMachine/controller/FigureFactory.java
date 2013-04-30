@@ -32,6 +32,14 @@ public class FigureFactory {
 		return findState(data.getName());
 	}
 	
+	public StateFigure findStart(){
+		StateFigure toReturn = null;
+		for(StateFigure state : figureMap.values()){
+			if(state.getData().isStart())
+				toReturn = state;
+		}
+		return toReturn;
+	}
 	public StateFigure getState(){
 		System.out.println("Factory creating state "+numStates);
 		StateFigure toReturn = new StateFigure();
