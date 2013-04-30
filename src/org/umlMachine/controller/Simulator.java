@@ -12,8 +12,10 @@ out of file
 package org.umlMachine.controller;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
@@ -58,6 +60,10 @@ public class Simulator {
 		new Thread(){
 			public void run(){
 		File events = FileHandler.getInstance().getFile();
+		File out = FileHandler.getInstance().getFile();
+		BufferedWriter writer = null;
+		
+			
 		StateData current = FigureFactory.getInstance().findStart().getData();
 		FigureFactory factory = FigureFactory.getInstance();
 		if(!current.isStart() && !current.isEnd())
@@ -68,6 +74,7 @@ public class Simulator {
 		}
 		BufferedReader reader =null;
 		try{
+			writer = new BufferedWriter(new FileWriter(out));
 			reader = new BufferedReader(new FileReader(events));
 			String line = reader.readLine();
 			while(line != null && !current.isEnd()){
@@ -78,30 +85,27 @@ public class Simulator {
 					if(line.equals(act.substring(0, act.indexOf("/")))){
 						foundInAction = true;
 						System.out.println("found action "+act);
+						writer.write(act.substring(act.indexOf("/")+1));
+						writer.newLine();
 						break;
 					}
 				}
 				if(foundInAction){
-					if(!current.isStart() && !current.isEnd())
-						FigureFactory.getInstance().findState(current).shade(false);
-					Thread.sleep(1000);
-					if(!current.isStart() && !current.isEnd()){
-						FigureFactory.getInstance().findState(current).shade(true);
+					//-------------------------------
 							
 						//System.out.println("found state "+current.getName());
-					}
+					
 				}else{
 					List<TransitionData> data = current.getTransitionsOut();
 					for(TransitionData trans : data){
 						if(trans.getEvent().equals(line)){
 							System.out.println("found transition "+trans.getEvent()+" a:"+trans.getActions().get(0));
 							found = true;
-							if(!current.isStart() && !current.isEnd())
-								FigureFactory.getInstance().findState(current).shade(false);
-							Thread.sleep(1000);
+							for(String toWrite: trans.getActions()){
+								writer.write(toWrite);
+								writer.newLine();
+							}
 							current = trans.getEnd();
-							if(!current.isStart() && !current.isEnd())
-								FigureFactory.getInstance().findState(current).shade(true);
 							break;
 						}
 					}
@@ -111,29 +115,23 @@ public class Simulator {
 						for(String act : current.getParent().getActions()){
 							if(line.equals(act.substring(0, act.indexOf("/")))){
 								foundInAction2 = true;
+								writer.write(act.substring(act.indexOf("/")+1));
+								writer.newLine();
 								break;
 							}
 						}
 						if(foundInAction2){
-							if(!current.isStart() && !current.isEnd())
-								FigureFactory.getInstance().findState(current).shade(false);
-							Thread.sleep(1000);
-							if(!current.getParent().isStart() && !current.getParent().isEnd()){
-								FigureFactory.getInstance().findState(current.getParent()).shade(true);
-									
-								System.out.println("found state "+current.getParent().getName());
-							}
+							//-------------
 						}else{
 							List<TransitionData> datas = current.getParent().getTransitionsOut();
 							for(TransitionData trans : datas){
 								if(trans.getEvent().equals(line)){
 									found = true;
-									if(!current.isStart() && !current.isEnd())
-										FigureFactory.getInstance().findState(current).shade(false);
-									Thread.sleep(1000);
+									for(String toWrite: trans.getActions()){
+										writer.write(toWrite);
+										writer.newLine();
+									}
 									current = trans.getEnd();
-									if(!current.getParent().isStart() && !current.getParent().isEnd())
-										FigureFactory.getInstance().findState(trans.getEnd()).shade(true);
 									break;
 								}
 							}
@@ -149,7 +147,14 @@ public class Simulator {
 			try {
 				reader.close();
 			} catch (IOException e) {
-			}}
+			}
+			if(writer != null)
+				try{
+					writer.close();
+				}catch(Exception e){
+					
+				}
+			}
 		
 			}
 	
