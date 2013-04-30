@@ -36,8 +36,7 @@ public class UMLMachineTest extends TestDetails {
 		stateFigure = new StateFigure();
 		transitionFigure = new TransitionFigure();
 	}
-	
-	
+		
 	// Model tests
 		//StateData Tests
 	@Test
