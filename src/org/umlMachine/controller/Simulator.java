@@ -46,32 +46,29 @@ public class Simulator {
 
 
 	public void fromFile() {
-		// TODO Auto-generated method stub
-		XMLController xml = new XMLController();
-		try {
-			xml.loadData(FileHandler.getInstance().getFile());
-		} catch (IOException e) {
-		}
-	}
-
-
-	public void fromDiagram() {
-		
 		new Thread(){
 			public void run(){
+				XMLController xml = new XMLController();
+		File serialized = FileHandler.getInstance().getFile();
 		File events = FileHandler.getInstance().getFile();
 		File out = FileHandler.getInstance().getFile();
 		BufferedWriter writer = null;
-		
-			
-		StateData current = FigureFactory.getInstance().findStart().getData();
-		FigureFactory factory = FigureFactory.getInstance();
-		if(!current.isStart() && !current.isEnd())
-			FigureFactory.getInstance().findState(current.getTransitionsOut().get(0).getEnd()).shade(true);
+		StateData current = null;
+		Set<StateData> states = null ;
 		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e1) {
+			states = xml.loadData(serialized);
+		} catch (IOException e1) {
 		}
+				
+		for(StateData state : states){
+			if(state.isStart()){
+				current= state;
+				break;
+			}
+		}
+			
+		FigureFactory factory = FigureFactory.getInstance();
+		
 		BufferedReader reader =null;
 		try{
 			writer = new BufferedWriter(new FileWriter(out));
@@ -138,7 +135,6 @@ public class Simulator {
 						}
 					}
 				}
-				Thread.sleep(2000);
 				line = reader.readLine();
 			}
 		}catch(Exception e){}
@@ -151,6 +147,110 @@ public class Simulator {
 			if(writer != null)
 				try{
 					writer.close();
+				}catch(Exception e){
+					
+				}
+			}
+		
+			}
+	
+		}.start();
+	}
+
+
+	public void fromDiagram() {
+		
+		new Thread(){
+			public void run(){
+		File events = FileHandler.getInstance().getFile();
+		File out = FileHandler.getInstance().getFile();
+		BufferedWriter writer = null;
+		
+			
+		StateData current = FigureFactory.getInstance().findStart().getData();
+		FigureFactory factory = FigureFactory.getInstance();
+		
+		BufferedReader reader =null;
+		try{
+			writer = new BufferedWriter(new FileWriter(out));
+			reader = new BufferedReader(new FileReader(events));
+			String line = reader.readLine();
+			while(line != null && !current.isEnd()){
+				boolean found = false;
+				System.out.println("current "+current.getName());
+				boolean foundInAction = false;
+				for(String act : current.getActions()){
+					if(line.equals(act.substring(0, act.indexOf("/")))){
+						foundInAction = true;
+						System.out.println("found action "+act);
+						writer.write(act.substring(act.indexOf("/")+1));
+						writer.newLine();
+						break;
+					}
+				}
+				if(foundInAction){
+					//-------------------------------
+							
+						//System.out.println("found state "+current.getName());
+					
+				}else{
+					List<TransitionData> data = current.getTransitionsOut();
+					for(TransitionData trans : data){
+						if(trans.getEvent().equals(line)){
+							System.out.println("found transition "+trans.getEvent()+" a:"+trans.getActions().get(0));
+							found = true;
+							for(String toWrite: trans.getActions()){
+								writer.write(toWrite);
+								writer.newLine();
+							}
+							current = trans.getEnd();
+							break;
+						}
+					}
+					if(!found && current.isChild()){
+						//---------------------------------------------------------------------
+						boolean foundInAction2 = false;
+						for(String act : current.getParent().getActions()){
+							if(line.equals(act.substring(0, act.indexOf("/")))){
+								foundInAction2 = true;
+								writer.write(act.substring(act.indexOf("/")+1));
+								writer.newLine();
+								break;
+							}
+						}
+						if(foundInAction2){
+							//-------------
+						}else{
+							List<TransitionData> datas = current.getParent().getTransitionsOut();
+							for(TransitionData trans : datas){
+								if(trans.getEvent().equals(line)){
+									found = true;
+									for(String toWrite: trans.getActions()){
+										writer.write(toWrite);
+										writer.newLine();
+									}
+									current = trans.getEnd();
+									break;
+								}
+							}
+						}
+					}
+				}
+				line = reader.readLine();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			if(reader != null)
+			try {
+				reader.close();
+			} catch (IOException e) {
+			}
+			if(writer != null)
+				try{
+					writer.close();
+					System.out.println("closing");
 				}catch(Exception e){
 					
 				}
