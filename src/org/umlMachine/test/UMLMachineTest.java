@@ -67,9 +67,8 @@ public class UMLMachineTest extends TestDetails {
 	@Test
 	public void testDefaultTransitionData(){
 		constructModel();
-		assertEquals(null,transitionData.getAction());
+		assertEquals(null,transitionData.getActions());
 		assertEquals(null, transitionData.getEvent());
-		assertEquals(null, transitionData.getTrigger());
 		assertEquals(null, transitionData.getEnd());
 		assertEquals(null, transitionData.getStart());
 	}
@@ -77,14 +76,10 @@ public class UMLMachineTest extends TestDetails {
 	@Test
 	public void testTransitionDataSets(){
 		constructModel();
-		transitionData.setAction("actionTest");
-		assertEquals("actionTest", transitionData.getAction());
-		transitionData.setCondition("conditionTest");
-		assertEquals("conditionTest",transitionData.condition());
+		transitionData.addAction("actionTest");
+		assertEquals("actionTest", transitionData.getActions());
 		transitionData.setEvent("eventTest");
 		assertEquals("eventTest", transitionData.getEvent());
-		transitionData.setTrigger("triggerTest");
-		assertEquals("triggerTest", transitionData.getTrigger());
 	}
 	
 	//figureTests
@@ -122,17 +117,10 @@ public class UMLMachineTest extends TestDetails {
 		sData2.forceName("State 2");
 		sData3.forceName("State 3");
 		
-		tData1.setAction("Transition 1");
-		tData2.setAction("Transition 2");
-		tData3.setAction("Transition 3");
-		tData4.setAction("Transition 4");
-		
-		tData1.setTrigger("Trig1");
-		tData2.setTrigger("Trig2");
-		tData3.setTrigger("Trig3");
-		tData4.setTrigger("Trig4");
-		
-		tData2.setCondition("[CON1]");
+		tData1.addAction("Transition 1");
+		tData2.addAction("Transition 2");
+		tData3.addAction("Transition 3");
+		tData4.addAction("Transition 4");
 		
 		sData1.addTransitionOut(tData1);
 		sData1.addTransitionOut(tData3);
@@ -151,13 +139,13 @@ public class UMLMachineTest extends TestDetails {
 				"<State name=\"State 2\" type=\"norm\">\n\t<Actions>\n\t\t<Action>state2Action1" +
 				"</Action>\n\t</Actions>\n</State>\n<State name=\"State 3\" type=\"norm\">\n\t<Actions>" +
 				"\n\t</Actions>\n</State>\n</States>\n<Transitions>\n" +
-				"<Transition action=\"Transition 1\" start=\"State 1\" end=\"State 2\" trigger=\"Trig1\" " +
-				"event=\"null\" condition=\"null\"/>\n" +
-				"<Transition action=\"Transition 3\" start=\"State 1\" end=\"State 3\" trigger=\"Trig3\" " +
-				"event=\"null\" condition=\"null\"/>\n<Transition action=\"Transition 2\" start=\"State 2\" " +
-				"end=\"State 3\" trigger=\"Trig2\" event=\"null\" condition=\"[CON1]\"/>\n<Transition " +
-				"action=\"Transition 4\" start=\"State 2\" end=\"State 2\" trigger=\"Trig4\" event=\"null\" " +
-				"condition=\"null\"/>\n</Transitions>\n</Serial>",xml.serialize(set));
+				"<Transition action=\"Transition 1\" start=\"State 1\" end=\"State 2\"" +
+				"event=\"null\"/>\n" +
+				"<Transition action=\"Transition 3\" start=\"State 1\" end=\"State 3\"" +
+				"event=\"null\"/>\n<Transition action=\"Transition 2\" start=\"State 2\" " +
+				"end=\"State 3\" event=\"null\"/>\n<Transition " +
+				"action=\"Transition 4\" start=\"State 2\" end=\"State 2\" event=\"null\" " +
+				"/>\n</Transitions>\n</Serial>",xml.serialize(set));
 	}
 	
 	@Test
