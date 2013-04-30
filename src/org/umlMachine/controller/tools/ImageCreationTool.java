@@ -71,6 +71,7 @@ public class ImageCreationTool extends CreationTool{
 	public void mousePressed(MouseEvent evt) {
 
 		getView().clearSelection();
+		
 		createdFigure = createFigure();
 		Point2D.Double p = constrainPoint(viewToDrawing(anchor));
 		anchor.x = evt.getX();

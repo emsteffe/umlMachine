@@ -189,7 +189,7 @@ public class StateData {
 	}
 
 	public void addTransitionOut(TransitionData transition){
-		if(!transitionsOut.contains(transition) && isEnd){
+		if(!transitionsOut.contains(transition) && !isEnd){
 			transitionsOut.add(transition);
 			//transition.getEnd().addTransitionIn(transition);
 		}

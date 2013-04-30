@@ -90,7 +90,21 @@ public class TestDetails{
 		}catch (Exception x){
 		return false;
 		}
-
+	}
+	//test if two children are siblings
+	public boolean checkSiblings(){
+		StateFigure parent = new StateFigure();
+		StateFigure one = new StateFigure();
+		StateFigure two = new StateFigure();
+		TransitionFigure t = new TransitionFigure();
+		parent.makeParent(); 
+		one.makeChild();
+		one.getData().setParent(parent.getData());
+		two.makeChild();
+		one.getData().addTransitionOut(t.getData());
+		t.getData().setStart(one.getData());
+		t.getData().setEnd(two.getData());
+		return two.getData().getParent() == one.getData().getParent();	
 	}
 	
 }

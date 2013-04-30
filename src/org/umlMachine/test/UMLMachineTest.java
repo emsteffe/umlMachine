@@ -29,11 +29,12 @@ public class UMLMachineTest extends TestDetails {
 	
 	@Before
 	public void constructModel(){
-		FF = new FigureFactory();
+		FF = FigureFactory.getInstance();
 		xml = new XMLController();
-		stateData = new StateData();
 		transitionData = new TransitionData();
 		stateFigure = new StateFigure();
+		stateData = new StateData();
+		FF.addState(stateFigure);
 		transitionFigure = new TransitionFigure();
 	}
 		
@@ -50,47 +51,51 @@ public class UMLMachineTest extends TestDetails {
 		assertEquals(0, stateData.getActions().size());
 	}
 	@Test
-	public void testStateDataSets(){
-		constructModel();
-		stateData.forceName("testName");
-		assertEquals("testName", stateData.getName());
-		stateData.forceName("name2");
-		assertEquals("name2", stateData.getName());
-		stateData.setStart(true);
-		assertEquals(true, stateData.isStart());
-		stateData.setEnd(true);
-		assertEquals(true, stateData.isEnd());
+	public void testDefaultStateFigureData(){
+		assertEquals(false, stateFigure.getData().isStart());
+		assertEquals(false, stateFigure.getData().isEnd());
+		assertEquals("State 0", stateFigure.getData().getName());
+		assertEquals(0, stateFigure.getData().getTransitionsIn().size());
+		assertEquals(0, stateFigure.getData().getTransitionsOut().size());
+		assertEquals(0, stateFigure.getData().getActions().size());
 	}
-	
+	@Test
+	public void testStateFigureDataSets(){
+		stateFigure.getData().forceName("testName");
+		assertEquals("testName", stateFigure.getData().getName());
+		stateFigure.getData().forceName("name2");
+		assertEquals("name2", stateFigure.getData().getName());
+		stateFigure.getData().setStart(true);
+		assertEquals(true, stateFigure.getData().isStart());
+		stateFigure.getData().setEnd(true);
+		assertEquals(true, stateFigure.getData().isEnd());
+	}
+
 	//TransitionData tests
 	@Test
 	public void testDefaultTransitionData(){
-		constructModel();
-		assertEquals(null,transitionData.getActions());
-		assertEquals(null, transitionData.getEvent());
+		assertEquals(0,transitionData.getActions().size());
+		assertEquals("", transitionData.getEvent());
 		assertEquals(null, transitionData.getEnd());
 		assertEquals(null, transitionData.getStart());
 	}
 	
 	@Test
 	public void testTransitionDataSets(){
-		constructModel();
 		transitionData.addAction("actionTest");
-		assertEquals("actionTest", transitionData.getActions());
+		assertEquals("actionTest", transitionData.getActions().get(0));
 		transitionData.setEvent("eventTest");
 		assertEquals("eventTest", transitionData.getEvent());
 	}
 	
 	//figureTests
 	@Test
-	public void testStateFigure(){
-		constructModel();
-		assertEquals(0, stateFigure.getActions().size());
+	public void testDefaultStateFigure(){
+		assertEquals(3, stateFigure.getActions().size());
 	}
 	
 	@Test
 	public void testXMLSerialization(){
-		constructModel();
 		StateData sData1 = new StateData();
 		StateData sData2 = new StateData();
 		StateData sData3 = new StateData();
@@ -150,49 +155,55 @@ public class UMLMachineTest extends TestDetails {
 	@Test
 	// test to see if the number of desired state figures are really created 
 	public void testForNumbersOfFiguresCreatedInList(){
-		constructModel();
+		FigureFactory.clear();
 		assertEquals(0, (construct(FF, 0)));
-		constructModel();
+		FigureFactory.clear();
 		assertEquals(1, (construct(FF, 1)));
-		constructModel();
+		FigureFactory.clear();
 		assertEquals(2, (construct(FF, 2)));
-		constructModel();
+		FigureFactory.clear();
 		assertEquals(3, (construct(FF,3))); 
 	}
 	
 	@Test
 	// test to see if successfully created a start state figure
 	public void testCreatedStartStateSuccessfully(){
-		constructModel();
+		FigureFactory.clear();
 		assertTrue("Start state not created successfully",createStartState(FF));
 	}
 	
 	@Test
 	// test to see if successfully created an end state figure
 	public void testCreatedEndStateSuccessfully(){
-		constructModel();
+		FigureFactory.clear();
 		assertTrue("End state not created successfully", createEndState(FF));
 	}
 	
 	@Test
 	// test to see if successfully created a transition figure
 	public void testCreatedTransitionFigureSuccessfully(){
-		constructModel();
+		FigureFactory.clear();
 		assertTrue("Transition figure not created successfully", createTransitionFigure(FF));
 		
 	}
 	@Test
 	// test to see if allowed a transition going into start state figure 
 	public void testForNoTransitionIntoStartState(){
-		constructModel();
+		FigureFactory.clear();
 		assertFalse("Allowed transition into start figure", allowedTransitionIntoStartState(FF));
 	}
 	
 	@Test
 	// test to see if allowed an end state figure to have a transition out
 	 public void testNoTransitionOutFromEndState(){
-		constructModel();
-		assertFalse("Allowed Transition out of end state", allowedEndStateToHaveTransitionsOut());
+		FigureFactory.clear();
+		assertTrue("Allowed Transition out of end state", allowedEndStateToHaveTransitionsOut());
+	}
+	
+	@Test
+	public void testSiblings(){
+		FigureFactory.clear();
+		assertTrue("These are not siblings", checkSiblings());
 	}
 }
 

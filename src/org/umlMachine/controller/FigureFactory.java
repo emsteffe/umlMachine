@@ -16,7 +16,6 @@ public class FigureFactory {
 	public FigureFactory(){}
 	public Map<String,StateFigure> figureMap = new HashMap<String,StateFigure>();
 	private int numStates;
-
 	
 	public static FigureFactory getInstance(){
 		if(instance == null) instance = new FigureFactory();
@@ -104,8 +103,8 @@ public class FigureFactory {
 		}
 	}
 	
-	public void addState(StateFigure state){
-		figureMap.put(state.getName(), state);
+	public void addState(StateFigure state){	
+		figureMap.put(state.getName(), state);		
 	}
 
 }
