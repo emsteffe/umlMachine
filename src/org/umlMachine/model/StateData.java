@@ -169,6 +169,13 @@ public class StateData {
 		return actions;
 	}
 	
+	public List<String> getEntryActions(){
+		return entryActions;
+	}
+	
+	public List<String> getExitActions(){
+		return exitActions;
+	}
 	
 	public List<String> getInternalTriggers(){
 		ArrayList<String> triggers = new ArrayList<String>();

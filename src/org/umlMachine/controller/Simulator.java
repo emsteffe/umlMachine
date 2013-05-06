@@ -98,11 +98,19 @@ public class Simulator {
 						if(trans.getEvent().equals(line)){
 							System.out.println("found transition "+trans.getEvent()+" a:"+trans.getActions().get(0));
 							found = true;
+							for(String toWrite: current.getExitActions()){
+								writer.write(toWrite);
+								writer.newLine();
+							}
 							for(String toWrite: trans.getActions()){
 								writer.write(toWrite);
 								writer.newLine();
 							}
 							current = trans.getEnd();
+							for(String toWrite: current.getEntryActions()){
+								writer.write(toWrite);
+								writer.newLine();
+							}
 							break;
 						}
 					}
@@ -124,11 +132,19 @@ public class Simulator {
 							for(TransitionData trans : datas){
 								if(trans.getEvent().equals(line)){
 									found = true;
+									for(String toWrite: current.getExitActions()){
+										writer.write(toWrite);
+										writer.newLine();
+									}
 									for(String toWrite: trans.getActions()){
 										writer.write(toWrite);
 										writer.newLine();
 									}
 									current = trans.getEnd();
+									for(String toWrite: current.getEntryActions()){
+										writer.write(toWrite);
+										writer.newLine();
+									}
 									break;
 								}
 							}
@@ -199,7 +215,16 @@ public class Simulator {
 						if(trans.getEvent().equals(line)){
 							System.out.println("found transition "+trans.getEvent()+" a:"+trans.getActions().get(0));
 							found = true;
+							for(String toWrite: current.getExitActions()){
+								writer.write(toWrite);
+								writer.newLine();
+							}
 							for(String toWrite: trans.getActions()){
+								writer.write(toWrite);
+								writer.newLine();
+							}
+							current = trans.getEnd();
+							for(String toWrite: current.getEntryActions()){
 								writer.write(toWrite);
 								writer.newLine();
 							}
@@ -225,7 +250,16 @@ public class Simulator {
 							for(TransitionData trans : datas){
 								if(trans.getEvent().equals(line)){
 									found = true;
+									for(String toWrite: current.getExitActions()){
+										writer.write(toWrite);
+										writer.newLine();
+									}
 									for(String toWrite: trans.getActions()){
+										writer.write(toWrite);
+										writer.newLine();
+									}
+									current = trans.getEnd();
+									for(String toWrite: current.getEntryActions()){
 										writer.write(toWrite);
 										writer.newLine();
 									}
