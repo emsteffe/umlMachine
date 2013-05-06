@@ -24,7 +24,7 @@ public class AnimateTool extends AbstractTool{
 
 	@Override
 	public void activate(DrawingEditor editor) {
-
+try{
 		new Thread(){
 			public void run(){
 		File events = FileHandler.getInstance().getFile();
@@ -76,6 +76,7 @@ public class AnimateTool extends AbstractTool{
 						}
 					}
 					if(!found && current.isChild()){
+						System.out.println("could not find but current is a child");
 						//---------------------------------------------------------------------
 						boolean foundInAction2 = false;
 						for(String act : current.getParent().getActions()){
@@ -97,12 +98,13 @@ public class AnimateTool extends AbstractTool{
 							List<TransitionData> datas = current.getParent().getTransitionsOut();
 							for(TransitionData trans : datas){
 								if(trans.getEvent().equals(line)){
+									System.out.println("found transition out to "+trans.getEnd().getName());
 									found = true;
 									if(!current.isStart() && !current.isEnd())
 										FigureFactory.getInstance().findState(current).shade(false);
 									Thread.sleep(1000);
 									current = trans.getEnd();
-									if(!current.getParent().isStart() && !current.getParent().isEnd())
+									if(!trans.getEnd().isStart() && !trans.getEnd().isEnd())
 										FigureFactory.getInstance().findState(trans.getEnd()).shade(true);
 									break;
 								}
@@ -115,22 +117,25 @@ public class AnimateTool extends AbstractTool{
 			}
 		}catch(Exception e){}
 		finally{
+			
 			if(reader != null)
 			try {
 				reader.close();
 			} catch (IOException e) {
-			}}
-		
 			}
-	
+
+			this.interrupt();
+			}
+			}
 		}.start();
+}catch(Throwable e){}
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent evt) {		
 		//This is questionable programming -- TODO fix it later
 		super.deactivate(editor);
-		fireToolDone();
+		//fireToolDone();
 	}
 	
 

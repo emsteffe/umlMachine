@@ -388,37 +388,10 @@ public class StateFigure extends GraphicalCompositeFigure {
 	 * Highlighting 
 	 */
 
-	class Shade extends Thread{
-		public boolean go;
-		public StateFigure toShade;
-		
-		public void run(){
-			RoundRectangleFigure fig = (RoundRectangleFigure) toShade.getPresentationFigure();
-			System.out.println("highlighting "+toShade.getName()+" "+go);
-			Color on = new Color(135,235,235);
-			Color off = new Color(255,255,255);
-			if(isParent) off = new Color(240,50,50);
-			if(isChild) off = new Color(250,160,160);
-
-			willChange();
-			fig.setAttributeEnabled(FILL_COLOR, true);
-
-			if(go){
-				fig.set(FILL_COLOR, on);
-			}else{
-				fig.set(FILL_COLOR, off);
-			}	
-			
-			fig.setAttributeEnabled(FILL_COLOR, false);
-			changed();
-		}
-	}
+	
 	
 	public void shade(boolean b){
-		Shade shader = new Shade();
-		shader.go = b;
-		shader.toShade = this;
-		shader.start();
+		highlight(b);
 	}
 	
 	public void highlight(boolean b){
