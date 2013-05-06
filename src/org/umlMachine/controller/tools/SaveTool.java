@@ -1,10 +1,13 @@
 package org.umlMachine.controller.tools;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 
+import org.jhotdraw.app.action.file.SaveFileAction;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.tool.AbstractTool;
 import org.umlMachine.controller.FileHandler;
+import org.umlMachine.model.RefModel;
 
 @SuppressWarnings("serial")
 public class SaveTool extends AbstractTool {
@@ -22,14 +25,16 @@ public class SaveTool extends AbstractTool {
 	}
 	
 	private void save(){
-		FileHandler.getInstance().exportDiagram();
-		System.out.println("Save");
+		SaveFileAction action;
+		action = new SaveFileAction(RefModel.app,RefModel.view,true );
+		action.actionPerformed(new ActionEvent(action, x, "Save"));
 
 	}
 	
 	private void saveAs(){
-		FileHandler.getInstance().exportDiagram();
-		System.out.println("Save As");
+		SaveFileAction action;
+		action = new SaveFileAction(RefModel.app,RefModel.view,true );
+		action.actionPerformed(new ActionEvent(action, x, "Save"));
 
 		
 	}

@@ -18,6 +18,9 @@ public class FileHandlerListener implements ActionListener{
 			FileHandler.setOption(FileHandler.OK);
 			FileHandler.setFile(((JFileURIChooser)e.getSource()).getSelectedFile().getAbsolutePath());
 			FileHandler.done();
+		}else {;
+			FileHandler.setOption(FileHandler.CANCEL);
+			FileHandler.done();
 		}
 	}
 

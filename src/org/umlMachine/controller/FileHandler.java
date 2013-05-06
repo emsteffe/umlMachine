@@ -52,10 +52,15 @@ public class FileHandler {
 	private static boolean done = false;
 	private static int option=0;
 	private static String file = "";
+	private static String Type = "";
 	
 	public static FileHandler getInstance(){
 		if(instance == null) instance = new FileHandler();
 		return instance;
+	}
+	
+	public static void setType(String type){
+		Type = type;
 	}
 	
 	public boolean exportDiagram(){//both transitions and states
@@ -195,6 +200,7 @@ public class FileHandler {
 	
 	public File getFile(){
 		File toReturn = null;
+		d.setName(Type);
 		d.showOpenDialog((Component) (RefModel.editor.getActiveView()));
 		XMLController xml = new XMLController();
 		while(!done){
