@@ -28,13 +28,13 @@ public class UMLMachineTest extends TestDetails {
 	private TransitionFigure transitionFigure;
 	
 	@Before
-	public void constructModel(){
+	public void constructModel(){	
 		FF = FigureFactory.getInstance();
+		FigureFactory.clear();
 		xml = new XMLController();
 		transitionData = new TransitionData();
-		stateFigure = new StateFigure();
+		stateFigure = FF.getState();
 		stateData = new StateData();
-		FF.addState(stateFigure);
 		transitionFigure = new TransitionFigure();
 	}
 		
@@ -42,7 +42,6 @@ public class UMLMachineTest extends TestDetails {
 		//StateData Tests
 	@Test
 	public void testDefaultStateData(){
-		constructModel();
 		assertEquals(false, stateData.isStart());
 		assertEquals(false, stateData.isEnd());
 		assertEquals(null, stateData.getName());
@@ -57,7 +56,7 @@ public class UMLMachineTest extends TestDetails {
 		assertEquals("State 0", stateFigure.getData().getName());
 		assertEquals(0, stateFigure.getData().getTransitionsIn().size());
 		assertEquals(0, stateFigure.getData().getTransitionsOut().size());
-		assertEquals(0, stateFigure.getData().getActions().size());
+		assertEquals(3, stateFigure.getData().getActions().size());
 	}
 	@Test
 	public void testStateFigureDataSets(){
