@@ -49,8 +49,11 @@ public class Simulator {
 		new Thread(){
 			public void run(){
 				XMLController xml = new XMLController();
+				FileHandler.setType("Serialized Figure");
 		File serialized = FileHandler.getInstance().getFile();
+		FileHandler.setType("Events File");
 		File events = FileHandler.getInstance().getFile();
+		FileHandler.setType("Output File");
 		File out = FileHandler.getInstance().getFile();
 		BufferedWriter writer = null;
 		StateData current = null;
@@ -178,7 +181,9 @@ public class Simulator {
 		
 		new Thread(){
 			public void run(){
+				FileHandler.setType("Events File");
 		File events = FileHandler.getInstance().getFile();
+		FileHandler.setType("Output File");
 		File out = FileHandler.getInstance().getFile();
 		BufferedWriter writer = null;
 		

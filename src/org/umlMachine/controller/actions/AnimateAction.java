@@ -31,6 +31,7 @@ public class AnimateAction extends AbstractAction {
 		try{
 			new Thread(){
 				public void run(){
+					FileHandler.setType("Events File");
 			File events = FileHandler.getInstance().getFile();
 			StateData current = FigureFactory.getInstance().findStart().getData();
 			FigureFactory factory = FigureFactory.getInstance();
