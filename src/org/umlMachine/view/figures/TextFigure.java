@@ -23,6 +23,7 @@ import org.jhotdraw.geom.*;
 import org.jhotdraw.xml.DOMInput;
 import org.jhotdraw.xml.DOMOutput;
 import org.umlMachine.controller.UMLMachineTextEditingTool;
+import org.umlMachine.model.StateData;
 
 
 @SuppressWarnings("serial")
@@ -32,6 +33,7 @@ public class TextFigure extends AbstractAttributedDecoratedFigure
     protected Point2D.Double origin = new Point2D.Double();
     protected boolean editable = true;
     private int context = 0;
+    private StateData state;
     // cache of the TextFigure's layout
     @Nullable transient protected TextLayout textLayout;
 
@@ -46,19 +48,22 @@ public class TextFigure extends AbstractAttributedDecoratedFigure
     	this(text,0);
     }
     
-    
     /*     
      * Context lets the text figure itself know where it lives
      * so it can enforce valid text conventions
-     * 0 = Default, no validation
-     * 1 = State action, exactly one '/' required
-     * 2 = Transition, exactly zero '/' required
+     * @see controller.UMLMachingTextEditingTool.java for parameters
      */
     public TextFigure(String text, int context){
+    	this(text,0,null);
+
+    }
+    
+    public TextFigure(String text, int context, StateData state){
     	setText(text);
     	this.context = context;
+    	this.state = state;
     }
-
+    
     // DRAWING
     @Override
     protected void drawStroke(java.awt.Graphics2D g) {
@@ -274,7 +279,7 @@ public class TextFigure extends AbstractAttributedDecoratedFigure
     @Override
     public Tool getTool(Point2D.Double p) {
         if (isEditable() && contains(p)) {
-            TextEditingTool t = new UMLMachineTextEditingTool(this,context);
+            TextEditingTool t = new UMLMachineTextEditingTool(this,context,state);
             return t;
         }
         return null;

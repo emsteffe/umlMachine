@@ -8,14 +8,21 @@ import org.jhotdraw.draw.tool.TextEditingTool;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.UndoableEdit;
 import org.jhotdraw.util.ResourceBundleUtil;
+import org.umlMachine.model.RefModel;
+import org.umlMachine.model.StateData;
+import org.umlMachine.model.TransitionData;
+import org.umlMachine.view.figures.StateFigure;
 
 @SuppressWarnings("serial")
 public class UMLMachineTextEditingTool extends TextEditingTool {
 	@Nullable private FloatingTextField textField;
 	@Nullable private TextHolderFigure typingTarget;
+	private StateData state;
 	private int context = 0;
 
 	public UMLMachineTextEditingTool(TextHolderFigure typingTarget) {
@@ -27,12 +34,20 @@ public class UMLMachineTextEditingTool extends TextEditingTool {
 	 * so it can enforce valid text conventions
 	 * 0 = Default, no validation
 	 * 1 = State action, exactly one '/' required
-	 * 2 = Transition, exactly zero '/' required
+	 * 2 = Transition action, exactly zero '/' required
+	 * 3 = Transition name, must be unambiguous
 	 */
 	public UMLMachineTextEditingTool(TextHolderFigure typingTarget, int context){
 		super(typingTarget);
 		this.typingTarget = typingTarget;
 		this.context = context;
+	}
+	
+	public UMLMachineTextEditingTool(TextHolderFigure typingTarget, int context, StateData state){
+		super(typingTarget);
+		this.typingTarget = typingTarget;
+		this.context = context;
+		this.state = state; // this is a clear violation of the MVC pattern
 	}
 
 	@Override
@@ -109,14 +124,27 @@ public class UMLMachineTextEditingTool extends TextEditingTool {
 		final String oldText = typingTarget.getText();
 		final String newText = textField.getText();
 
-		if(newText.length() < 1) return false; //
+		//Handle removal of action
+		if(newText.length() < 1){
+			StateFigure figure = new StateFigure();;
+			for(StateFigure fig : FigureFactory.getInstance().getStates()){
+				if(fig.getData() == state) figure = fig;
+			}
+			
+			figure.willChange();
+			typingTarget.requestRemove();
+			state.removeAction(oldText);
+			figure.changed();
+			return false;
+		}
 
 		switch(context){
+		
 		//No validation
 		case 0:
 			return true;
 
-			//State Action
+		//State Action
 		case 1:
 			//I could invert all of these boolean expressions and just directly return that
 			if(newText.startsWith("/") || newText.endsWith("/")) return false; //Must have e/a
@@ -130,10 +158,13 @@ public class UMLMachineTextEditingTool extends TextEditingTool {
 			
 			return true;
 
-			//Transition Action
+		//Transition Action
 		case 2:
 			return !newText.contains("/");
-
+			
+		//Transition Name
+		case 3:
+			return true;
 		}
 
 		return true;

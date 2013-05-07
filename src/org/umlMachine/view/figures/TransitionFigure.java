@@ -11,9 +11,9 @@ import org.jhotdraw.draw.locator.BezierPointLocator;
 import java.awt.*;
 import static org.jhotdraw.draw.AttributeKeys.*;
 import org.jhotdraw.draw.*;
-import org.umlMachine.controller.FigureFactory;
 import org.umlMachine.model.StateData;
 import org.umlMachine.model.TransitionData;
+import org.umlMachine.view.figures.TextFigure;
 
 /**
  * Lowell Johnson
@@ -40,8 +40,9 @@ public class TransitionFigure extends LabeledLineConnectionFigure  {
 		setLiner(elbow);
 
 
-		TextFigure label1 = new TextFigure("Event " + TransitionData.getCount());
-		TextFigure label2 = new TextFigure("Action");
+		System.out.println(data.getStart());
+		TextFigure label1 = new TextFigure("Event " + TransitionData.getCount(),3,data.getStart());
+		TextFigure label2 = new TextFigure("Action",2,data.getStart());
 		data.setEvent("Event "+TransitionData.getCount());
 		data.addAction("Action");
 		ListFigure compartment = new ListFigure();

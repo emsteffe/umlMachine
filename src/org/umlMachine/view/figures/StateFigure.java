@@ -233,6 +233,11 @@ public class StateFigure extends GraphicalCompositeFigure {
 		File file;
 		nameCompartment.add(new TextFigure("State "+ (int)(FigureFactory.getInstance().getNumStates()) ));
 		data.forceName("State "+ FigureFactory.getInstance().getNumStates());
+		
+		//convert to end type if there is already a start state out there
+		for( StateFigure state : FigureFactory.getInstance().getStates()){
+			if(state.getData().isStart()) type = false;
+		}
 
 		if(type){
 			file = new File("src/org/umlMachine/view/images/start.png");
@@ -284,7 +289,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 	public void addAction(String a){
 		data.addAction(a);
 		willChange();
-		TextFigure toAdd = new TextFigure(a,1);
+		TextFigure toAdd = new TextFigure(a,1,data);
 		addActionFigure(toAdd);
 		
 		FigureAdapter actionAdapter = new ActionAdapter(toAdd,this);
@@ -358,7 +363,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 	public List<String> getActions(){
 		return data.getActions();
 	}
-
+	
 	//TODO These methods need to be smarter
 	public void makeParent(){
 		if (data.makeParent()){
