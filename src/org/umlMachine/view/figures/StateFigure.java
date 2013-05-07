@@ -21,8 +21,8 @@ import org.jhotdraw.draw.handle.BoundsOutlineHandle;
 import org.jhotdraw.geom.Insets2D;
 import org.jhotdraw.xml.*;
 import org.umlMachine.controller.FigureFactory;
-import org.umlMachine.model.RefModel;
 import org.umlMachine.model.StateData;
+import org.umlMachine.view.figures.TextFigure;
 
 /**
  * Lowell Johnson
@@ -284,7 +284,7 @@ public class StateFigure extends GraphicalCompositeFigure {
 	public void addAction(String a){
 		data.addAction(a);
 		willChange();
-		TextFigure toAdd = new TextFigure(a);
+		TextFigure toAdd = new TextFigure(a,1);
 		addActionFigure(toAdd);
 		
 		FigureAdapter actionAdapter = new ActionAdapter(toAdd,this);
