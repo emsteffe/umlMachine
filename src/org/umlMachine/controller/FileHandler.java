@@ -201,6 +201,7 @@ public class FileHandler {
 	public File getFile(){
 		File toReturn = null;
 		d.setName(Type);
+		d.setDialogTitle(Type);
 		d.showOpenDialog((Component) (RefModel.editor.getActiveView()));
 		XMLController xml = new XMLController();
 		while(!done){
